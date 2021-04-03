@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <iostream>
 #include <map>
 #include <math.h>
@@ -14,12 +13,12 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-int main() {
+int main(){
   int n;
   cin >> n;
-  double x,y;
-  cin >> x >> y;
-  double p,q;
-  cin >> p >> q;
-  
+  vector<ll> a(n);
+  rep(i,n){
+    cin >> a[i];
+  }
+  vector<ll> max_memo(n,0);
 }

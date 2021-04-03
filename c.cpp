@@ -17,9 +17,21 @@ typedef long long ll;
 int main() {
   int n;
   cin >> n;
-  double x,y;
-  cin >> x >> y;
-  double p,q;
-  cin >> p >> q;
-  
+  vector<ll> a(n);
+  rep(i, n) cin >> a[i];
+  vector<int> buc(31,0);
+  rep(i,n){
+    rep(j,31){
+      buc[j] += a[i]>>j&1;
+    }
+  }
+  ll ans = 0;
+  rep(i,31){
+    if(buc[i] == 1){
+      cout << (1<<i) << endl;
+      return 0;
+    }
+  }
+  cout << 0 << endl;
+  return 0;
 }

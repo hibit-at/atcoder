@@ -1,40 +1,17 @@
-x = input()
-m = int(input())
+n = int(input())
+x,y = map(float,input().split(" "))
+p,q = map(float,input().split(" "))
 
-n = len(x)
-if n == 1:
-    nowd = int(x)
-    if nowd <= m:
-        print(1)
-        exit()
-    else:
-        print(0)
-        exit()
+import numpy as np
 
-d = 0
-for i in range(n):
-    d = max(d, int(x[i]))
+start = np.array((x,y))
+target = np.array((p,q))
+middle = (start+target)/2
+arm = start - middle
 
-a = []
-for c in x:
-    a.append(int(c))
-a.reverse()
+ang = 2*np.pi/n
 
-ok = 0
-ng = pow(10, 18)+1
+rot = np.array([[np.cos(ang),-np.sin(ang)],[np.sin(ang),np.cos(ang)]])
 
-while abs(ok-ng) > 1:
-    mid = (int)((ok+ng)/2)
-    total = 0
-    for i in range(n):
-        nowd = int(x[i])
-        if total > pow(10,18):
-            ng = mid
-            continue
-        total += nowd*pow(mid,i)
-    if total <= m:
-        ok = mid
-    else:
-        ng = mid
-
-print (max(ok-d,0))
+ans = middle + np.matmul(rot,arm)
+print(ans[0],ans[1])

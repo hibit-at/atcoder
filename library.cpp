@@ -25,6 +25,24 @@ ll gcd(ll a, ll b) {
 
 ll lcm(ll a, ll b) { return a * b / gcd(a, b); }
 
+vector<pair<ll, ll>> prime_factorize(ll n) {
+  vector<pair<ll, ll>> ans;
+  for (ll i = 2; i * i <= n; i++) {
+    if (n % i == 0) {
+      ll ex = 0;
+      while (n % i == 0) {
+        ex++;
+        n /= i;
+      }
+      ans.push_back({i, ex});
+    }
+  }
+  if (n != 1) {
+    ans.push_back({n, 1});
+  }
+  return ans;
+}
+
 struct UnionFind {
   vector<int> par;
 
@@ -61,6 +79,14 @@ void print_maze(vector<vector<char>> maze) {
     rep(j, m) { cout << maze[i][j]; }
     cout << endl;
   }
+}
+
+void print_vector_pair(vector<pair<int, int>> v) {
+  for (pair<int, int> i : v) {
+    cout << "(" << i.first << "," << i.second << ")"
+         << " ";
+  }
+  cout << endl;
 }
 
 void print_vector(vector<int> v) {
@@ -105,7 +131,7 @@ vector<pair<int, char>> swapmap(map<char, int> mp) {
   return vp;
 }
 
-ll rpow(ll a, ll r,ll mod) {
+ll rpow(ll a, ll r, ll mod) {
   if (r == 0)
     return 1;
   ll ans = rpow(a, r / 2, mod);
@@ -140,6 +166,18 @@ vector<bool> make_erat(int limit) {
     }
   }
   return erat;
+}
+
+string binary_expression(int n, int d) {
+  string ans = "";
+  rep(i, d) { ans.push_back((n >> i & 1) + '0'); }
+  return ans;
+}
+
+int pop_count(int n) {
+  int ans = 0;
+  rep(i, 32) { ans += (n >> i & 1); }
+  return ans;
 }
 
 int main() {
