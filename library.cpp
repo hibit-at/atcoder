@@ -81,6 +81,15 @@ void print_maze(vector<vector<char>> maze) {
   }
 }
 
+void print_vector_vector(vector<vector<int>> vv){
+  for(vector<int> v : vv){
+    for(int i : v){
+      cout << i << ",";
+    }
+    cout << endl;
+  }
+}
+
 void print_vector_pair(vector<pair<int, int>> v) {
   for (pair<int, int> i : v) {
     cout << "(" << i.first << "," << i.second << ")"
