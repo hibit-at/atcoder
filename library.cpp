@@ -72,6 +72,16 @@ struct UnionFind {
   }
 };
 
+void print_to_with_cost(vector<vector<pair<int,int>>> to){
+  int n = to.size();
+  rep(i,n){
+    for (auto p : to[i]){
+      cout << "(to " << p.first << ",cost " << p.second << ") ";
+    }
+    cout << endl;
+  }
+}
+
 void print_maze(vector<vector<char>> maze) {
   int n = maze.size();
   int m = maze[0].size();
