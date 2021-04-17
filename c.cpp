@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <math.h>
+#include <ostream>
 #include <queue>
 #include <set>
 #include <string>
@@ -14,24 +15,26 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-int main() {
-  int n;
-  cin >> n;
-  vector<ll> a(n);
-  rep(i, n) cin >> a[i];
-  vector<int> buc(31,0);
-  rep(i,n){
-    rep(j,31){
-      buc[j] += a[i]>>j&1;
+int main(){
+  int a,b;
+  cin >> a >> b;
+  int ans = 1;
+  for(int i=a;i<b;i++){
+    // cout << "searching " << i << endl;
+    for(int y=1;y*y<=i;y++){
+      if(i%y != 0){
+        continue;
+      }
+      // cout << "...yakusuu is " << y << endl; 
+      if(b >= i+y){
+        ans = max(ans,y);
+      }
+      int o = i/y;
+      // cout << "...opposite is " << o << endl;
+      if(b >= i+o){
+        ans = max(ans,o);
+      }
     }
   }
-  ll ans = 0;
-  rep(i,31){
-    if(buc[i] == 1){
-      cout << (1<<i) << endl;
-      return 0;
-    }
-  }
-  cout << 0 << endl;
-  return 0;
+  cout << ans << endl;
 }

@@ -1,11 +1,12 @@
-n = int(input())
+import math
 
-ans = 0
+r,x,y = list(map(int,input().split()))
+d = math.sqrt(x*x+y*y)
 
-for i in range(1,1000001):
-    j = str(i)+str(i)
-    j = int(j)
-    if j <= n:
-        ans += 1
-
-print(ans)
+if d == r:
+    print(1)
+    exit()
+if d <= 2*r:
+    print(2)
+    exit()
+print(math.ceil(d/r))
