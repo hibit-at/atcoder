@@ -15,19 +15,19 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-ll mod = (ll)1e9+7;
-
-int main(){
-  ll n,p;
-  cin >> n >> p;
-  ll ans = 1;
-  rep(i,n){
-    if(i == 0){
-      ans = p-1;
+int main() {
+  int a,b;
+  cin >> a >> b;
+  int ans = 1;
+  for(int i=2;i*i<=b;i++){
+    if(b%i == 0){
       continue;
     }
-    ans = ans*(p-2);
-    ans %= mod;
+    int divB = b/i;
+    int divA = (a-1)/i;
+    if(divB - divA >= 2){
+      ans = max(ans,i);
+    }
   }
   cout << ans << endl;
 }

@@ -17,17 +17,23 @@ typedef long long ll;
 
 ll mod = (ll)1e9+7;
 
+ll rpow(ll a, ll r, ll mod) {
+  if (r == 0)
+    return 1;
+  ll ans = rpow(a, r / 2, mod);
+  ans *= ans;
+  ans %= mod;
+  if (r % 2 == 1)
+    ans *= a;
+  ans %= mod;
+  return ans;
+}
+
 int main(){
   ll n,p;
   cin >> n >> p;
-  ll ans = 1;
-  rep(i,n){
-    if(i == 0){
-      ans = p-1;
-      continue;
-    }
-    ans = ans*(p-2);
-    ans %= mod;
-  }
+  ll ans = p-1;
+  ans = ans*rpow(p-2,n-1,mod);
+  ans %= mod;
   cout << ans << endl;
 }

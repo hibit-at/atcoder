@@ -14,11 +14,32 @@ using namespace std;
 typedef long long ll;
 
 int main(){
-  int n;
-  cin >> n;
-  vector<ll> a(n);
+  int n,m;
+  cin >> n >> m;
+  map<int,int> mp;
   rep(i,n){
-    cin >> a[i];
+    int a;
+    cin >> a;
+    mp[a] = 1;
   }
-  vector<ll> max_memo(n,0);
+  rep(i,n){
+    int b;
+    cin >> b;
+    mp[b] ++;
+  }
+  vector<int> ans;
+  for(auto p : mp){
+    if(p.second == 1){
+      ans.push_back(p.first);
+    }
+  }
+  rep(i,ans.size()){
+    cout << ans[i];
+    if(i == ans.size()-1){
+      cout << endl;
+    }else{
+      cout << " ";
+    }
+  }
+
 }
