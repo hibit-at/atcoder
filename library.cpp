@@ -100,10 +100,18 @@ void print_vector_vector(vector<vector<int>> vv){
   }
 }
 
+
 void print_vector_pair(vector<pair<int, int>> v) {
   for (pair<int, int> i : v) {
     cout << "(" << i.first << "," << i.second << ")"
          << " ";
+  }
+  cout << endl;
+}
+
+void print_vector_ll(vector<ll> v) {
+  for (int i : v) {
+    cout << i << " ";
   }
   cout << endl;
 }

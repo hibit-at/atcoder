@@ -1,15 +1,11 @@
-import numpy as np
+a,b,c = map(int,input().split())
 
-a,b = map(int,input().split(' '))
+tmp = 1
 
-A = np.ones(b,dtype='int64')*a
-B = np.ones(a,dtype='int64')*-b
+for i in range(b):
+    tmp *= c
 
-print(A,B)
-
-A_sub = np.array(range(a)) - a/2
-B_sub = np.array(range(b)) - b/2
-A_sub = A_sub.astype('int64')
-B_sub = B_sub.astype('int64')
-
-print(A_sub,B_sub)
+if a < tmp:
+    print('Yes')
+else:
+    print('No')

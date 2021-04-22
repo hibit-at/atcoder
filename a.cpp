@@ -16,18 +16,11 @@ using namespace std;
 typedef long long ll;
 
 int main() {
-  int a,b;
-  cin >> a >> b;
-  int ans = 1;
-  for(int i=2;i*i<=b;i++){
-    if(b%i == 0){
-      continue;
-    }
-    int divB = b/i;
-    int divA = (a-1)/i;
-    if(divB - divA >= 2){
-      ans = max(ans,i);
-    }
+  ll a,b,c;
+  cin >> a >> b >> c;
+  ll tmp = 1;
+  rep(i,b){
+    tmp *= c;
+    cout << tmp << endl;
   }
-  cout << ans << endl;
 }
