@@ -22,5 +22,8 @@ int main() {
   rep(i,b){
     tmp *= c;
     cout << tmp << endl;
+    if(tmp > a){
+      
+    }
   }
 }
