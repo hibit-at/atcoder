@@ -15,25 +15,29 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-ll mod = (ll)1e9+7;
+ll mod = (ll)1e9 + 7;
 
-ll rpow(ll a, ll r, ll mod) {
-  if (r == 0)
-    return 1;
-  ll ans = rpow(a, r / 2, mod);
-  ans *= ans;
-  ans %= mod;
-  if (r % 2 == 1)
-    ans *= a;
-  ans %= mod;
-  return ans;
-}
+vector<int> graph;
+vector<vector<int>> to;
+vector<bool> seen;
 
-int main(){
-  ll n,p;
-  cin >> n >> p;
-  ll ans = p-1;
-  ans = ans*rpow(p-2,n-1,mod);
-  ans %= mod;
-  cout << ans << endl;
+
+int main() {
+  int n, m;
+  cin >> n >> m;
+
+  rep(i, m) {
+    int a, b;
+    cin >> a >> b;
+    a--;
+    b--;
+    to[a].push_back(b);
+    to[b].push_back(a);
+  }
+  rep(i, n) {
+    if (seen[i])
+      continue;
+    queue<int> q;
+    q.push(i);
+  }
 }

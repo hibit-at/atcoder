@@ -15,15 +15,18 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
+ll gcd(ll a, ll b) {
+  if (b == 0)
+    return a;
+  return gcd(b, a % b);
+}
+
 int main() {
   ll a,b,c;
   cin >> a >> b >> c;
-  ll tmp = 1;
-  rep(i,b){
-    tmp *= c;
-    cout << tmp << endl;
-    if(tmp > a){
-      
-    }
-  }
+  ll gcd_of_abc = gcd(a,gcd(b,c));
+  a /= gcd_of_abc;
+  b /= gcd_of_abc;
+  c /= gcd_of_abc;
+  cout << (a-1)+(b-1)+(c-1) << endl;
 }

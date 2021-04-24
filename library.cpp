@@ -17,6 +17,14 @@ typedef long long ll;
 
 ll const mod = (ll)1e9 + 7;
 
+void chmax(int &a,int b){
+  a = max(a,b);
+}
+
+void chmin(int &a,int b){
+  a = min(a,b);
+}
+
 ll gcd(ll a, ll b) {
   if (b == 0)
     return a;

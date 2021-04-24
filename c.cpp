@@ -15,26 +15,46 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-int main(){
-  int a,b;
-  cin >> a >> b;
-  int ans = 1;
-  for(int i=a;i<b;i++){
-    // cout << "searching " << i << endl;
-    for(int y=1;y*y<=i;y++){
-      if(i%y != 0){
-        continue;
-      }
-      // cout << "...yakusuu is " << y << endl; 
-      if(b >= i+y){
-        ans = max(ans,y);
-      }
-      int o = i/y;
-      // cout << "...opposite is " << o << endl;
-      if(b >= i+o){
-        ans = max(ans,o);
-      }
-    }
+void print_vector(vector<int> v) {
+  for (int i : v) {
+    cout << i << " ";
   }
-  cout << ans << endl;
+  cout << endl;
+}
+
+int main() {
+  int n;
+  cin >> n;
+  string s;
+  cin >> s;
+  int q;
+  cin >> q;
+  bool isFlip = false;
+  vector<int> order(2 * n);
+  rep(i, 2 * n) { order[i] = i; }
+  rep(i, q) {
+    int t, a, b;
+    cin >> t >> a >> b;
+    if (t == 1) {
+      a--;
+      b--;
+      if (isFlip) {
+        a = (a + n) % (2 * n);
+        b = (b + n) % (2 * n);
+      }
+      swap(order[a], order[b]);
+    }
+    if (t == 2) {
+      isFlip = !isFlip;
+    }
+    // print_vector(order);
+  }
+  rep(i, 2 * n) {
+    int pos = i;
+    if (isFlip) {
+      pos = (pos + n) % (2 * n);
+    }
+    cout << s[order[pos]];
+  }
+  cout << endl;
 }

@@ -1,11 +1,16 @@
-a,b,c = map(int,input().split())
+n = int(input())
+s = input()
 
-tmp = 1
+s_list = list(s)
 
-for i in range(b):
-    tmp *= c
+q = int(input())
 
-if a < tmp:
-    print('Yes')
-else:
-    print('No')
+for i in range(q):
+    t,a,b = map(int,input().split(' '))
+    if t == 1:
+        a -= 1
+        b -= 1
+        s_list[a],s_list[b] = s_list[b],s_list[a]
+    if t == 2:
+        s_list = s_list[:n] + s_list[n:]
+    print(s_list)
