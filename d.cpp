@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <deque>
 #include <iostream>
 #include <map>
 #include <math.h>
@@ -15,29 +16,47 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-ll mod = (ll)1e9 + 7;
-
-vector<int> graph;
-vector<vector<int>> to;
-vector<bool> seen;
-
-
 int main() {
-  int n, m;
-  cin >> n >> m;
-
-  rep(i, m) {
-    int a, b;
-    cin >> a >> b;
-    a--;
-    b--;
-    to[a].push_back(b);
-    to[b].push_back(a);
-  }
+  string s;
+  cin >> s;
+  bool isReverse = false;
+  deque<char> q;
+  int n = s.size();
   rep(i, n) {
-    if (seen[i])
-      continue;
-    queue<int> q;
-    q.push(i);
+    char now = s[i];
+    if (now == 'R') {
+      isReverse = !isReverse;
+    } else {
+      if (isReverse) {
+        char back_check = q.back();
+        if (back_check != now) {
+          q.push_back(now);
+        } else {
+          q.pop_back();
+        }
+      } else {
+        char front_check = q.front();
+        if (front_check != now) {
+          q.push_front(now);
+        } else {
+          q.pop_front();
+        }
+      }
+    }
   }
+  deque<char> t = q;
+  if (isReverse) {
+    while (t.size() > 0) {
+      char now = t.front();
+      t.pop_front();
+      cout << now;
+    }
+  } else {
+    while (t.size() > 0){
+      char now = t.back();
+      t.pop_back();
+      cout << now;
+    }
+  }
+  cout << endl;
 }

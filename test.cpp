@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <deque>
 #include <iostream>
 #include <map>
 #include <math.h>
@@ -16,8 +17,9 @@ using namespace std;
 typedef long long ll;
 
 int main(){
-
-  int n;
-  cin >> n;
-  
+    deque<int> q;
+    cout << q.front() << endl;
+    q.push_front(1);
+    cout << q.front() << endl;
+    cout  << q.back() << endl;
 }
