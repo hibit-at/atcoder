@@ -1,9 +1,5 @@
-import re
+import numpy as np
 
-# pattern = re.compile('*b*')
-
-target = 'aabcc'
-
-after = re.sub('.b.','***',target)
-
-print(after)
+a = np.eye(10)
+a[1][0:4] = np.ones(4)
+print(a[1][0:4])
