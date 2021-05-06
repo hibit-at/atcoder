@@ -33,6 +33,11 @@ ll gcd(ll a, ll b) {
 
 ll lcm(ll a, ll b) { return a * b / gcd(a, b); }
 
+void plus_and_mod(ll &a, ll b, ll mod) {
+  a += b;
+  a %= mod;
+}
+
 vector<pair<ll, ll>> prime_factorize(ll n) {
   vector<pair<ll, ll>> ans;
   for (ll i = 2; i * i <= n; i++) {
