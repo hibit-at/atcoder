@@ -7,6 +7,7 @@
 #include <queue>
 #include <set>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -16,52 +17,79 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
+struct UnionFind {
+  vector<int> par;
+
+  UnionFind(int N) : par(N) {
+    for (int i = 0; i < N; i++)
+      par[i] = i;
+  }
+
+  int root(int x) {
+    if (par[x] == x)
+      return x;
+    return par[x] = root(par[x]);
+  }
+
+  void unite(int x, int y) {
+    int rx = root(x);
+    int ry = root(y);
+    if (rx == ry)
+      return;
+    par[rx] = ry;
+  }
+
+  bool same(int x, int y) {
+    int rx = root(x);
+    int ry = root(y);
+    return rx == ry;
+  }
+};
+
 int main() {
-  string s;
-  cin >> s;
-  bool isReverse = false;
-  deque<char> q;
-  int n = s.size();
-  rep(i, n) {
-    char now = s[i];
-    if (now == 'R') {
-      isReverse = !isReverse;
-    } else {
-      // 空qなら無条件に挿入
-      if (q.size() == 0){
-        q.push_back(now);
-        continue;
-      }
-      if (isReverse) {
-        char back_check = q.back();
-        if (back_check != now) {
-          q.push_back(now);
-        } else {
-          q.pop_back();
+  int h, w;
+  cin >> h >> w;
+  int q;
+  cin >> q;
+  vector<int> dr = {1, -1, 0, 0};
+  vector<int> dc = {0, 0, 1, -1};
+  UnionFind un(h * w + 1);
+  vector<vector<bool>> isRed(h, vector<bool>(w, false));
+  rep(i, q) {
+    int t;
+    cin >> t;
+    if (t == 1) {
+      int r, c;
+      cin >> r >> c;
+      r--;
+      c--;
+      isRed[r][c] = true;
+      rep(j, 4) {
+        int nx = r + dr[j];
+        int ny = c + dc[j];
+        if (nx < 0 || nx >= h) {
+          continue;
         }
+        if (ny < 0 || ny >= w) {
+          continue;
+        }
+        if (isRed[nx][ny]) {
+          un.unite(r * w + c, nx * w + ny);
+        }
+      }
+    } // if...t
+    if (t == 2) {
+      int ra, ca, rb, cb;
+      cin >> ra >> ca >> rb >> cb;
+      ra--;
+      ca--;
+      rb--;
+      cb--;
+      if (un.same(ra * w + ca, rb * w + cb) && isRed[ra][ca]) {
+        cout << "Yes" << endl;
       } else {
-        char front_check = q.front();
-        if (front_check != now) {
-          q.push_front(now);
-        } else {
-          q.pop_front();
-        }
+        cout << "No" << endl;
       }
-    }
-  }
-  deque<char> t = q;
-  if (isReverse) {
-    while (t.size() > 0) {
-      char now = t.front();
-      t.pop_front();
-      cout << now;
-    }
-  } else {
-    while (t.size() > 0){
-      char now = t.back();
-      t.pop_back();
-      cout << now;
-    }
-  }
-  cout << endl;
+    } // if...t
+  }   // i
 }
