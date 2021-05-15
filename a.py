@@ -1,13 +1,10 @@
-import itertools
+from math import gcd
 
-n,k=map(int,input().split())
+a,b = map(int,input().split())
 
-a = range(1,n+1)
+ans = a//gcd(a,b)*b
 
-a_list =  list(itertools.product(a,repeat=3))
-
-a_list.sort()
-
-print(a_list)
-
-print(a_list[k-1])
+if ans > int(pow(10,18)):
+    print('Large')
+else:
+    print(ans)
