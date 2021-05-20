@@ -6,6 +6,7 @@
 #include <ostream>
 #include <queue>
 #include <set>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <type_traits>
@@ -18,51 +19,38 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-void print_vector_vector(vector<vector<int>> vv) {
-  for (vector<int> v : vv) {
-    for (int i : v) {
-      cout << i << ",";
+void output(int a) {
+  int bitnum = __builtin_popcount(a);
+  cout << bitnum;
+  rep(i, 8) {
+    if (a >> i & 1) {
+      cout << " " << i + 1;
     }
-    cout << endl;
   }
+  cout << endl;
 }
 
 int main() {
   int n;
   cin >> n;
-  int grid_size = 1010;
-  vector<vector<int>> imos(grid_size, vector<int>(grid_size, 0));
-  vector<vector<int>> sum(grid_size, vector<int>(grid_size, 0));
-  rep(i, n) {
-    int lx, ly, rx, ry;
-    cin >> lx >> ly >> rx >> ry;
-    imos[lx][ly] += 1;
-    imos[lx][ry] -= 1;
-    imos[rx][ly] -= 1;
-    imos[rx][ry] += 1;
-  }
-  rep(i, grid_size) {
-    rep(j, grid_size) {
-      sum[i][j] += imos[i][j];
-      if (j > 0) {
-        sum[i][j] += sum[i][j - 1];
+  vector<int> a(n), buc(200, 0);
+  rep(i, n) cin >> a[i];
+  rep(i, 1 << min(n, 8)) {
+    ll check = 0;
+    rep(j, 8) {
+      if (i >> j & 1) {
+        check += a[j];
+        check %= 200;
       }
     }
-  }
-  rep(j, grid_size){
-    rep(i, grid_size){
-      if(i > 0){
-        sum[i][j] += sum[i-1][j];
-      }
+    if (buc[check] == 0) {
+      buc[check] = i;
+    } else {
+      cout << "Yes" << endl;
+      output(buc[check]);
+      output(i);
+      return 0;
     }
   }
-  vector<int> buc(n+1,0);
-  rep(i,grid_size){
-    rep(j,grid_size){
-      buc[sum[i][j]] += 1;
-    }
-  }
-  rep1(i,n){
-    cout << buc[i] << endl;
-  }
+  cout << "No" << endl;
 }
