@@ -19,38 +19,37 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-void output(int a) {
-  int bitnum = __builtin_popcount(a);
-  cout << bitnum;
-  rep(i, 8) {
-    if (a >> i & 1) {
-      cout << " " << i + 1;
-    }
-  }
-  cout << endl;
+const ll mod = (ll)1e9 + 7;
+
+ll rpow(ll a, ll r, ll mod) {
+  if (r == 0)
+    return 1;
+  ll ans = rpow(a, r / 2, mod);
+  ans *= ans;
+  ans %= mod;
+  if (r % 2 == 1)
+    ans *= a;
+  ans %= mod;
+  return ans;
 }
 
 int main() {
-  int n;
-  cin >> n;
-  vector<int> a(n), buc(200, 0);
-  rep(i, n) cin >> a[i];
-  rep(i, 1 << min(n, 8)) {
-    ll check = 0;
-    rep(j, 8) {
-      if (i >> j & 1) {
-        check += a[j];
-        check %= 200;
-      }
-    }
-    if (buc[check] == 0) {
-      buc[check] = i;
-    } else {
-      cout << "Yes" << endl;
-      output(buc[check]);
-      output(i);
-      return 0;
+  int k;
+  cin >> k;
+  if(k%9 != 0){
+    cout << 0 << endl;
+    return 0;
+  }
+  vector<ll> dp(k + 1, 0);
+  dp[0] = 1;
+  rep1(i, k) {
+    rep(j, min(i + 1, 10)) {
+      dp[i] += dp[i - j];
+      dp[i] %= mod;
     }
   }
-  cout << "No" << endl;
+  cout << dp[k] << endl;
+  rep1(i,k){
+    cout << rpow(2,i-1,mod) << "," << dp[i] << "..." << rpow(2,i-1,mod) - dp[i] << endl;
+  }
 }

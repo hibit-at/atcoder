@@ -219,11 +219,3 @@ int pop_count(int n) {
   rep(i, 32) { ans += (n >> i & 1); }
   return ans;
 }
-
-int main() {
-  vector<bool> erat = make_erat(200001);
-  rep(i, 100) {
-    if (erat[i])
-      cout << i << endl;
-  }
-}

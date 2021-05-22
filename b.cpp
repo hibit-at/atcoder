@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
@@ -15,23 +16,22 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
+char process(char c) {
+  if (c == '6') {
+    return '9';
+  }
+  if (c == '9') {
+    return '6';
+  }
+  return c;
+}
+
 int main() {
-  int n;
-  string s, t;
-  cin >> n >> s >> t;
-  rep(i, n) {
-    if (s[i] == '1' && t[i] == '1') {
-      continue;
-    } else {
-      cout << s[i];
-    }
+  string s;
+  cin >> s;
+  reverse(all(s));
+  for (char c : s) {
+    cout << process(c);
   }
   cout << endl;
-  rep(i, n) {
-    if (s[i] == '1' && t[i] == '1') {
-      continue;
-    } else {
-      cout << t[i];
-    }
-  }
 }
