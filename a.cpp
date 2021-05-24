@@ -19,37 +19,22 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-const ll mod = (ll)1e9 + 7;
-
-ll rpow(ll a, ll r, ll mod) {
-  if (r == 0)
-    return 1;
-  ll ans = rpow(a, r / 2, mod);
-  ans *= ans;
-  ans %= mod;
-  if (r % 2 == 1)
-    ans *= a;
-  ans %= mod;
-  return ans;
-}
-
 int main() {
-  int k;
-  cin >> k;
-  if(k%9 != 0){
-    cout << 0 << endl;
-    return 0;
+  int n, k;
+  cin >> n >> k;
+  priority_queue<pair<int, int>> q;
+  rep(i, n) {
+    int a, b;
+    cin >> a >> b;
+    q.push({b, a});
   }
-  vector<ll> dp(k + 1, 0);
-  dp[0] = 1;
-  rep1(i, k) {
-    rep(j, min(i + 1, 10)) {
-      dp[i] += dp[i - j];
-      dp[i] %= mod;
-    }
+  ll ans = 0;
+  while (k > 0) {
+    pair<int, int> now = q.top();
+    q.pop();
+    ans += now.first;
+    q.push({now.second - now.first, -1});
+    k--;
   }
-  cout << dp[k] << endl;
-  rep1(i,k){
-    cout << rpow(2,i-1,mod) << "," << dp[i] << "..." << rpow(2,i-1,mod) - dp[i] << endl;
-  }
+  cout << ans << endl;
 }

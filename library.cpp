@@ -17,13 +17,9 @@ typedef long long ll;
 
 ll const mod = (ll)1e9 + 7;
 
-void chmax(int &a,int b){
-  a = max(a,b);
-}
+void chmax(int &a, int b) { a = max(a, b); }
 
-void chmin(int &a,int b){
-  a = min(a,b);
-}
+void chmin(int &a, int b) { a = min(a, b); }
 
 ll gcd(ll a, ll b) {
   if (b == 0)
@@ -85,10 +81,10 @@ struct UnionFind {
   }
 };
 
-void print_to_with_cost(vector<vector<pair<int,int>>> to){
+void print_to_with_cost(vector<vector<pair<int, int>>> to) {
   int n = to.size();
-  rep(i,n){
-    for (auto p : to[i]){
+  rep(i, n) {
+    for (auto p : to[i]) {
       cout << "(to " << p.first << ",cost " << p.second << ") ";
     }
     cout << endl;
@@ -104,15 +100,14 @@ void print_maze(vector<vector<char>> maze) {
   }
 }
 
-void print_vector_vector(vector<vector<int>> vv){
-  for(vector<int> v : vv){
-    for(int i : v){
+void print_vector_vector(vector<vector<int>> vv) {
+  for (vector<int> v : vv) {
+    for (int i : v) {
       cout << i << ",";
     }
     cout << endl;
   }
 }
-
 
 void print_vector_pair(vector<pair<int, int>> v) {
   for (pair<int, int> i : v) {
@@ -181,6 +176,14 @@ ll rpow(ll a, ll r, ll mod) {
     ans *= a;
   ans %= mod;
   return ans;
+}
+
+void submod(int &a, int b, int mod) {
+  a -= b;
+  a %= mod;
+  a += mod;
+  a %= mod;
+  return;
 }
 
 vector<ll> make_fact(int limit) {

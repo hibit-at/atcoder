@@ -1,35 +1,26 @@
 import itertools
-from collections import defaultdict
 
-s = input()
+from scipy.special import comb
 
-nums = list(range(10))
+k = int(input())
+
+mod = int(pow(10,9))+7
+
+# if k%9 != 0:
+#     print(0)
+#     exit()
 
 ans = 0
+cnt = 0
 
-for case in itertools.product(nums,repeat=4):
-    # print(case,end='')
-    mp = defaultdict(bool)
-    for i in range(4):
-        mp[case[i]] = True
-    # outcheck
-    outcheck = False
-    for i in range(10):
-        if s[i] == 'x':
-            if mp[i]:
-                # print(i,'out')
-                outcheck = True
-                break
-    if outcheck:
-        continue
-    # hitcheck
-    mustcheck = True
-    for i in range(10):
-        if s[i] == 'o':
-            if not mp[i]:
-                mustcheck = False
-    if mustcheck:
-        # print('ok')
-        ans += 1
+while k > 0:
+    part = 0
+    for i in range(cnt+1):
+        part += comb(k-i,cnt)*pow(2,k-i-1,mod)*pow(-1,i)
+        part %= mod
+    ans += part*pow(-1,cnt)
+    ans %= mod
+    k -= 9
+    cnt += 1
 
-print(ans)
+print(int(ans))
