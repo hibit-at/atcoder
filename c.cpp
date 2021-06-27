@@ -19,27 +19,21 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
+
+
 int main() {
-  int n;
+  ll n;
   cin >> n;
-  vector<ll> a(n), b(n), c(n + 1);
-  vector<ll> buc_b(n + 1);
-  rep(i, n) { cin >> a[i]; }
-  rep(i, n) {
-    cin >> b[i];
-  }
-  rep(i, n) {
-    ll x;
-    cin >> x;
-    c[x]++;
-  }
+  map<ll,ll> mp;
   rep(i,n){
-    int x = b[i];
-    buc_b[x] += c[i+1];
+    ll a;
+    cin >> a;
+    mp[a] ++;
   }
-  ll ans = 0;
-  rep(i, n) {
-    ans += buc_b[a[i]];
+  ll ans = n*(n-1)/2;
+  for(auto p : mp){
+    ll m = p.second;
+    ans -= m*(m-1)/2;
   }
   cout << ans << endl;
 }

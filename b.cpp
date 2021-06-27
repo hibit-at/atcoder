@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <limits.h>
 #include <map>
@@ -8,7 +9,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <algorithm>
+
 
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
@@ -16,22 +17,12 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
-char process(char c) {
-  if (c == '6') {
-    return '9';
-  }
-  if (c == '9') {
-    return '6';
-  }
-  return c;
-}
+const ll mod = 1e9+7;
 
 int main() {
-  string s;
-  cin >> s;
-  reverse(all(s));
-  for (char c : s) {
-    cout << process(c);
-  }
-  cout << endl;
+  int n;
+  ll k,p;
+  cin >> k >> p;
+  vector<vector<int>> dp(n+1,vector<int>(2,0));
+  dp[0][0] = 1;
 }

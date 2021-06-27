@@ -5,6 +5,7 @@
 #include <math.h>
 #include <ostream>
 #include <queue>
+#include <stack>
 #include <set>
 #include <string>
 #include <utility>
@@ -16,47 +17,59 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 typedef long long ll;
 
+void print_vector_vector(vector<vector<int>> vv) {
+  for (vector<int> v : vv) {
+    for (int i : v) {
+      cout << i << ",";
+    }
+    cout << endl;
+  }
+}
+
 int main() {
-  string s;
-  cin >> s;
-  bool isReverse = false;
-  deque<char> q;
-  int n = s.size();
-  rep(i, n) {
-    char now = s[i];
-    if (now == 'R') {
-      isReverse = !isReverse;
-    } else {
-      if (isReverse) {
-        char back_check = q.back();
-        if (back_check != now) {
-          q.push_back(now);
-        } else {
-          q.pop_back();
+  set<pair<int,int>> s;
+  int n;
+  cin >> n;
+  vector<int> a(n);
+  rep(i,n){
+    cin >> a[i];
+  }
+  vector<set<int>> to(n+1);
+  rep(i,n/2){
+    int first = a[i];
+    int second = a[n-1-i];
+    cout << first << "-" << second << endl;
+    if(first == second){
+      continue;
+    }
+    cout << "add" << first << "," << second << endl;
+    to[first].insert(second);
+    to[second].insert(first);
+  }
+  vector<bool> seen(2e5+1,false);
+  ll ans = 0;
+  for(int start : a){
+    if(seen[start]){
+      continue;
+    }
+    cout << start << endl;
+    stack<int> q;
+    int cnt = 0;
+    q.push(start);
+    while(q.size()>0){
+      int now = q.top();
+      cout << "now in " << now << endl;
+      q.pop();
+      seen[now] = true;
+      for(int next : to[start]){
+        if(seen[next]){
+          continue;
         }
-      } else {
-        char front_check = q.front();
-        if (front_check != now) {
-          q.push_front(now);
-        } else {
-          q.pop_front();
-        }
+        cout << "next is" << next << endl;
+        cnt ++;
+        q.push(next);
       }
     }
+    cout << "start " << start << " cnt " << cnt << endl;
   }
-  deque<char> t = q;
-  if (isReverse) {
-    while (t.size() > 0) {
-      char now = t.front();
-      t.pop_front();
-      cout << now;
-    }
-  } else {
-    while (t.size() > 0){
-      char now = t.back();
-      t.pop_back();
-      cout << now;
-    }
-  }
-  cout << endl;
 }

@@ -1,26 +1,12 @@
-import itertools
+from collections import deque
 
-from scipy.special import comb
-
-k = int(input())
-
-mod = int(pow(10,9))+7
-
-# if k%9 != 0:
-#     print(0)
-#     exit()
-
-ans = 0
-cnt = 0
-
-while k > 0:
-    part = 0
-    for i in range(cnt+1):
-        part += comb(k-i,cnt)*pow(2,k-i-1,mod)*pow(-1,i)
-        part %= mod
-    ans += part*pow(-1,cnt)
-    ans %= mod
-    k -= 9
-    cnt += 1
-
-print(int(ans))
+q = int(input())
+d = deque()
+for i in range(q):
+    t, x = map(int, input().split())
+    if t == 1:
+        d.appendleft(x)
+    if t == 2:
+        d.append(x)
+    if t == 3:
+        print(d[x-1])
