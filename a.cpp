@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <map>
 #include <math.h>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <sstream>
@@ -17,44 +18,31 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-const ll inf = 9e18;
-
-void print_vector(vector<int> v) {
-  for (int i : v) {
-    cout << i << " ";
-  }
-  cout << endl;
-}
-
 int main() {
-  ll n, k;
-  cin >> n >> k;
-  rep(q, k) {
-    vector<int> eight(0);
-    while (n > 0) {
-      eight.push_back(n % 10);
-      n /= 10;
-    }
-    reverse(all(eight));
-    ll tmp = 0;
-    for (int e : eight) {
-      tmp *= 8;
-      tmp += e;
-    }
-    vector<int> nine(0);
-    while (tmp > 0) {
-      nine.push_back(tmp % 9);
-      tmp /= 9;
-    }
-    reverse(all(nine));
-    n = 0;
-    for (int ni : nine) {
-      n *= 10;
-      if (ni == 8) {
-        ni = 5;
-      }
-      n += ni;
-    }
+  int n;
+  cin >> n;
+  //元となるキューpと、尺取り中の列q
+  queue<int> p,q;
+  rep(i,n){
+    int a;
+    cin >> a;
+    p.push(a);
   }
-  cout << n << endl;
+  int ans = 0;
+  //基準となる処理（既にその数が含まれているか？）
+  vector<bool> criterion(1e5 + 1);
+  while(p.size()>0){
+    int now = p.front();
+    p.pop();
+    //次の数を入れていい状態になるまでqを整理
+    while (criterion[now]) {
+      int front = q.front();
+      q.pop();
+      criterion[front] = false;
+    }
+    q.push(now);
+    criterion[now] = true;
+    ans = max(ans, (int)q.size());
+  }
+  cout << ans << endl;
 }

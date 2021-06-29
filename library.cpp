@@ -208,6 +208,15 @@ void print_vector(vector<int> v) {
   cout << endl;
 }
 
+void print_deque(deque<int> q){
+  while (q.size() > 0) {
+    int now = q.front();
+    q.pop_back();
+    cout << now << " ";
+  }
+  cout << endl;
+}
+
 void print_queue(queue<int> q) {
   while (q.size() > 0) {
     int now = q.front();
