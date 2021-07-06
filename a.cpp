@@ -19,30 +19,25 @@ using namespace std;
 typedef long long ll;
 
 int main() {
-  int n;
-  cin >> n;
-  //元となるキューpと、尺取り中の列q
-  queue<int> p,q;
+  ll n, k;
+  cin >> n >> k;
+  vector<pair<int,int>> a(n);
   rep(i,n){
-    int a;
-    cin >> a;
-    p.push(a);
+    int x;
+    cin >> x;
+    a[i] = {x,i};
   }
-  int ans = 0;
-  //基準となる処理（既にその数が含まれているか？）
-  vector<bool> criterion(1e5 + 1);
-  while(p.size()>0){
-    int now = p.front();
-    p.pop();
-    //次の数を入れていい状態になるまでqを整理
-    while (criterion[now]) {
-      int front = q.front();
-      q.pop();
-      criterion[front] = false;
+  sort(all(a));
+  map<int,ll> mp;
+  ll res = k % n;
+  rep(i,n){
+    mp[a[i].second] = k / n;
+    if(res > 0){
+      mp[a[i].second] ++;
     }
-    q.push(now);
-    criterion[now] = true;
-    ans = max(ans, (int)q.size());
+    res --;
   }
-  cout << ans << endl;
+  rep(i,n){
+    cout << mp[i] << endl;
+  }
 }

@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <map>
 #include <math.h>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <sstream>
@@ -11,64 +12,40 @@
 #include <vector>
 
 using namespace std;
-#define rep(i, n) for (int i = 0; i < n; i++)
-#define rep1(i, n) for (int i = 1; i < n + 1; i++)
+#define rep(i, n) for (ll i = 0; i < n; i++)
+#define rep1(i, n) for (ll i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
+#define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-void print_queue(queue<int> q) {
-  while (q.size() > 0) {
-    int now = q.front();
-    q.pop();
-    cout << now << " ";
+void print_vector_pair(vector<pair<int, int>> v) {
+  for (pair<int, int> i : v) {
+    cout << "(" << i.first << "," << i.second << ")"
+         << " ";
   }
   cout << endl;
 }
 
 int main() {
-  int n, k;
+  ll n, k;
   cin >> n >> k;
-  bool check_zero = false;
-  //元となるキューpと、尺取り中の列q
-  queue<int> p, q;
-  rep(i, n) {
-    int s;
-    cin >> s;
-    if (s == 0) { //この問題では0を含む場合のコーナーケースが必要
-      check_zero = true;
+  vector<pair<int,int>> a(n);
+  rep(i,n){
+    int x;
+    cin >> x;
+    a[i] = {x,i};
+  }
+  sort(all(a));
+  map<int,ll> mp;
+  ll res = k % n;
+  rep(i,n){
+    mp[a[i].second] = k / n;
+    if(res > 0){
+      mp[a[i].second] ++;
     }
-    p.push(s);
+    res --;
   }
-  if (check_zero) {
-    cout << p.size() << endl;
-    return 0;
+  rep(i,n){
+    cout << mp[i] << endl;
   }
-  int ans = 0;
-  //基準となる処理（尺取り中の列の積は？）
-  ll criterion = 1;
-  while (p.size() > 0) {
-    int now = p.front();
-    p.pop();
-    criterion *= now;
-    q.push(now);
-    cout << "p : ";
-    print_queue(p);
-    cout << "q : ";
-    print_queue(q);
-    cout << "criterion : " << criterion << endl;
-    //次の数を入れていい状態になるまでqを整理
-    while (criterion > k && q.size() > 0) {
-      int front = q.front();
-      q.pop();
-      criterion /= front;
-      cout << "p : ";
-      print_queue(p);
-      cout << "q : ";
-      print_queue(q);
-      ans = max(ans, int(q.size()));
-      cout << "criterion : " << criterion << endl;
-    }
-    ans = max(ans, int(q.size()));
-  }
-  cout << ans << endl;
 }
