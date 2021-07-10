@@ -27,42 +27,49 @@ void print_vector_vector(vector<vector<int>> vv) {
   }
 }
 
+void print_vector_pair(vector<pair<ll, ll>> v) {
+  for (pair<ll, ll> i : v) {
+    cout << "(" << i.first << "," << i.second << ")"
+         << " ";
+  }
+  cout << endl;
+}
+
 int main() {
-  int n;
-  cin >> n;
-  int grid_size = 1010;
-  vector<vector<int>> imos(grid_size, vector<int>(grid_size, 0));
-  vector<vector<int>> sum(grid_size, vector<int>(grid_size, 0));
-  rep(i, n) {
-    int lx, ly, rx, ry;
-    cin >> lx >> ly >> rx >> ry;
-    imos[lx][ly] += 1;
-    imos[lx][ry] -= 1;
-    imos[rx][ly] -= 1;
-    imos[rx][ry] += 1;
+  int n,m;
+  cin >> n >> m;
+  vector<vector<int>> to(n+1,vector<int>(n+1,0));
+  rep(i,m){
+    int a,b;
+    cin >> a >> b;
+    to[a].push_back(b);
   }
-  rep(i, grid_size) {
-    rep(j, grid_size) {
-      sum[i][j] += imos[i][j];
-      if (j > 0) {
-        sum[i][j] += sum[i][j - 1];
-      }
-    }
-  }
-  rep(j, grid_size){
-    rep(i, grid_size){
-      if(i > 0){
-        sum[i][j] += sum[i-1][j];
-      }
-    }
-  }
-  vector<int> buc(n+1,0);
-  rep(i,grid_size){
-    rep(j,grid_size){
-      buc[sum[i][j]] += 1;
-    }
-  }
+  const int inf = 1e9;
+  vector<vector<int>> dists(n+1,vector<int>(n+1,inf));
   rep1(i,n){
-    cout << buc[i] << endl;
+    queue<int> q;
+    q.push(i);
+    dists[i][i] = 0;
+    while(q.size()>0){
+      int now = q.front();
+      q.pop();
+      for(int next : to[now]){
+        if(dists[i][next] <= dists[i][now]+1){
+          continue;
+        }
+        dists[i][next] = dists[i][now] + 1;
+        q.push(next);
+      }
+    }
   }
+  // print_vector_vector(dists);
+  int ans = 0;
+  rep1(i,n){
+    rep1(j,n){
+      if(dists[i][j] != inf){
+        ans ++;
+      }
+    }
+  }
+  cout << ans << endl;
 }
