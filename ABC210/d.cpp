@@ -37,7 +37,6 @@ void debug_inf(ll n) {
   }
 }
 
-void chmin(int &a, int b) { a = min(a, b); }
 
 int main() {
   ll h, w, c;
