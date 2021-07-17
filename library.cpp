@@ -36,6 +36,14 @@ void chmax(int &a, int b) { a = max(a, b); }
 
 void chmin(int &a, int b) { a = min(a, b); }
 
+void debug_inf(ll n) {
+  if (n == inf) {
+    cout << "#,";
+  } else {
+    cout << n << ",";
+  }
+}
+
 ll gcd(ll a, ll b) {
   if (b == 0)
     return a;

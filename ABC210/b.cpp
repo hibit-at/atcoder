@@ -18,34 +18,21 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-void print_vector_pair(vector<pair<int, int>> v) {
-  for (pair<int, int> i : v) {
-    cout << "(" << i.first << "," << i.second << ")"
-         << " ";
-  }
-  cout << endl;
-}
-
 int main() {
-  ll n, k;
-  cin >> n >> k;
-  vector<pair<int,int>> a(n);
+  int n;
+  cin >> n;
   rep(i,n){
-    int x;
-    cin >> x;
-    a[i] = {x,i};
-  }
-  sort(all(a));
-  map<int,ll> mp;
-  ll res = k % n;
-  rep(i,n){
-    mp[a[i].second] = k / n;
-    if(res > 0){
-      mp[a[i].second] ++;
+    char c;
+    cin >> c;
+    if (c == '1'){
+      if(i%2 == 0){
+        cout << "Takahashi" << endl;
+        return 0;
+      }
+      else{
+        cout << "Aoki" << endl;
+        return 0;
+      }
     }
-    res --;
-  }
-  rep(i,n){
-    cout << mp[i] << endl;
   }
 }
