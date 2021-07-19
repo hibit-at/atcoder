@@ -19,25 +19,4 @@ using namespace std;
 typedef long long ll;
 
 int main() {
-  ll n, k;
-  cin >> n >> k;
-  vector<pair<int,int>> a(n);
-  rep(i,n){
-    int x;
-    cin >> x;
-    a[i] = {x,i};
-  }
-  sort(all(a));
-  map<int,ll> mp;
-  ll res = k % n;
-  rep(i,n){
-    mp[a[i].second] = k / n;
-    if(res > 0){
-      mp[a[i].second] ++;
-    }
-    res --;
-  }
-  rep(i,n){
-    cout << mp[i] << endl;
-  }
 }

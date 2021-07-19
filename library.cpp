@@ -18,6 +18,14 @@ typedef long long ll;
 ll const mod = (ll)1e9 + 7;
 ll const inf = (ll)2e9;
 
+void YesNo(bool b) {
+  if (b) {
+    cout << "Yes" << endl;
+  } else {
+    cout << "No" << endl;
+  }
+}
+
 int inf_to_minus(int n) {
   if (n == inf) {
     return -1;
@@ -35,14 +43,6 @@ char inf_to_wall(int n) {
 void chmax(int &a, int b) { a = max(a, b); }
 
 void chmin(int &a, int b) { a = min(a, b); }
-
-void debug_inf(ll n) {
-  if (n == inf) {
-    cout << "#,";
-  } else {
-    cout << n << ",";
-  }
-}
 
 ll gcd(ll a, ll b) {
   if (b == 0)

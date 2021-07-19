@@ -20,65 +20,45 @@ typedef long long ll;
 
 const ll inf = 1e18;
 
-void print_vector_vector(vector<vector<ll>> vv) {
-  for (vector<ll> v : vv) {
-    for (ll i : v) {
-      cout << i << ",";
-    }
-    cout << endl;
-  }
-}
-
-void debug_inf(ll n) {
-  if (n >= inf) {
-    cout << "#,";
-  } else {
-    cout << n << ",";
-  }
-}
-
+void chmin(ll &a, ll b) { a = min(a, b); }
 
 int main() {
   ll h, w, c;
   cin >> h >> w >> c;
-  vector<vector<ll>> maze(h, vector<ll>(w));
+  vector<vector<vector<ll>>> dp(3, vector<vector<ll>>(h, vector<ll>(w, inf)));
   rep(i, h) {
-    rep(j, w) { cin >> maze[i][j]; }
+    rep(j, w) { cin >> dp[0][i][j]; }
   }
-  vector<vector<vector<ll>>> dp(h, vector<vector<ll>>(w, vector<ll>(3)));
-  // 0 ... 始点
-  // 1 ... スルー
-  // 2 ... そこを終点とする
-  rep(i, h) {
-    rep(j, w) { dp[i][j][0] = maze[i][j]; }
-  }
-  dp[0][0][1] = inf;
-  dp[0][0][2] = inf;
-  //まずスルーの処理
   rep(i, h) {
     rep(j, w) {
-      rep(k, 2) {
-        if (i < h - 1) {
-          dp[i + 1][j][1] = min(dp[i][j][0], dp[i][j][1]) + c;
-        }
-        if (j < w - 1) {
-          dp[i][j + 1][1] = min(dp[i][j][0], dp[i][j][1]) + c;
-        }
-        dp[i][j][2] = dp[i][j][1] + maze[i][j];
+      ll route = min(dp[0][i][j], dp[1][i][j]) + c;
+      if (i < h - 1) {
+        chmin(dp[1][i + 1][j], route);
+      }
+      if (j < w - 1) {
+        chmin(dp[1][i][j + 1], route);
       }
     }
   }
-  // rep(i, h) {
-  //   rep(j, w) { debug_inf(dp[i][j][1]); }
-  //   cout << endl;
-  // }
-  // rep(i, h) {
-  //   rep(j, w) { debug_inf(dp[i][j][2]); }
-  //   cout << endl;
-  // }
+  rep(i, h) { reverse(all(dp[0][i])); }
+  rep(i, h) {
+    rep(j, w) {
+      ll route = min(dp[0][i][j], dp[2][i][j]) + c;
+      if (i < h - 1) {
+        chmin(dp[2][i + 1][j], route);
+      }
+      if (j < w - 1) {
+        chmin(dp[2][i][j + 1], route);
+      }
+    }
+  }
+  rep(i, h) { reverse(all(dp[1][i])); }
   ll ans = inf;
   rep(i, h) {
-    rep(j, w) { ans = min(ans, dp[i][j][2]); }
+    rep(j, w) {
+      ll cost = dp[0][i][j] + min(dp[1][i][j], dp[2][i][j]);
+      chmin(ans, cost);
+    }
   }
   cout << ans << endl;
 }
