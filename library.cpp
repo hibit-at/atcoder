@@ -166,6 +166,12 @@ void print_to_with_cost(vector<vector<pair<int, int>>> to) {
   }
 }
 
+void print_map(map<int,int> mp){
+  for(auto p : mp){
+    cout << "key : " << p.first << ", value : " << p.second << endl;
+  }
+}
+
 void print_maze(vector<vector<char>> maze) {
   int n = maze.size();
   int m = maze[0].size();
