@@ -166,6 +166,17 @@ void print_to_with_cost(vector<vector<pair<int, int>>> to) {
   }
 }
 
+void print_to(vector<vector<int>> to) {
+  int n = to.size();
+  rep(i, n) {
+    cout << "from " << i << " : to ";
+    for (int next : to[i]) {
+      cout << next << ",";
+    }
+    cout << endl;
+  }
+}
+
 void print_map(map<int,int> mp){
   for(auto p : mp){
     cout << "key : " << p.first << ", value : " << p.second << endl;
