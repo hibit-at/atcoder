@@ -202,6 +202,15 @@ void print_vector_vector_pair(vector<vector<pair<int, int>>> vvp) {
   cout << endl;
 }
 
+void print_vector_vector_ll(vector<vector<ll>> vv) {
+  for (vector<ll> v : vv) {
+    for (ll i : v) {
+      cout << i << ",";
+    }
+    cout << endl;
+  }
+}
+
 void print_vector_vector(vector<vector<int>> vv) {
   for (vector<int> v : vv) {
     for (int i : v) {
