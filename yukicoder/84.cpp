@@ -19,4 +19,13 @@ using namespace std;
 typedef long long ll;
 
 int main() {
+  int k;
+  cin >> k;
+  vector<double> dp(2e5, 0);
+  rep1(i, k) {
+    int vi = i + 2e5;
+    dp[vi] = 1;
+    rep1(j, 6) { dp[vi] += dp[vi - j] * 1 / 6; }
+  }
+  cout << dp[2e5+k] << endl;
 }
