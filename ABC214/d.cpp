@@ -18,51 +18,59 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-vector<bool> seen;
-vector<bool> opt;
-vector<vector<pair<int, int>>> to;
+struct UnionFind {
+  vector<int> par;
 
-void print_to_with_cost(vector<vector<pair<int, int>>> to) {
-  int n = to.size();
-  rep(i, n) {
-    cout << "from " << i << " : ";
-    for (auto p : to[i]) {
-      cout << "(to " << p.first << ",cost " << p.second << ") ";
-    }
-    cout << endl;
+  UnionFind(int N) : par(N) {
+    for (int i = 0; i < N; i++)
+      par[i] = -1;
   }
-}
 
-ll dfs(int now) {
-  ll ans = 0;
-  cout << now << endl;
-  seen[now] = true;
-  for (auto next_pair : to[now]) {
-    int next = next_pair.first;
-    if (seen[next]) {
-      continue;
-    }
-    cout << "next target is " << next << endl;
-    if (opt[now] and opt[next]) {
-      continue;
-    }
-    ans += 1 + dfs(next);
+  int root(int x) {
+    if (par[x] < 0)
+      return x;
+    return par[x] = root(par[x]);
   }
-  return ans;
-}
+
+  void unite(int x, int y) {
+    int rx = root(x);
+    int ry = root(y);
+    if (same(x, y)) {
+      return;
+    }
+    if (par[rx] > par[ry])
+      swap(rx, ry);
+    par[rx] += par[ry];
+    par[ry] = rx;
+    return;
+  }
+
+  bool same(int x, int y) {
+    int rx = root(x);
+    int ry = root(y);
+    return rx == ry;
+  }
+
+  int size(int x) { return -par[root(x)]; }
+};
 
 int main() {
   int n;
   cin >> n;
-  opt.resize(n + 1, false);
-  to.resize(n + 1);
-  rep1(i, n - 1) {
+  UnionFind uf(n + 1);
+  vector<tuple<int,int,int>> to;
+  rep(i, n - 1) {
     int u, v, w;
     cin >> u >> v >> w;
-    seen = vector<bool>(n + 1, false);
-    seen[u] = true;
-    seen[v] = true;
-    cout << dfs(u) << endl;
-    cout << dfs(v) << endl;
+    to.push_back({w,u,v});
   }
+  sort(all(to));
+  ll ans = 0;
+  for (auto t : to) {
+    int u,v,w;
+    tie(w,u,v) = t;
+    ans += 1LL * w * uf.size(u) * uf.size(v);
+    uf.unite(u, v);
+  }
+  cout << ans << endl;
 }

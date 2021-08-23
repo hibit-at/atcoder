@@ -68,47 +68,45 @@ void sub_mod(int &a, int b, int mod) {
   a %= mod;
 }
 
-struct edge{ll to, cost;};
-typedef pair<ll,ll> P;
-struct graph{
+struct edge {
+  ll to, cost;
+};
+typedef pair<ll, ll> P;
+struct graph {
   ll V;
-  vector<vector<edge> > G;
+  vector<vector<edge>> G;
   vector<ll> d;
 
-  graph(ll n){
-    init(n);
-  }
+  graph(ll n) { init(n); }
 
-  void init(ll n){
+  void init(ll n) {
     V = n;
     G.resize(V);
     d.resize(V);
-    rep(i,V){
-      d[i] = inf;
-    }
+    rep(i, V) { d[i] = inf; }
   }
 
-  void add_edge(ll s, ll t, ll cost){
+  void add_edge(ll s, ll t, ll cost) {
     edge e;
     e.to = t, e.cost = cost;
     G[s].push_back(e);
   }
 
-  void dijkstra(ll s){
-    rep(i,V){
-      d[i] = inf;
-    }
+  void dijkstra(ll s) {
+    rep(i, V) { d[i] = inf; }
     d[s] = 0;
-    priority_queue<P,vector<P>, greater<P> > que;
-    que.push(P(0,s));
-    while(!que.empty()){
-      P p = que.top(); que.pop();
+    priority_queue<P, vector<P>, greater<P>> que;
+    que.push(P(0, s));
+    while (!que.empty()) {
+      P p = que.top();
+      que.pop();
       ll v = p.second;
-      if(d[v]<p.first) continue;
-      for(auto e : G[v]){
-        if(d[e.to]>d[v]+e.cost){
-          d[e.to] = d[v]+e.cost;
-          que.push(P(d[e.to],e.to));
+      if (d[v] < p.first)
+        continue;
+      for (auto e : G[v]) {
+        if (d[e.to] > d[v] + e.cost) {
+          d[e.to] = d[v] + e.cost;
+          que.push(P(d[e.to], e.to));
         }
       }
     }
@@ -178,11 +176,11 @@ struct UnionFind {
 
   UnionFind(int N) : par(N) {
     for (int i = 0; i < N; i++)
-      par[i] = i;
+      par[i] = -1;
   }
 
   int root(int x) {
-    if (par[x] == x)
+    if (par[x] < 0)
       return x;
     return par[x] = root(par[x]);
   }
@@ -190,9 +188,14 @@ struct UnionFind {
   void unite(int x, int y) {
     int rx = root(x);
     int ry = root(y);
-    if (rx == ry)
+    if (same(x, y)) {
       return;
-    par[rx] = ry;
+    }
+    if (par[rx] > par[ry])
+      swap(rx, ry);
+    par[rx] += par[ry];
+    par[ry] = rx;
+    return;
   }
 
   bool same(int x, int y) {
@@ -200,6 +203,8 @@ struct UnionFind {
     int ry = root(y);
     return rx == ry;
   }
+
+  int size(int x) { return -par[root(x)]; }
 };
 
 void print_to_with_cost(vector<vector<pair<int, int>>> to) {
@@ -224,12 +229,11 @@ void print_to(vector<vector<int>> to) {
   }
 }
 
-void print_map(map<int,int> mp){
-  for(auto p : mp){
+void print_map(map<int, int> mp) {
+  for (auto p : mp) {
     cout << "key : " << p.first << ", value : " << p.second << endl;
   }
 }
-
 
 void print_maze(vector<vector<char>> maze) {
   int n = maze.size();
@@ -290,7 +294,7 @@ void print_vector(vector<int> v) {
   cout << endl;
 }
 
-void print_deque(deque<int> q){
+void print_deque(deque<int> q) {
   while (q.size() > 0) {
     int now = q.front();
     q.pop_back();
