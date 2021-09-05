@@ -18,23 +18,31 @@ typedef long long ll;
 ll const mod = (ll)1e9 + 7;
 ll const inf = (ll)2e9;
 
-void YesNo(bool b) {
-  if (b) {
+void YesNo(bool b)
+{
+  if (b)
+  {
     cout << "Yes" << endl;
-  } else {
+  }
+  else
+  {
     cout << "No" << endl;
   }
 }
 
-int inf_to_minus(int n) {
-  if (n == inf) {
+int inf_to_minus(int n)
+{
+  if (n == inf)
+  {
     return -1;
   }
   return n;
 }
 
-char inf_to_wall(int n) {
-  if (n == inf) {
+char inf_to_wall(int n)
+{
+  if (n == inf)
+  {
     return '#';
   }
   return n + '0';
@@ -44,7 +52,8 @@ void chmax(int &a, int b) { a = max(a, b); }
 
 void chmin(int &a, int b) { a = min(a, b); }
 
-ll gcd(ll a, ll b) {
+ll gcd(ll a, ll b)
+{
   if (b == 0)
     return a;
   return gcd(b, a % b);
@@ -52,59 +61,70 @@ ll gcd(ll a, ll b) {
 
 ll lcm(ll a, ll b) { return a * b / gcd(a, b); }
 
-int index(vector<int> v, int target) {
+int index(vector<int> v, int target)
+{
   return find(all(v), target) - v.begin();
 }
 
-void plus_mod(ll &a, ll b, ll mod) {
+void plus_mod(ll &a, ll b, ll mod)
+{
   a += b;
   a %= mod;
 }
 
-void sub_mod(int &a, int b, int mod) {
+void sub_mod(int &a, int b, int mod)
+{
   a -= b;
   a %= mod;
   a += mod;
   a %= mod;
 }
 
-struct edge {
+struct edge
+{
   ll to, cost;
 };
 typedef pair<ll, ll> P;
-struct graph {
+struct graph
+{
   ll V;
   vector<vector<edge>> G;
   vector<ll> d;
 
   graph(ll n) { init(n); }
 
-  void init(ll n) {
+  void init(ll n)
+  {
     V = n;
     G.resize(V);
     d.resize(V);
     rep(i, V) { d[i] = inf; }
   }
 
-  void add_edge(ll s, ll t, ll cost) {
+  void add_edge(ll s, ll t, ll cost)
+  {
     edge e;
     e.to = t, e.cost = cost;
     G[s].push_back(e);
   }
 
-  void dijkstra(ll s) {
+  void dijkstra(ll s)
+  {
     rep(i, V) { d[i] = inf; }
     d[s] = 0;
     priority_queue<P, vector<P>, greater<P>> que;
     que.push(P(0, s));
-    while (!que.empty()) {
+    while (!que.empty())
+    {
       P p = que.top();
       que.pop();
       ll v = p.second;
       if (d[v] < p.first)
         continue;
-      for (auto e : G[v]) {
-        if (d[e.to] > d[v] + e.cost) {
+      for (auto e : G[v])
+      {
+        if (d[e.to] > d[v] + e.cost)
+        {
           d[e.to] = d[v] + e.cost;
           que.push(P(d[e.to], e.to));
         }
@@ -113,18 +133,22 @@ struct graph {
   }
 };
 
-vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start) {
+vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
+{
   vector<int> dist(n + 1, inf);
   queue<int> q;
   dist[start] = 0;
   q.push(start);
-  while (q.size() > 0) {
+  while (q.size() > 0)
+  {
     int now = q.front();
     q.pop();
-    for (auto next_pair : to[now]) {
+    for (auto next_pair : to[now])
+    {
       int next = next_pair.first;
       int cost = next_pair.second;
-      if (dist[next] <= dist[now] + cost) {
+      if (dist[next] <= dist[now] + cost)
+      {
         continue;
       }
       dist[next] = dist[now] + cost;
@@ -134,16 +158,20 @@ vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start) {
   return dist;
 }
 
-vector<int> bfs(int n, vector<vector<int>> to, int start) {
+vector<int> bfs(int n, vector<vector<int>> to, int start)
+{
   vector<int> dist(n + 1, inf);
   queue<int> q;
   dist[start] = 0;
   q.push(start);
-  while (q.size() > 0) {
+  while (q.size() > 0)
+  {
     int now = q.front();
     q.pop();
-    for (int next : to[now]) {
-      if (dist[next] <= dist[now] + 1) {
+    for (int next : to[now])
+    {
+      if (dist[next] <= dist[now] + 1)
+      {
         continue;
       }
       dist[next] = dist[now] + 1;
@@ -153,42 +181,52 @@ vector<int> bfs(int n, vector<vector<int>> to, int start) {
   return dist;
 }
 
-vector<pair<ll, ll>> prime_factorize(ll n) {
+vector<pair<ll, ll>> prime_factorize(ll n)
+{
   vector<pair<ll, ll>> ans;
-  for (ll i = 2; i * i <= n; i++) {
-    if (n % i == 0) {
+  for (ll i = 2; i * i <= n; i++)
+  {
+    if (n % i == 0)
+    {
       ll ex = 0;
-      while (n % i == 0) {
+      while (n % i == 0)
+      {
         ex++;
         n /= i;
       }
       ans.push_back({i, ex});
     }
   }
-  if (n != 1) {
+  if (n != 1)
+  {
     ans.push_back({n, 1});
   }
   return ans;
 }
 
-struct UnionFind {
+struct UnionFind
+{
   vector<int> par;
 
-  UnionFind(int N) : par(N) {
+  UnionFind(int N) : par(N)
+  {
     for (int i = 0; i < N; i++)
       par[i] = -1;
   }
 
-  int root(int x) {
+  int root(int x)
+  {
     if (par[x] < 0)
       return x;
     return par[x] = root(par[x]);
   }
 
-  void unite(int x, int y) {
+  void unite(int x, int y)
+  {
     int rx = root(x);
     int ry = root(y);
-    if (same(x, y)) {
+    if (same(x, y))
+    {
       return;
     }
     if (par[rx] > par[ry])
@@ -198,7 +236,8 @@ struct UnionFind {
     return;
   }
 
-  bool same(int x, int y) {
+  bool same(int x, int y)
+  {
     int rx = root(x);
     int ry = root(y);
     return rx == ry;
@@ -207,46 +246,59 @@ struct UnionFind {
   int size(int x) { return -par[root(x)]; }
 };
 
-void print_to_with_cost(vector<vector<pair<int, int>>> to) {
+void print_to_with_cost(vector<vector<pair<int, int>>> to)
+{
   int n = to.size();
-  rep(i, n) {
+  rep(i, n)
+  {
     cout << "from " << i << " : ";
-    for (auto p : to[i]) {
+    for (auto p : to[i])
+    {
       cout << "(to " << p.first << ",cost " << p.second << ") ";
     }
     cout << endl;
   }
 }
 
-void print_to(vector<vector<int>> to) {
+void print_to(vector<vector<int>> to)
+{
   int n = to.size();
-  rep(i, n) {
+  rep(i, n)
+  {
     cout << "from " << i << " : to ";
-    for (int next : to[i]) {
+    for (int next : to[i])
+    {
       cout << next << ",";
     }
     cout << endl;
   }
 }
 
-void print_map(map<int, int> mp) {
-  for (auto p : mp) {
+void print_map(map<int, int> mp)
+{
+  for (auto p : mp)
+  {
     cout << "key : " << p.first << ", value : " << p.second << endl;
   }
 }
 
-void print_maze(vector<vector<char>> maze) {
+void print_maze(vector<vector<char>> maze)
+{
   int n = maze.size();
   int m = maze[0].size();
-  rep(i, n) {
+  rep(i, n)
+  {
     rep(j, m) { cout << maze[i][j]; }
     cout << endl;
   }
 }
 
-void print_vector_vector_pair(vector<vector<pair<int, int>>> vvp) {
-  for (vector<pair<int, int>> vp : vvp) {
-    for (pair<int, int> p : vp) {
+void print_vector_vector_pair(vector<vector<pair<int, int>>> vvp)
+{
+  for (vector<pair<int, int>> vp : vvp)
+  {
+    for (pair<int, int> p : vp)
+    {
       cout << "(" << p.first << "," << p.second << ")"
            << " ";
     }
@@ -254,48 +306,62 @@ void print_vector_vector_pair(vector<vector<pair<int, int>>> vvp) {
   cout << endl;
 }
 
-void print_vector_vector_ll(vector<vector<ll>> vv) {
-  for (vector<ll> v : vv) {
-    for (ll i : v) {
+void print_vector_vector_ll(vector<vector<ll>> vv)
+{
+  for (vector<ll> v : vv)
+  {
+    for (ll i : v)
+    {
       cout << i << ",";
     }
     cout << endl;
   }
 }
 
-void print_vector_vector(vector<vector<int>> vv) {
-  for (vector<int> v : vv) {
-    for (int i : v) {
+void print_vector_vector(vector<vector<int>> vv)
+{
+  for (vector<int> v : vv)
+  {
+    for (int i : v)
+    {
       cout << i << ",";
     }
     cout << endl;
   }
 }
 
-void print_vector_pair(vector<pair<int, int>> v) {
-  for (pair<int, int> i : v) {
+void print_vector_pair(vector<pair<int, int>> v)
+{
+  for (pair<int, int> i : v)
+  {
     cout << "(" << i.first << "," << i.second << ")"
          << " ";
   }
   cout << endl;
 }
 
-void print_vector_ll(vector<ll> v) {
-  for (ll i : v) {
+void print_vector_ll(vector<ll> v)
+{
+  for (ll i : v)
+  {
     cout << i << " ";
   }
   cout << endl;
 }
 
-void print_vector(vector<int> v) {
-  for (int i : v) {
+void print_vector(vector<int> v)
+{
+  for (int i : v)
+  {
     cout << i << " ";
   }
   cout << endl;
 }
 
-void print_deque(deque<int> q) {
-  while (q.size() > 0) {
+void print_deque(deque<int> q)
+{
+  while (q.size() > 0)
+  {
     int now = q.front();
     q.pop_back();
     cout << now << " ";
@@ -303,8 +369,10 @@ void print_deque(deque<int> q) {
   cout << endl;
 }
 
-void print_queue(queue<int> q) {
-  while (q.size() > 0) {
+void print_queue(queue<int> q)
+{
+  while (q.size() > 0)
+  {
     int now = q.front();
     q.pop();
     cout << now << " ";
@@ -312,8 +380,10 @@ void print_queue(queue<int> q) {
   cout << endl;
 }
 
-void print_stack(stack<int> q) {
-  while (q.size() > 0) {
+void print_stack(stack<int> q)
+{
+  while (q.size() > 0)
+  {
     int now = q.top();
     q.pop();
     cout << now << " ";
@@ -321,8 +391,10 @@ void print_stack(stack<int> q) {
   cout << endl;
 }
 
-void print_priority_queue(priority_queue<int> q) {
-  while (q.size() > 0) {
+void print_priority_queue(priority_queue<int> q)
+{
+  while (q.size() > 0)
+  {
     int now = q.top();
     q.pop();
     cout << now << " ";
@@ -330,15 +402,18 @@ void print_priority_queue(priority_queue<int> q) {
   cout << endl;
 }
 
-vector<pair<int, char>> swapmap(map<char, int> mp) {
+vector<pair<int, char>> swapmap(map<char, int> mp)
+{
   vector<pair<int, char>> vp;
-  for (auto p : mp) {
+  for (auto p : mp)
+  {
     vp.push_back(make_pair(p.second, p.first));
   }
   return vp;
 }
 
-ll rpow(ll a, ll r, ll mod) {
+ll rpow(ll a, ll r, ll mod)
+{
   if (r == 0)
     return 1;
   ll ans = rpow(a, r / 2, mod);
@@ -350,23 +425,29 @@ ll rpow(ll a, ll r, ll mod) {
   return ans;
 }
 
-vector<ll> make_fact(int limit) {
+vector<ll> make_fact(int limit)
+{
   vector<ll> ans(limit, 1);
-  rep(i, limit - 1) {
+  rep(i, limit - 1)
+  {
     ans[i + 1] = ans[i] * (i + 1);
     ans[i + 1] %= mod;
   }
   return ans;
 }
 
-vector<bool> make_erat(int limit) {
+vector<bool> make_erat(int limit)
+{
   vector<bool> erat(limit, true);
   erat[0] = false;
   erat[1] = false;
-  for (int i = 0; i * i < limit; i++) {
-    if (erat[i]) {
+  for (int i = 0; i * i < limit; i++)
+  {
+    if (erat[i])
+    {
       int j = i * i;
-      while (j < limit) {
+      while (j < limit)
+      {
         erat[j] = false;
         j += i;
       }
@@ -375,30 +456,36 @@ vector<bool> make_erat(int limit) {
   return erat;
 }
 
-string binary_expression(int n, int d) {
+string binary_expression(int n, int d)
+{
   string ans = "";
   rep(i, d) { ans.push_back((n >> i & 1) + '0'); }
   return ans;
 }
 
-class segment_tree {
+class segment_tree
+{
 private:
   int sz;
   vector<int> seg;
   vector<int> lazy;
-  void push(int k) {
-    if (k < sz) {
+  void push(int k)
+  {
+    if (k < sz)
+    {
       lazy[k * 2] = max(lazy[k * 2], lazy[k]);
       lazy[k * 2 + 1] = max(lazy[k * 2 + 1], lazy[k]);
     }
     seg[k] = max(seg[k], lazy[k]);
     lazy[k] = 0;
   }
-  void update(int a, int b, int x, int k, int l, int r) {
+  void update(int a, int b, int x, int k, int l, int r)
+  {
     push(k);
     if (r <= a || b <= l)
       return;
-    if (a <= l && r <= b) {
+    if (a <= l && r <= b)
+    {
       lazy[k] = x;
       push(k);
       return;
@@ -407,7 +494,8 @@ private:
     update(a, b, x, k * 2 + 1, (l + r) >> 1, r);
     seg[k] = max(seg[k * 2], seg[k * 2 + 1]);
   }
-  int range_max(int a, int b, int k, int l, int r) {
+  int range_max(int a, int b, int k, int l, int r)
+  {
     push(k);
     if (r <= a || b <= l)
       return 0;
@@ -420,9 +508,11 @@ private:
 
 public:
   segment_tree() : sz(0), seg(), lazy(){};
-  segment_tree(int N) {
+  segment_tree(int N)
+  {
     sz = 1;
-    while (sz < N) {
+    while (sz < N)
+    {
       sz *= 2;
     }
     seg = std::vector<int>(sz * 2, 0);

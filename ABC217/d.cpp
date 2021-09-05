@@ -20,20 +20,24 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
-    map<string, int> mp;
-    rep(i, n)
+    ll l, q;
+    cin >> l >> q;
+    vector<ll> v = {0, l};
+    rep(_, q)
     {
-        string s, t;
-        cin >> s >> t;
-        string hash = s + '+' + t;
-        mp[hash]++;
-        if (mp[hash] > 1)
+        ll c, x;
+        cin >> c >> x;
+        if (c == 1)
         {
-            cout << "Yes" << endl;
-            return 0;
+            v.push_back(x);
+            sort(all(v));
+        }
+        if (c == 2)
+        {
+            auto lb = lower_bound(all(v),x);
+            ll start = *(lb-1);
+            ll end = *lb;
+            cout << end - start << endl;
         }
     }
-    cout << "No" << endl;
 }

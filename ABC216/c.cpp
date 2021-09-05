@@ -17,13 +17,13 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-int n;
+ll n;
 
 int main()
 {
   cin >> n;
-  string ans;
-  while (n > 1)
+  string ans = "";
+  while (n)
   {
     if (n % 2 == 0)
     {
@@ -36,7 +36,6 @@ int main()
       n--;
     }
   }
-  ans.push_back('A');
   reverse(all(ans));
   cout << ans << endl;
 }

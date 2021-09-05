@@ -22,18 +22,23 @@ int main(void)
 {
     int n;
     cin >> n;
-    map<string, int> mp;
+    vector<int> ans(n);
     rep(i, n)
     {
-        string s, t;
-        cin >> s >> t;
-        string hash = s + '+' + t;
-        mp[hash]++;
-        if (mp[hash] > 1)
+        int q;
+        cin >> q;
+        ans[q - 1] = i + 1;
+    }
+    rep(i, n)
+    {
+        cout << ans[i];
+        if (i < n - 1)
         {
-            cout << "Yes" << endl;
-            return 0;
+            cout << " ";
+        }
+        else
+        {
+            cout << endl;
         }
     }
-    cout << "No" << endl;
 }
