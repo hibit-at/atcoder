@@ -133,6 +133,48 @@ struct graph
   }
 };
 
+bool top_sort(int n, vector<vector<int>> to)
+{
+  vector<int> graph(n + 1);
+  rep1(i, n)
+  {
+    for (int next : to[i])
+    {
+      graph[next]++;
+    }
+  }
+  // print_vector(graph);
+  stack<int> st;
+  rep1(i, n)
+  {
+    if (graph[i] == 0)
+    {
+      st.push(i);
+    }
+  }
+  while (st.size() > 0)
+  {
+    int now = st.top();
+    st.pop();
+    for (int next : to[now])
+    {
+      graph[next]--;
+      if (graph[next] == 0)
+      {
+        st.push(next);
+      }
+    }
+  }
+  rep1(i, n)
+  {
+    if (graph[i] > 0)
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
 vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
 {
   vector<int> dist(n + 1, inf);
@@ -272,6 +314,15 @@ void print_to(vector<vector<int>> to)
     }
     cout << endl;
   }
+}
+
+void print_set(set<int> st)
+{
+  for (int s : st)
+  {
+    cout << s << ",";
+  }
+  cout << endl;
 }
 
 void print_map(map<int, int> mp)

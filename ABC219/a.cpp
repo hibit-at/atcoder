@@ -18,36 +18,18 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-void print_set(set<int> st)
-{
-    for (int s : st)
-    {
-        cout << s << ",";
-    }
-    cout << endl;
-}
-
 int main(void)
 {
-    ll l, q;
-    cin >> l >> q;
-    set<int> st;
-    st.insert(0);
-    st.insert(l);
-    rep(_, q)
+    int x;
+    cin >> x;
+    vector<int> scores = {40, 70, 90};
+    rep(i, 3)
     {
-        ll c, x;
-        cin >> c >> x;
-        if (c == 1)
+        if (x < scores[i])
         {
-            st.insert(x);
-        }
-        else
-        {
-            auto lb = st.lower_bound(x);
-            ll start = *prev(lb);
-            ll end = *lb;
-            cout << end - start << endl;
+            cout << scores[i] - x << endl;
+            return 0;
         }
     }
+    cout << "expert" << endl;
 }

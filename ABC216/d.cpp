@@ -9,6 +9,7 @@
 #include <sstream>
 #include <utility>
 #include <vector>
+#include <stack>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
@@ -17,64 +18,80 @@ using namespace std;
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 typedef long long ll;
 
-void print_vector(vector<int> v)
+void YesNo(bool b)
 {
-    for (int i : v)
+    if (b)
     {
-        cout << i << " ";
+        cout << "Yes" << endl;
     }
-    cout << endl;
+    else
+    {
+        cout << "No" << endl;
+    }
+}
+
+bool top_sort(int n, vector<vector<int>> to)
+{
+    vector<int> graph(n + 1);
+    rep1(i, n)
+    {
+        for (int next : to[i])
+        {
+            graph[next]++;
+        }
+    }
+    // print_vector(graph);
+    stack<int> st;
+    rep1(i, n)
+    {
+        if (graph[i] == 0)
+        {
+            st.push(i);
+        }
+    }
+    while (st.size() > 0)
+    {
+        int now = st.top();
+        st.pop();
+        for (int next : to[now])
+        {
+            graph[next]--;
+            if (graph[next] == 0)
+            {
+                st.push(next);
+            }
+        }
+    }
+    rep1(i, n)
+    {
+        if (graph[i] > 0)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 int main()
 {
-    int n, m, k;
+    int n, m;
     cin >> n >> m;
-    vector<int> graph(n + 1);
-    rep(i, m)
+    vector<vector<int>> to(n + 1, vector<int>());
+    rep(_, m)
     {
         int k;
         cin >> k;
-        vector<int> a(k);
-        rep(j, k)
+        int last = -1;
+        int now = -1;
+        rep(i, k)
         {
-            int x;
-            cin >> x;
-            a[j] = x;
-        }
-        rep(j, k - 1)
-        {
-            graph[a[j]] = a[j + 1];
+            cin >> now;
+            if (last != -1)
+            {
+                to[last].push_back(now);
+            }
+            last = now;
         }
     }
-    // print_vector(graph);
-    vector<bool> seen(n + 1);
-    rep1(i, n)
-    {
-        if (seen[i])
-        {
-            continue;
-        }
-        queue<int> q;
-        q.push(i);
-        while (q.size())
-        {
-            int now = q.front();
-            q.pop();
-            // cout << "start from " << i << " now is " << now << endl;
-            seen[now] = true;
-            int next = graph[now];
-            if (next == 0)
-            {
-                continue;
-            }
-            if (seen[next])
-            {
-                cout << "No" << endl;
-                return 0;
-            }
-            q.push(next);
-        }
-    }
-    cout << "Yes" << endl;
+    YesNo(top_sort(n, to));
 }
