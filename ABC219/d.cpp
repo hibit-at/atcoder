@@ -16,11 +16,21 @@ using namespace std;
 #define rep1(i, n) for (ll i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
+#define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
 const int inf = 2e5;
 
 void chmin(int &a, int b) { a = min(a, b); }
+
+int inf_to_minus(int n)
+{
+  if (n == inf)
+  {
+    return -1;
+  }
+  return n;
+}
 
 int main(void)
 {
@@ -45,10 +55,10 @@ int main(void)
                 int next_tai = tai + add_tai;
                 chmin(next_tako, x);
                 chmin(next_tai, y);
-                chmin(dp[i + 1][tako + add_tako][tai + add_tai], dp[i][tako][tai] + 1);
-                dp[i + 1][tako][tai] = dp[i][tako][tai];
+                chmin(dp[i + 1][next_tako][next_tai], dp[i][tako][tai] + 1);
+                chmin(dp[i + 1][tako][tai],dp[i][tako][tai]);
             }
         }
     }
-    cout << dp[0][0][0] << endl;
+    cout << inf_to_minus(dp[n][x][y]) << endl;
 }

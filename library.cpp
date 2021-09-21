@@ -13,6 +13,7 @@ using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
+#define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
 ll const mod = (ll)1e9 + 7;
