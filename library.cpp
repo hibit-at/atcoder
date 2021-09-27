@@ -49,9 +49,11 @@ char inf_to_wall(int n)
   return n + '0';
 }
 
-void chmax(int &a, int b) { a = max(a, b); }
+template <typename T>
+void chmax(T &a, T b) { a = max(a, b); }
 
-void chmin(int &a, int b) { a = min(a, b); }
+template <typename T>
+void chmin(T &a, T b) { a = min(a, b); }
 
 ll gcd(ll a, ll b)
 {
@@ -144,7 +146,6 @@ bool top_sort(int n, vector<vector<int>> to)
       graph[next]++;
     }
   }
-  // print_vector(graph);
   stack<int> st;
   rep1(i, n)
   {
@@ -175,6 +176,20 @@ bool top_sort(int n, vector<vector<int>> to)
   }
   return true;
 }
+
+// void tree_dp(int pos, int pre)
+// {
+//     dp[pos] = 1;
+//     for (int next : to[pos])
+//     {
+//         if (next == pre)
+//         {
+//             continue;
+//         }
+//         tree_dp(next, pos);
+//         dp[pos] += dp[next];
+//     }
+// }
 
 vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
 {
@@ -222,6 +237,24 @@ vector<int> bfs(int n, vector<vector<int>> to, int start)
     }
   }
   return dist;
+}
+
+vector<ll> divisor(ll n)
+{
+  vector<ll> ans;
+  for (ll i = 1; i * i <= n; i++)
+  {
+    if (n % i == 0)
+    {
+      ans.push_back(i);
+      if (i * i != n)
+      {
+        ans.push_back(n / i);
+      }
+    }
+  }
+  sort(all(ans));
+  return ans;
 }
 
 vector<pair<ll, ll>> prime_factorize(ll n)
@@ -345,34 +378,10 @@ void print_maze(vector<vector<char>> maze)
   }
 }
 
-void print_vector_vector_pair(vector<vector<pair<int, int>>> vvp)
+template <typename T>
+void print_vector_vector(vector<vector<T>> vv)
 {
-  for (vector<pair<int, int>> vp : vvp)
-  {
-    for (pair<int, int> p : vp)
-    {
-      cout << "(" << p.first << "," << p.second << ")"
-           << " ";
-    }
-  }
-  cout << endl;
-}
-
-void print_vector_vector_ll(vector<vector<ll>> vv)
-{
-  for (vector<ll> v : vv)
-  {
-    for (ll i : v)
-    {
-      cout << i << ",";
-    }
-    cout << endl;
-  }
-}
-
-void print_vector_vector(vector<vector<int>> vv)
-{
-  for (vector<int> v : vv)
+  for (vector<T> v : vv)
   {
     for (int i : v)
     {
@@ -382,9 +391,10 @@ void print_vector_vector(vector<vector<int>> vv)
   }
 }
 
-void print_vector_pair(vector<pair<int, int>> v)
+template <typename S, typename T>
+void print_vector_pair(vector<pair<S, T>> v)
 {
-  for (pair<int, int> i : v)
+  for (pair<S, T> i : v)
   {
     cout << "(" << i.first << "," << i.second << ")"
          << " ";
@@ -392,36 +402,19 @@ void print_vector_pair(vector<pair<int, int>> v)
   cout << endl;
 }
 
-void print_vector_ll(vector<ll> v)
+template <typename T>
+void print_vector(vector<T> v)
 {
   for (ll i : v)
   {
-    cout << i << " ";
+    cout << i << ",";
   }
   cout << endl;
+  return;
 }
 
-void print_vector(vector<int> v)
-{
-  for (int i : v)
-  {
-    cout << i << " ";
-  }
-  cout << endl;
-}
-
-void print_deque(deque<int> q)
-{
-  while (q.size() > 0)
-  {
-    int now = q.front();
-    q.pop_back();
-    cout << now << " ";
-  }
-  cout << endl;
-}
-
-void print_queue(queue<int> q)
+template<typename T>
+void print_front(T q)
 {
   while (q.size() > 0)
   {
@@ -432,7 +425,8 @@ void print_queue(queue<int> q)
   cout << endl;
 }
 
-void print_stack(stack<int> q)
+template<typename T>
+void print_top(T q)
 {
   while (q.size() > 0)
   {
@@ -443,15 +437,9 @@ void print_stack(stack<int> q)
   cout << endl;
 }
 
-void print_priority_queue(priority_queue<int> q)
-{
-  while (q.size() > 0)
-  {
-    int now = q.top();
-    q.pop();
-    cout << now << " ";
-  }
-  cout << endl;
+template<typename T, typename S>
+void print_pair(pair<T,S> p){
+  cout << "(" p.first << ", " << p.second << ")" << endl;
 }
 
 vector<pair<int, char>> swapmap(map<char, int> mp)
@@ -479,8 +467,8 @@ ll rpow(ll a, ll r, ll mod)
 
 vector<ll> make_fact(int limit)
 {
-  vector<ll> ans(limit, 1);
-  rep(i, limit - 1)
+  vector<ll> ans(limit + 1, 1);
+  rep(i, limit)
   {
     ans[i + 1] = ans[i] * (i + 1);
     ans[i + 1] %= mod;
@@ -490,7 +478,7 @@ vector<ll> make_fact(int limit)
 
 vector<bool> make_erat(int limit)
 {
-  vector<bool> erat(limit, true);
+  vector<bool> erat(limit + 1, true);
   erat[0] = false;
   erat[1] = false;
   for (int i = 0; i * i < limit; i++)
@@ -498,7 +486,7 @@ vector<bool> make_erat(int limit)
     if (erat[i])
     {
       int j = i * i;
-      while (j < limit)
+      while (j <= limit)
       {
         erat[j] = false;
         j += i;
