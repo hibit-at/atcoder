@@ -6,11 +6,11 @@
 #include <numeric>
 #include <queue>
 #include <set>
+#include <stack>
 #include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <stack>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
@@ -21,5 +21,27 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    ll n;
+    string s;
+    cin >> n >> s;
+    s.push_back('#');
+    char last = '#';
+    ll tmp = 0;
+    ll ans = n * (n - 1) / 2;
+    for (char now : s)
+    {
+        if (now == last)
+        {
+            tmp++;
+        }
+        else
+        {
+            ans -= tmp * (tmp - 1) / 2;
+            last = now;
+            tmp = 1;
+        }
+    }
+    cout << ans << endl;
 }

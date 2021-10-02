@@ -10,16 +10,33 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <stack>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
 #define rep1(i, n) for (ll i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
-#define debug(var) cout << #var << " = " << var << endl;
-
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    ll a, b, c;
+    cin >> a >> b >> c;
+    if (c % 2 == 0)
+    {
+        a *= a;
+        b *= b;
+    }
+    if (a > b)
+    {
+        cout << ">" << endl;
+    }
+    else if (a < b)
+    {
+        cout << "<" << endl;
+    }
+    else
+    {
+        cout << "=" << endl;
+    }
 }

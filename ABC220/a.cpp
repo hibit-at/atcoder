@@ -21,5 +21,21 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int a, b, c;
+    cin >> a >> b >> c;
+    rep(i, b + 1)
+    {
+        if (i < a)
+        {
+            continue;
+        }
+        if (i % c == 0)
+        {
+            cout << i << endl;
+            return 0;
+        }
+    }
+    cout << -1 << endl;
 }
