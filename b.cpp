@@ -24,18 +24,6 @@ void clear_queue(queue<int> &q) {
 int main() {
   int n;
   cin >> n;
-<<<<<<< HEAD
-  map<int,int> mp;
-  rep(i,n){
-    int a;
-    cin >> a;
-    mp[a] ++;
-  }
-  if(mp.size() == n){
-    cout << "Yes" << endl;
-  }else{
-    cout << "No" << endl;
-=======
   //元となるキューpと、尺取り中の列q
   queue<int> p, q;
   rep(i, n) {
@@ -60,7 +48,6 @@ int main() {
       }
     }
     q.push(now);
->>>>>>> e6d71b39984d79fdb2c10411835c1bca8dab5505
   }
   cout << ans << endl;
 }
