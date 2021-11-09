@@ -336,7 +336,8 @@ void print_to_with_cost(vector<vector<pair<int, int>>> to)
   }
 }
 
-void print_to(vector<vector<int>> to)
+template <typename T>
+void print_to(vector<vector<T>> to)
 {
   int n = to.size();
   rep(i, n)
@@ -405,7 +406,7 @@ void print_vector_pair(vector<pair<S, T>> v)
 template <typename T>
 void print_vector(vector<T> v)
 {
-  for (ll i : v)
+  for (T i : v)
   {
     cout << i << ",";
   }
