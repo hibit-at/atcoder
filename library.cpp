@@ -414,7 +414,7 @@ void print_vector(vector<T> v)
   return;
 }
 
-template<typename T>
+template <typename T>
 void print_front(T q)
 {
   while (q.size() > 0)
@@ -426,7 +426,7 @@ void print_front(T q)
   cout << endl;
 }
 
-template<typename T>
+template <typename T>
 void print_top(T q)
 {
   while (q.size() > 0)
@@ -438,8 +438,9 @@ void print_top(T q)
   cout << endl;
 }
 
-template<typename T, typename S>
-void print_pair(pair<T,S> p){
+template <typename T, typename S>
+void print_pair(pair<T, S> p)
+{
   cout << "(" p.first << ", " << p.second << ")" << endl;
 }
 
