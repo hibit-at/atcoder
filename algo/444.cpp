@@ -1,9 +1,6 @@
 #include <algorithm>
 #include <iostream>
-<<<<<<< HEAD
-=======
 #include <iomanip>
->>>>>>> 3b87184c338a56f738f0caf54f2233e0c268bd17
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -15,6 +12,7 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#include <deque>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
@@ -36,40 +34,71 @@ void print_vector(vector<T> v)
   return;
 }
 
-vector<int> quick(vector<int> v)
+template <typename T>
+void print_deque(deque<T> q)
 {
-  int n = v.size();
+  while (q.size() > 0)
+  {
+    T now = q.front();
+    q.pop_front();
+    cout << now << ",";
+  }
+  cout << endl;
+}
+
+vector<int> quick(vector<int> a)
+{
+  int n = a.size();
   int x = n / 2;
-  int axis = v[x];
-  // print_vector(v);
-  vector<int> sort_L = {};
-  vector<int> sort_R = {};
+  vector<int> L = {};
+  vector<int> R = {};
   rep(i, n)
   {
-    if (i == x)
+    if (i < x)
     {
-      continue;
-    }
-    if (v[i] < axis)
-    {
-      sort_L.push_back(v[i]);
+      L.push_back(a[i]);
     }
     else
     {
-      sort_R.push_back(v[i]);
+      R.push_back(a[i]);
     }
   }
-  if (sort_L.size() > 0)
+  if (L.size() > 1)
   {
-    sort_L = quick(sort_L);
+    L = quick(L);
   }
-  if (sort_R.size() > 0)
+  if (R.size() > 1)
   {
-    sort_R = quick(sort_R);
+    R = quick(R);
   }
-  sort_L.push_back(axis);
-  sort_L.insert(sort_L.end(), all(sort_R));
-  return sort_L;
+  reverse(all(L));
+  reverse(all(R));
+  deque<int> dq;
+  rep(i, L.size())
+  {
+    dq.push_back(L[i]);
+  }
+  rep(i, R.size())
+  {
+    dq.push_front(R[i]);
+  }
+  vector<int> b = {};
+  while (dq.size() > 0)
+  {
+    int e_first = dq.front();
+    int e_last = dq.back();
+    if (e_first <= e_last)
+    {
+      b.push_back(e_first);
+      dq.pop_front();
+    }
+    else
+    {
+      b.push_back(e_last);
+      dq.pop_back();
+    }
+  }
+  return b;
 }
 
 int main()

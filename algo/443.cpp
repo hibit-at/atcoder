@@ -1,9 +1,6 @@
 #include <algorithm>
 #include <iostream>
-<<<<<<< HEAD
-=======
 #include <iomanip>
->>>>>>> 3b87184c338a56f738f0caf54f2233e0c268bd17
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -15,6 +12,7 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#include <cstdlib>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
@@ -39,7 +37,7 @@ void print_vector(vector<T> v)
 vector<int> quick(vector<int> v)
 {
   int n = v.size();
-  int x = n / 2;
+  int x = rand() % n;
   int axis = v[x];
   // print_vector(v);
   vector<int> sort_L = {};
@@ -53,6 +51,18 @@ vector<int> quick(vector<int> v)
     if (v[i] < axis)
     {
       sort_L.push_back(v[i]);
+    }
+    else if (v[i] == axis)
+    {
+      int coin = rand() % 2;
+      if (coin)
+      {
+        sort_L.push_back(v[i]);
+      }
+      else
+      {
+        sort_R.push_back(v[i]);
+      }
     }
     else
     {
