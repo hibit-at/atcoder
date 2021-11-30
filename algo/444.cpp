@@ -34,6 +34,18 @@ void print_vector(vector<T> v)
   return;
 }
 
+template <typename T>
+void print_deque(deque<T> q)
+{
+  while (q.size() > 0)
+  {
+    T now = q.front();
+    q.pop_front();
+    cout << now << ",";
+  }
+  cout << endl;
+}
+
 vector<int> quick(vector<int> a)
 {
   int n = a.size();
@@ -59,14 +71,18 @@ vector<int> quick(vector<int> a)
   {
     R = quick(R);
   }
+  reverse(all(L));
   reverse(all(R));
-  L.insert(L.end(), all(R));
   deque<int> dq;
-  vector<int> b = {};
-  rep(i, n)
+  rep(i, L.size())
   {
-    dq.push_front(L[i]);
+    dq.push_back(L[i]);
   }
+  rep(i, R.size())
+  {
+    dq.push_front(R[i]);
+  }
+  vector<int> b = {};
   while (dq.size() > 0)
   {
     int e_first = dq.front();

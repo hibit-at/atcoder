@@ -44,12 +44,9 @@ void print_vector(vector<T> v)
   return;
 }
 
-void make_heap(vector<int> &a, int n)
+void make_heap(vector<int> &a)
 {
-  if (n < a.size())
-  {
-    swap(a[n], a[0]);
-  }
+  int n = a.size();
   int x = n / 2 - 1;
   while (x >= 0)
   {
@@ -82,6 +79,36 @@ void make_heap(vector<int> &a, int n)
   }
 }
 
+void pop_heap(vector<int> &a, int n)
+{
+  swap(a[0], a[n]);
+  int k = 0;
+  while (true)
+  {
+    vector<pair<int, int>> children;
+    vector<int> where_children = {k, 2 * k + 1, 2 * k + 2};
+    for (int w : where_children)
+    {
+      if (w < n)
+      {
+        children.push_back({-a[w], w});
+      }
+    }
+    if (children.size() == 1)
+    {
+      break;
+    }
+    sort(all(children));
+    int target = children[0].second;
+    if (k == target)
+    {
+      break;
+    }
+    swap(a[k], a[target]);
+    swap(k, target);
+  }
+}
+
 int main()
 {
   int n, m;
@@ -93,10 +120,18 @@ int main()
   }
   rep(i, n)
   {
-    make_heap(a, n - i);
+    if (i == 0)
+    {
+      make_heap(a);
+    }
+    else
+    {
+      pop_heap(a, n - i);
+    }
+    // debug(i);
     if (n - i == m)
     {
-      print_vector<int>(a);
+      print_vector(a);
     }
   }
   print_vector<int>(a);
