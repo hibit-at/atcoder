@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -21,41 +22,49 @@ using namespace std;
 
 typedef long long ll;
 
+vector<vector<int>> to;
+vector<int> dp;
+
 template <typename T>
 void print_vector(vector<T> v)
 {
-    for (T i : v)
-    {
-        cout << i << ",";
-    }
-    cout << endl;
-    return;
+  for (T i : v)
+  {
+    cout << i << ",";
+  }
+  cout << endl;
+  return;
 }
 
-int main(void)
+void dfs(int now)
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> p(n);
-    rep(i, n)
-    {
-        int x, y, z;
-        cin >> x >> y >> z;
-        p[i] = x + y + z;
-    }
-    vector<int> orig = p;
-    sort(all(p));
-    reverse(all(p));
-    int target = p[k - 1];
-    rep(i, n)
-    {
-        if (orig[i] + 300 >= target)
-        {
-            cout << "Yes" << endl;
-        }
-        else
-        {
-            cout << "No" << endl;
-        }
-    }
+  for (int next : to[now])
+  {
+    dfs(next);
+  }
+  dp[now] = 1;
+  for (int next : to[now])
+  {
+    dp[now] += dp[next];
+  }
+}
+
+int main()
+{
+  int n;
+  cin >> n;
+  to.resize(n);
+  dp.resize(n);
+  rep1(i, n - 1)
+  {
+    int p;
+    cin >> p;
+    to[p].push_back(i);
+  }
+  dfs(0);
+  // print_vector(dp);
+  rep(i, n)
+  {
+    cout << dp[i] - 1 << endl;
+  }
 }

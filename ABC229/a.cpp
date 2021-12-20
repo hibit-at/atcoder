@@ -21,41 +21,28 @@ using namespace std;
 
 typedef long long ll;
 
-template <typename T>
-void print_vector(vector<T> v)
-{
-    for (T i : v)
-    {
-        cout << i << ",";
-    }
-    cout << endl;
-    return;
-}
-
 int main(void)
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> p(n);
-    rep(i, n)
+    string s1, s2;
+    cin >> s1 >> s2;
+    if (s1 == "##")
     {
-        int x, y, z;
-        cin >> x >> y >> z;
-        p[i] = x + y + z;
+        cout << "Yes" << endl;
     }
-    vector<int> orig = p;
-    sort(all(p));
-    reverse(all(p));
-    int target = p[k - 1];
-    rep(i, n)
+    else if (s2 == "##")
     {
-        if (orig[i] + 300 >= target)
-        {
-            cout << "Yes" << endl;
-        }
-        else
-        {
-            cout << "No" << endl;
-        }
+        cout << "Yes" << endl;
+    }
+    else if (s1[0] == '#' && s2[0] == '#')
+    {
+        cout << "Yes" << endl;
+    }
+    else if (s1[1] == '#' && s2[1] == '#')
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
     }
 }

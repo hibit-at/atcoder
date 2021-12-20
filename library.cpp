@@ -19,6 +19,48 @@ typedef long long ll;
 ll const mod = (ll)1e9 + 7;
 ll const inf = (ll)2e9;
 
+struct UnionFind
+{
+  vector<int> par;
+
+  UnionFind(int N) : par(N)
+  {
+    for (int i = 0; i < N; i++)
+      par[i] = -1;
+  }
+
+  int root(int x)
+  {
+    if (par[x] < 0)
+      return x;
+    return par[x] = root(par[x]);
+  }
+
+  void unite(int x, int y)
+  {
+    int rx = root(x);
+    int ry = root(y);
+    if (same(x, y))
+    {
+      return;
+    }
+    if (par[rx] > par[ry])
+      swap(rx, ry);
+    par[rx] += par[ry];
+    par[ry] = rx;
+    return;
+  }
+
+  bool same(int x, int y)
+  {
+    int rx = root(x);
+    int ry = root(y);
+    return rx == ry;
+  }
+
+  int size(int x) { return -par[root(x)]; }
+};
+
 void YesNo(bool b)
 {
   if (b)
@@ -279,7 +321,6 @@ vector<pair<ll, ll>> prime_factorize(ll n)
   }
   return ans;
 }
-
 
 void print_to_with_cost(vector<vector<pair<int, int>>> to)
 {

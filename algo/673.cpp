@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -21,41 +22,38 @@ using namespace std;
 
 typedef long long ll;
 
-template <typename T>
-void print_vector(vector<T> v)
+int main()
 {
-    for (T i : v)
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> to(n, vector<int>());
+    if (m == 0)
     {
-        cout << i << ",";
+        return 0;
+    }
+    rep(i, m)
+    {
+        int a, b;
+        cin >> a >> b;
+        to[a].push_back(b);
+        to[b].push_back(a);
+    }
+    vector<pair<int, int>> vp(n);
+    rep(i, n)
+    {
+        vp[i] = {-to[i].size(), i};
+    }
+    sort(all(vp));
+    int popular = vp[0].second;
+    sort(all(to[popular]));
+    int size = to[popular].size();
+    rep(i, size)
+    {
+        cout << to[popular][i];
+        if (i < size - 1)
+        {
+            cout << ' ';
+        }
     }
     cout << endl;
-    return;
-}
-
-int main(void)
-{
-    int n, k;
-    cin >> n >> k;
-    vector<int> p(n);
-    rep(i, n)
-    {
-        int x, y, z;
-        cin >> x >> y >> z;
-        p[i] = x + y + z;
-    }
-    vector<int> orig = p;
-    sort(all(p));
-    reverse(all(p));
-    int target = p[k - 1];
-    rep(i, n)
-    {
-        if (orig[i] + 300 >= target)
-        {
-            cout << "Yes" << endl;
-        }
-        else
-        {
-            cout << "No" << endl;
-        }
-    }
 }

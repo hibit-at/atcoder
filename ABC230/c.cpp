@@ -21,41 +21,27 @@ using namespace std;
 
 typedef long long ll;
 
-template <typename T>
-void print_vector(vector<T> v)
-{
-    for (T i : v)
-    {
-        cout << i << ",";
-    }
-    cout << endl;
-    return;
-}
-
 int main(void)
 {
-    int n, k;
-    cin >> n >> k;
-    vector<int> p(n);
-    rep(i, n)
+    ll n, a, b;
+    cin >> n >> a >> b;
+    ll p, q, r, s;
+    cin >> p >> q >> r >> s;
+    for (ll i = p; i <= q; i++)
     {
-        int x, y, z;
-        cin >> x >> y >> z;
-        p[i] = x + y + z;
-    }
-    vector<int> orig = p;
-    sort(all(p));
-    reverse(all(p));
-    int target = p[k - 1];
-    rep(i, n)
-    {
-        if (orig[i] + 300 >= target)
+        for (ll j = r; j <= s; j++)
         {
-            cout << "Yes" << endl;
+            bool sub1 = (i - j) == (a - b);
+            bool sub2 = (i + j) == (a + b);
+            if (sub1 || sub2)
+            {
+                cout << '#';
+            }
+            else
+            {
+                cout << '.';
+            }
         }
-        else
-        {
-            cout << "No" << endl;
-        }
+        cout << endl;
     }
 }
