@@ -24,9 +24,28 @@ typedef long long ll;
 
 int main()
 {
-	ll n;
+	int n;
 	cin >> n;
-	ll sum = n*(n+1)/2;
-	ll dsum = n*(n+1)*(2*n+1)/6;
-	cout << (sum * sum - dsum) / 2 << endl;
+	vector<pair<int, int>> vp(n);
+	rep(i, n)
+	{
+		int s, t;
+		cin >> s >> t;
+		vp[i] = {t, s};
+	}
+	sort(all(vp));
+	int time = 0;
+	int ans = 0;
+	rep(i, n)
+	{
+		int end = vp[i].first;
+		int start = vp[i].second;
+		if (time > start)
+		{
+			continue;
+		}
+		time = end;
+		ans++;
+	}
+	cout << ans << endl;
 }
