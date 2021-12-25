@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -22,35 +21,40 @@ using namespace std;
 
 typedef long long ll;
 
-ll func(ll mid, ll n)
+template <typename S, typename T>
+void print_map(map<S, T> mp)
 {
-    ll ans = 0;
-    rep1(i, n)
+    for (auto p : mp)
     {
-        ll upr = mid / i;
-        ans += min(n, upr);
+        cout << "key : " << p.first << ", value : " << p.second << endl;
     }
-    return ans;
 }
 
-int main()
+int main(void)
 {
     ll n, x;
     cin >> n >> x;
-    ll ng = -1;
-    ll ok = 1e10 + 1;
-    while (abs(ng - ok) > 1)
+    map<ll, ll> mp;
+    mp[1] = 1;
+    rep(i, n)
     {
-        ll mid = (ng + ok) / 2;
-        ll res = func(mid, n);
-        if (res >= x)
+        ll L;
+        cin >> L;
+        map<ll, ll> tmp;
+        rep(j, L)
         {
-            ok = mid;
+            ll a;
+            cin >> a;
+            for (auto p : mp)
+            {
+                if (p.first > x / a)
+                {
+                    continue;
+                }
+                tmp[p.first * a] += p.second;
+            }
         }
-        else
-        {
-            ng = mid;
-        } 
+        mp = tmp;
     }
-    cout << ok << endl;
+    cout << mp[x] << endl;
 }

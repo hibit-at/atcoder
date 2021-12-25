@@ -22,35 +22,35 @@ using namespace std;
 
 typedef long long ll;
 
-ll func(ll mid, ll n)
-{
-    ll ans = 0;
-    rep1(i, n)
-    {
-        ll upr = mid / i;
-        ans += min(n, upr);
-    }
-    return ans;
-}
-
 int main()
 {
-    ll n, x;
-    cin >> n >> x;
-    ll ng = -1;
-    ll ok = 1e10 + 1;
-    while (abs(ng - ok) > 1)
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    rep(i, n)
     {
-        ll mid = (ng + ok) / 2;
-        ll res = func(mid, n);
-        if (res >= x)
-        {
-            ok = mid;
-        }
-        else
-        {
-            ng = mid;
-        } 
+        cin >> a[i];
     }
-    cout << ok << endl;
+    sort(all(a));
+    ll ans = 0;
+    rep(i, n)
+    {
+        ll ng = -1;
+        ll ok = n;
+        while (abs(ok - ng) > 1)
+        {
+            ll mid = (ok + ng) / 2;
+            ll crt = a[i] + a[mid];
+            if (crt >= k)
+            {
+                ok = mid;
+            }
+            else
+            {
+                ng = mid;
+            }
+        }
+        ans += n - ok;
+    }
+    cout << ans << endl;
 }

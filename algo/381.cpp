@@ -36,7 +36,7 @@ int main()
     rep(i, n)
     {
         auto itr = lower_bound(all(a), k - a[i]);
-        ans += a.end()-itr;
+        ans += a.end() - itr;
     }
     cout << ans << endl;
 }
