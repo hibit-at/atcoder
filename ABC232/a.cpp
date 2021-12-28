@@ -22,5 +22,10 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int a, c;
+    char b;
+    cin >> a >> b >> c;
+    cout << a * c << endl;
 }

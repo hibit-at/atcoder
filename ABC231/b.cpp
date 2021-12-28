@@ -22,5 +22,21 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int n;
+    cin >> n;
+    map<string, int> mp;
+    rep(i, n)
+    {
+        string s;
+        cin >> s;
+        mp[s]++;
+    }
+    priority_queue<pair<int, string>> q;
+    for (auto p : mp)
+    {
+        q.push({p.second, p.first});
+    }
+    cout << q.top().second << endl;
 }

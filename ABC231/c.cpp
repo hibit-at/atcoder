@@ -22,5 +22,20 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int n, q;
+    cin >> n >> q;
+    vector<int> a(n);
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+    sort(all(a));
+    rep(i, q)
+    {
+        int x;
+        cin >> x;
+        cout << a.end() - lower_bound(all(a), x) << endl;
+    }
 }

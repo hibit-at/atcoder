@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -22,5 +21,20 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+    auto itr = lower_bound(all(a), k);
+    int ans = itr - a.begin();
+    if (ans == n)
+    {
+        ans = -1;
+    }
+    cout << ans << endl;
 }

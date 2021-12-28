@@ -22,5 +22,9 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    double d;
+    cin >> d;
+    cout << setprecision(20) << d / 100 << endl;
 }

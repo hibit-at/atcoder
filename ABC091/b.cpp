@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -22,5 +21,32 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int n;
+    cin >> n;
+    map<string, int> mp;
+    rep(i, n)
+    {
+        string s;
+        cin >> s;
+        mp[s]++;
+    }
+    int m;
+    cin >> m;
+    rep(i, m)
+    {
+        string t;
+        cin >> t;
+        mp[t]--;
+    }
+    int ans = -1e9;
+    for (auto p : mp)
+    {
+        if (p.second > ans)
+        {
+            ans = p.second;
+        }
+    }
+    cout << max(ans, 0) << endl;
 }

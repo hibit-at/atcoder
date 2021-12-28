@@ -22,5 +22,31 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+void shift(string &s)
+{
+    int n = s.size();
+    rep(i, n)
+    {
+        s[i]++;
+        if (s[i] == '{')
+        {
+            s[i] = 'a';
+        }
+    }
+}
+
+int main(void)
+{
+    string s, t;
+    cin >> s >> t;
+    rep(i, 26)
+    {
+        shift(s);
+        if (s == t)
+        {
+            cout << "Yes" << endl;
+            return 0;
+        }
+    }
+    cout << "No" << endl;
 }

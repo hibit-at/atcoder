@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -22,5 +21,16 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    int n;
+    cin >> n;
+    set<int> st;
+    rep(i, n)
+    {
+        int d;
+        cin >> d;
+        st.insert(d);
+    }
+    cout << st.size() << endl;
 }
