@@ -45,29 +45,26 @@ void print_vector_vector(vector<vector<T>> vv)
 
 int main(void)
 {
-    string s,t;
-    cin >> s >> t;
-    int n = s.size();
-    int m = t.size();
-    vector<vector<int>> dp(n+1, vector<int>(m+1, inf));
-    dp[0][0] = 0;
-    rep(i, n+1)
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> c(n, vector<int>(m));
+    rep(i, n)
     {
-        rep(j, m+1)
+        rep(j, m)
         {
-            if(i+1 <= n){
-                chmin(dp[i+1][j],dp[i][j] + 1);
-            }
-            if(j+1 <= m){
-                chmin(dp[i][j+1],dp[i][j] + 1);
-            }
-            if(i+1 <= n && j+1 <= m){
-                int cost = 1;
-                if(s[i] == t[j]){
-                    cost = 0;
-                }
-                chmin(dp[i+1][j+1],dp[i][j] + cost);
-            }
+            cin >> c[i][j];
+        }
+    }
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, inf));
+    dp[0][0] = 0;
+    rep1(i, n)
+    {
+        rep1(j, m)
+        {
+            int cost = c[i - 1][j - 1];
+            chmin(dp[i][j], dp[i - 1][j] + cost);
+            chmin(dp[i][j], dp[i][j - 1] + cost);
+            chmin(dp[i][j], dp[i - 1][j - 1] + cost);
         }
     }
     // print_vector_vector(dp);

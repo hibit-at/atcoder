@@ -43,33 +43,40 @@ void print_vector_vector(vector<vector<T>> vv)
     }
 }
 
+template <typename T>
+void print_vector(vector<T> v)
+{
+    for (T i : v)
+    {
+        cout << i << ",";
+    }
+    cout << endl;
+    return;
+}
+
 int main(void)
 {
-    string s,t;
-    cin >> s >> t;
-    int n = s.size();
-    int m = t.size();
-    vector<vector<int>> dp(n+1, vector<int>(m+1, inf));
-    dp[0][0] = 0;
-    rep(i, n+1)
+    int T;
+    cin >> T;
+    vector<vector<int>> g(T, vector<int>(T));
+    rep(i, T)
     {
-        rep(j, m+1)
+        rep(j, T)
         {
-            if(i+1 <= n){
-                chmin(dp[i+1][j],dp[i][j] + 1);
-            }
-            if(j+1 <= m){
-                chmin(dp[i][j+1],dp[i][j] + 1);
-            }
-            if(i+1 <= n && j+1 <= m){
-                int cost = 1;
-                if(s[i] == t[j]){
-                    cost = 0;
-                }
-                chmin(dp[i+1][j+1],dp[i][j] + cost);
+            cin >> g[i][j];
+        }
+    }
+    vector<int> dp(T + 2);
+    rep(t, T + 2)
+    {
+        rep(i, t)
+        {
+            for (int j = i + 1; j < t; j++)
+            {
+                chmax(dp[t], dp[i] + g[i][j - 1]);
             }
         }
     }
-    // print_vector_vector(dp);
-    cout << dp[n][m] << endl;
+    // print_vector(dp);
+    cout << dp[T + 1] << endl;
 }
