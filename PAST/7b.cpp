@@ -21,5 +21,13 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    double a, b, c;
+    cin >> a >> b >> c;
+    while (a > b * c)
+    {
+        a--;
+    }
+    cout << setprecision(20) << a / b << endl;
 }

@@ -21,5 +21,32 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void) {
+ll func(int k)
+{
+    k--;
+    ll ans = 1;
+    rep(i, 30)
+    {
+        ans *= 3;
+        if (i == k)
+        {
+            ans++;
+        }
+    }
+    return ans;
+}
+
+int main(void)
+{
+    ll n;
+    cin >> n;
+    rep1(i, 30)
+    {
+        if (func(i) == n)
+        {
+            cout << i << endl;
+            return 0;
+        }
+    }
+    cout << -1 << endl;
 }
