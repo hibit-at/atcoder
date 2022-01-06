@@ -22,5 +22,35 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int n, x;
+vector<int> a;
+
+bool func(int now_pos, int now_val)
+{
+    // debug(now_val);
+    if (now_pos == n)
+    {
+        return now_val == x;
+    }
+    bool sub1 = func(now_pos + 1, now_val);
+    bool sub2 = func(now_pos + 1, now_val + a[now_pos]);
+    return sub1 || sub2;
+}
+
+int main(void)
+{
+    cin >> n >> x;
+    a.resize(n);
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+    if (func(0, 0))
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
+    }
 }

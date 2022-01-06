@@ -22,5 +22,22 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int func(int x)
+{
+    if (x == 1)
+    {
+        return 1;
+    }
+    if (x == 2)
+    {
+        return 1;
+    }
+    return func(x - 1) + func(x - 2);
+}
+
+int main(void)
+{
+    int n;
+    cin >> n;
+    cout << func(n) << endl;
 }

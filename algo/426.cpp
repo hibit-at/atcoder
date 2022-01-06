@@ -22,5 +22,18 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+int func(int start, int end)
+{
+    if (start == end)
+    {
+        return end;
+    }
+    return start + func(start + 1, end);
+}
+
+int main(void)
+{
+    int a, b;
+    cin >> a >> b;
+    cout << func(a, b) << endl;
 }

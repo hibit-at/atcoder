@@ -22,5 +22,21 @@ using namespace std;
 
 typedef long long ll;
 
-int main(void) {
+vector<ll> memo(81,-1);
+
+ll func(ll x)
+{
+    if(memo[x]>-1){
+        return memo[x];
+    }
+    return memo[x] = func(x-1) + func(x-2);
+}
+
+int main(void)
+{
+    ll n;
+    cin >> n;
+    memo[1] = 1;
+    memo[2] = 1;
+    cout << func(n) << endl;
 }
