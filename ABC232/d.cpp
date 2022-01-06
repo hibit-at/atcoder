@@ -24,33 +24,48 @@ typedef long long ll;
 
 int h, w;
 vector<vector<char>> maze;
+vector<vector<int>> memo;
 
-void print_maze(vector<vector<char>> maze)
+int dfs(int now_h, int now_w)
 {
-    int n = maze.size();
-    int m = maze[0].size();
-    rep(i, n)
+    if (now_h >= h)
     {
-        rep(j, m) { cout << maze[i][j]; }
-        cout << endl;
+        return 0;
     }
+    if (now_w >= w)
+    {
+        return 0;
+    }
+    if (maze[now_h][now_w] == '#')
+    {
+        return 0;
+    }
+    if (memo[now_h][now_w] > -1)
+    {
+        return memo[now_h][now_w];
+    }
+    // cout << now_h << ',' << now_w << endl;
+    int ans = max(dfs(now_h + 1, now_w), dfs(now_h, now_w + 1));
+    return memo[now_h][now_w] = 1 + ans;
 }
 
 int main(void)
 {
     cin >> h >> w;
-    rep(i, h + 2)
+    maze.resize(h);
+    memo.resize(h);
+    rep(i, h)
     {
-        maze[i].resize(w + 2, '#');
+        maze[i].resize(w);
+        memo[i].resize(w, -1);
     }
-    rep1(i, h)
+    rep(i, h)
     {
-        rep1(j, w)
+        rep(j, w)
         {
-            char c;
-            cin >> c;
-            maze[i][j] = c;
+            cin >> maze[i][j];
         }
     }
-    print_maze(maze);
+    // print_maze(maze);
+    cout << dfs(0, 0) << endl;
 }
