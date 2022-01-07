@@ -1,0 +1,16 @@
+{
+	"snp listint": {
+		"prefix": "listint",
+		"body": [
+			"list(map(int,input().split()))"
+		],
+		"description": "listint"
+	},
+	"snp rep": {
+		"prefix": "rep",
+		"body": [
+			"for i in range(n):"
+		],
+		"description": "rep"
+	}
+}
