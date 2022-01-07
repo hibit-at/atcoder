@@ -21,6 +21,9 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void){
-    
+int main(void)
+{
+    int a, b, c, d;
+    cin >> a >> b >> c >> d;
+    cout << min(a + b - c, d) << endl;
 }

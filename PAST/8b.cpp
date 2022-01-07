@@ -22,5 +22,23 @@ using namespace std;
 typedef long long ll;
 
 int main(void){
-    
+    int n,m;
+    cin >> n >> m;
+    vector<int> a(n);
+    rep(i,n){
+        cin >> a[i];
+    }
+    vector<int> b(m);
+    rep(i,m){
+        cin >> b[i];
+    }
+    sort(all(a));
+    sort(all(b));
+    rep(i,n){
+        rep(j,m){
+            if(a[i] == b[j]){
+                cout << a[i] << ' ';
+            }
+        }
+    }
 }
