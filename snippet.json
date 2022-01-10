@@ -230,5 +230,61 @@
             "}"
         ],
         "description": "divisor"
+    },
+    "snp yesno": {
+        "prefix": "yesno",
+        "body": [
+            "void yesno(bool b)",
+            "{",
+            "  if (b)",
+            "  {",
+            "    cout << \"Yes\" << endl;",
+            "  }",
+            "  else",
+            "  {",
+            "    cout << \"No\" << endl;",
+            "  }",
+            "}",
+            ""
+        ],
+        "description": "yesno"
+    },
+    "snp print_front": {
+        "prefix": "print_front",
+        "body": [
+            "template <typename T>",
+            "void print_front(T q)",
+            "{",
+            "  while (q.size() > 0)",
+            "  {",
+            "    int now = q.front();",
+            "    q.pop();",
+            "    cout << now << \" \";",
+            "  }",
+            "  cout << endl;",
+            "}",
+            ""
+        ],
+        "description": "print_front"
+    },
+    "snp minpq": {
+        "prefix": "minpq",
+        "body": [
+            "priority_queue<int,vector<int>, greater<int>>"
+        ],
+        "description": "minpq"
+    },
+    "snp gcd": {
+        "prefix": "gcd",
+        "body": [
+            "template <typename T>",
+            "T gcd(T a, T b)",
+            "{",
+            "  if (b == 0)",
+            "    return a;",
+            "  return gcd(b, a % b);",
+            "}"
+        ],
+        "description": "gcd"
     }
 }
