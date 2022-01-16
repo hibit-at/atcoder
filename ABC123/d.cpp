@@ -32,22 +32,39 @@ void print_vector(vector<T> v)
     return;
 }
 
-bool func(vector<ll> &a, vector<ll> &d, ll x, ll mid, ll target)
+ll x, y, z, K;
+vector<ll> a, b, c;
+
+bool solve(ll mid)
 {
-    ll tmp = 0;
+    ll cnt = 0;
     rep(i, x)
     {
-        auto itr = upper_bound(all(d), mid - a[i]);
-        tmp += d.end() - itr;
+        rep(j, y)
+        {
+            rep(k, min(K, z))
+            {
+                if (a[i] + b[j] + c[k] < mid)
+                {
+                    break;
+                }
+                cnt++;
+                if (cnt >= K)
+                {
+                    return true;
+                }
+            }
+        }
     }
-    return tmp <= target;
+    return false;
 }
 
 int main(void)
 {
-    int x, y, z, k;
-    cin >> x >> y >> z >> k;
-    vector<ll> a(x), b(y), c(z);
+    cin >> x >> y >> z >> K;
+    a.resize(x);
+    b.resize(y);
+    c.resize(z);
     rep(i, x)
     {
         cin >> a[i];
@@ -60,34 +77,55 @@ int main(void)
     {
         cin >> c[i];
     }
-    // sum of B,C
-    vector<ll> d;
-    rep(i, y)
+    sort(all(a));
+    sort(all(b));
+    sort(all(c));
+    reverse(all(a));
+    reverse(all(b));
+    reverse(all(c));
+    // nibutan
+    ll ng = 1e18;
+    ll ok = 0;
+    while (abs(ng - ok) > 1)
     {
-        rep(j, z)
+        ll mid = (ng + ok) / 2;
+        // mid以上の数はK以上か？
+        if (solve(mid))
         {
-            d.push_back(b[i] + c[j]);
+            ok = mid;
+        }
+        else
+        {
+            ng = mid;
         }
     }
-    sort(all(d));
-    // nibutan
-    rep(target, k)
+    ll border = ok;
+    // debug(border);
+    priority_queue<ll> ans;
+    ll cnt = 0;
+    rep(i, x)
     {
-        ll ng = 0;
-        ll ok = 1e18;
-        while (abs(ng - ok) > 1)
+        rep(j, y)
         {
-            ll mid = (ng + ok) / 2;
-            // midより上の合計の組み合わせはtarget以下か？
-            if (func(a, d, x, mid, target))
+            rep(k, min(K, z))
             {
-                ok = mid;
-            }
-            else
-            {
-                ng = mid;
+                if (a[i] + b[j] + c[k] >= border)
+                {
+                    ans.push(a[i] + b[j] + c[k]);
+                    cnt++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
-        cout << ok << endl;
+    }
+    cnt = 0;
+    while (ans.size() > 0 && cnt < K)
+    {
+        cout << ans.top() << endl;
+        ans.pop();
+        cnt++;
     }
 }
