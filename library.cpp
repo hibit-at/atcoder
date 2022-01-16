@@ -19,6 +19,48 @@ typedef long long ll;
 ll const mod = (ll)1e9 + 7;
 ll const inf = (ll)2e9;
 
+struct UnionFind
+{
+  vector<int> par;
+
+  UnionFind(int N) : par(N)
+  {
+    for (int i = 0; i < N; i++)
+      par[i] = -1;
+  }
+
+  int root(int x)
+  {
+    if (par[x] < 0)
+      return x;
+    return par[x] = root(par[x]);
+  }
+
+  void unite(int x, int y)
+  {
+    int rx = root(x);
+    int ry = root(y);
+    if (same(x, y))
+    {
+      return;
+    }
+    if (par[rx] > par[ry])
+      swap(rx, ry);
+    par[rx] += par[ry];
+    par[ry] = rx;
+    return;
+  }
+
+  bool same(int x, int y)
+  {
+    int rx = root(x);
+    int ry = root(y);
+    return rx == ry;
+  }
+
+  int size(int x) { return -par[root(x)]; }
+};
+
 void YesNo(bool b)
 {
   if (b)
@@ -54,6 +96,16 @@ void chmax(T &a, T b) { a = max(a, b); }
 
 template <typename T>
 void chmin(T &a, T b) { a = min(a, b); }
+
+void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)
+{
+    if (dist[now] + cost < dist[next])
+    {
+        dist[next] = dist[now] + 1;
+        q.push(next);
+    }
+    return;
+}
 
 ll gcd(ll a, ll b)
 {
@@ -280,48 +332,6 @@ vector<pair<ll, ll>> prime_factorize(ll n)
   return ans;
 }
 
-struct UnionFind
-{
-  vector<int> par;
-
-  UnionFind(int N) : par(N)
-  {
-    for (int i = 0; i < N; i++)
-      par[i] = -1;
-  }
-
-  int root(int x)
-  {
-    if (par[x] < 0)
-      return x;
-    return par[x] = root(par[x]);
-  }
-
-  void unite(int x, int y)
-  {
-    int rx = root(x);
-    int ry = root(y);
-    if (same(x, y))
-    {
-      return;
-    }
-    if (par[rx] > par[ry])
-      swap(rx, ry);
-    par[rx] += par[ry];
-    par[ry] = rx;
-    return;
-  }
-
-  bool same(int x, int y)
-  {
-    int rx = root(x);
-    int ry = root(y);
-    return rx == ry;
-  }
-
-  int size(int x) { return -par[root(x)]; }
-};
-
 void print_to_with_cost(vector<vector<pair<int, int>>> to)
 {
   int n = to.size();
@@ -336,7 +346,8 @@ void print_to_with_cost(vector<vector<pair<int, int>>> to)
   }
 }
 
-void print_to(vector<vector<int>> to)
+template <typename T>
+void print_to(vector<vector<T>> to)
 {
   int n = to.size();
   rep(i, n)
@@ -350,7 +361,8 @@ void print_to(vector<vector<int>> to)
   }
 }
 
-void print_set(set<int> st)
+template <typename T>
+void print_set(set<T> st)
 {
   for (int s : st)
   {
@@ -359,7 +371,8 @@ void print_set(set<int> st)
   cout << endl;
 }
 
-void print_map(map<int, int> mp)
+template <typename S, typename T>
+void print_map(map<S, T> mp)
 {
   for (auto p : mp)
   {
@@ -405,7 +418,7 @@ void print_vector_pair(vector<pair<S, T>> v)
 template <typename T>
 void print_vector(vector<T> v)
 {
-  for (ll i : v)
+  for (T i : v)
   {
     cout << i << ",";
   }
@@ -413,7 +426,7 @@ void print_vector(vector<T> v)
   return;
 }
 
-template<typename T>
+template <typename T>
 void print_front(T q)
 {
   while (q.size() > 0)
@@ -425,7 +438,7 @@ void print_front(T q)
   cout << endl;
 }
 
-template<typename T>
+template <typename T>
 void print_top(T q)
 {
   while (q.size() > 0)
@@ -437,10 +450,12 @@ void print_top(T q)
   cout << endl;
 }
 
-template<typename T, typename S>
-void print_pair(pair<T,S> p){
+template <typename T, typename S>
+void print_pair(pair<T, S> p)
+{
   cout << "(" p.first << ", " << p.second << ")" << endl;
 }
+
 
 vector<pair<int, char>> swapmap(map<char, int> mp)
 {
