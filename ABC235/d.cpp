@@ -21,7 +21,7 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int change(int n)
+int rotate(int n)
 {
     if (n < 10)
     {
@@ -38,6 +38,16 @@ int change(int n)
     return stoi(t);
 }
 
+void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)
+{
+    if (dist[now] + cost < dist[next])
+    {
+        dist[next] = dist[now] + 1;
+        q.push(next);
+    }
+    return;
+}
+
 int main(void)
 {
     int a, n;
@@ -49,23 +59,16 @@ int main(void)
     while (q.size() > 0)
     {
         int now = q.front();
+        // debug(now);
         q.pop();
-        int next = change(now);
-        if (dist[now] + 1 < dist[next])
-        {
-            dist[next] = dist[now] + 1;
-            q.push(next);
-        }
+        int next = rotate(now);
+        chminque(now, next, 1, dist, q);
         if (now >= 1e6 / a)
         {
             continue;
         }
         next = now * a;
-        if (dist[now] + 1 < dist[next])
-        {
-            dist[next] = dist[now] + 1;
-            q.push(next);
-        }
+        chminque(now, next, 1, dist, q);
     }
     if (dist[n] == 1e6)
     {

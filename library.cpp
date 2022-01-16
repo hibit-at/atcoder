@@ -97,6 +97,16 @@ void chmax(T &a, T b) { a = max(a, b); }
 template <typename T>
 void chmin(T &a, T b) { a = min(a, b); }
 
+void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)
+{
+    if (dist[now] + cost < dist[next])
+    {
+        dist[next] = dist[now] + 1;
+        q.push(next);
+    }
+    return;
+}
+
 ll gcd(ll a, ll b)
 {
   if (b == 0)

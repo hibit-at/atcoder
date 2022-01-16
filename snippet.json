@@ -286,5 +286,20 @@
             "}"
         ],
         "description": "gcd"
+    },
+    "snp chminqueue": {
+        "prefix": "chminqueue",
+        "body": [
+            "void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)",
+            "{",
+            "    if (dist[now] + cost < dist[next])",
+            "    {",
+            "        dist[next] = dist[now] + 1;",
+            "        q.push(next);",
+            "    }",
+            "    return;",
+            "}"
+        ],
+        "description": "chminqueue"
     }
 }
