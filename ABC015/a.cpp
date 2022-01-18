@@ -31,6 +31,6 @@ int main(void)
     }
     else
     {
-        cout << b << endl;
+        cout << b << endl;  
     }
 }
