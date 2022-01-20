@@ -301,5 +301,24 @@
             "}"
         ],
         "description": "chminqueue"
+    },
+    "snp rpow": {
+        "prefix": "rpow",
+        "body": [
+            "ll rpow(ll a, ll r, ll mod)",
+            "{",
+            "  if (r == 0)",
+            "    return 1;",
+            "  ll ans = rpow(a, r / 2, mod);",
+            "  ans *= ans;",
+            "  ans %= mod;",
+            "  if (r % 2 == 1)",
+            "    ans *= a;",
+            "  ans %= mod;",
+            "  return ans;",
+            "}",
+            ""
+        ],
+        "description": "rpow"
     }
 }
