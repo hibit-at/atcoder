@@ -21,5 +21,14 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void) {
+int main(void)
+{
+    string s;
+    cin >> s;
+    int a, b;
+    cin >> a >> b;
+    a--;
+    b--;
+    swap(s[a], s[b]);
+    cout << s << endl;
 }
