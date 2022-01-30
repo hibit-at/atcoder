@@ -23,14 +23,7 @@ typedef long long ll;
 
 int main(void)
 {
-    string a, b;
-    cin >> a >> b;
-    if (a.size() > b.size())
-    {
-        cout << a << endl;
-    }
-    else
-    {
-        cout << b << endl;  
-    }
+    int n, h, w;
+    cin >> n >> h >> w;
+    cout << (n - h + 1) * (n - w + 1) << endl;
 }

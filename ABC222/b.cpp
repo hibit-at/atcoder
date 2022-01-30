@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -14,23 +13,30 @@
 #include <stack>
 
 using namespace std;
-#define rep(i, n) for (int i = 0; i < n; i++)
-#define rep1(i, n) for (int i = 1; i < n + 1; i++)
+#define rep(i, n) for (ll i = 0; i < n; i++)
+#define rep1(i, n) for (ll i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
+
 typedef long long ll;
 
 int main(void)
 {
-    string a, b;
-    cin >> a >> b;
-    if (a.size() > b.size())
+    int n, p;
+    cin >> n >> p;
+    vector<int> a(n);
+    rep(i, n)
     {
-        cout << a << endl;
+        cin >> a[i];
     }
-    else
+    int ans = 0;
+    rep(i, n)
     {
-        cout << b << endl;  
+        if (a[i] < p)
+        {
+            ans++;
+        }
     }
+    cout << ans << endl;
 }

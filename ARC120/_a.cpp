@@ -21,16 +21,34 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
+vector<ll> a, peak, sum, sum_sum;
+
 int main(void)
 {
-    string a, b;
-    cin >> a >> b;
-    if (a.size() > b.size())
+    int n;
+    cin >> n;
+    a.resize(n);
+    peak.resize(n);
+    sum.resize(n);
+    sum_sum.resize(n);
+    rep(i, n)
     {
-        cout << a << endl;
+        cin >> a[i];
+        if (i == 0)
+        {
+            peak[i] = a[i];
+            sum[i] = a[i];
+            sum_sum[i] = sum[i];
+        }
+        else
+        {
+            peak[i] = max(peak[i - 1], a[i]);
+            sum[i] = sum[i - 1] + a[i];
+            sum_sum[i] = sum_sum[i - 1] + sum[i];
+        }
     }
-    else
+    rep(i, n)
     {
-        cout << b << endl;  
+        cout << peak[i] * ll(i + 1) + sum_sum[i] << endl;
     }
 }

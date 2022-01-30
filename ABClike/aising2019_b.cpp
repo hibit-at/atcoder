@@ -23,14 +23,27 @@ typedef long long ll;
 
 int main(void)
 {
-    string a, b;
+    int n;
+    cin >> n;
+    int a, b;
     cin >> a >> b;
-    if (a.size() > b.size())
+    queue<int> x, y, z;
+    rep(i, n)
     {
-        cout << a << endl;
+        int p;
+        cin >> p;
+        if (p <= a)
+        {
+            x.push(p);
+        }
+        else if (p <= b)
+        {
+            y.push(p);
+        }
+        else
+        {
+            z.push(p);
+        }
     }
-    else
-    {
-        cout << b << endl;  
-    }
+    cout << min(min(x.size(), y.size()), z.size()) << endl;
 }
