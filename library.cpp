@@ -243,6 +243,37 @@ bool top_sort(int n, vector<vector<int>> to)
 //     }
 // }
 
+vector<int> dijkstra(int n, vector<vector<pair<int, int>>> to, int start)
+{
+  vector<int> dist(n + 1, inf);
+  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+  dist[start] = 0;
+  pq.push({0, start});
+  while (pq.size() > 0)
+  {
+    auto now_pair = pq.top();
+    pq.pop();
+    int now = now_pair.second;
+    int now_dist = now_pair.first;
+    if (dist[now] < now_dist)
+    {
+      continue;
+    }
+    for (auto next_pair : to[now])
+    {
+      int next = next_pair.first;
+      int cost = next_pair.second;
+      if (dist[now] + cost >= dist[next])
+      {
+        continue;
+      }
+      dist[next] = dist[now] + cost;
+      pq.push({dist[next], next});
+    }
+  }
+  return dist;
+}
+
 vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
 {
   vector<int> dist(n + 1, inf);
