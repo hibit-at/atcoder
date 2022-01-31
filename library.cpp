@@ -210,7 +210,7 @@ vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
     for (auto next_pair : to[now])
     {
       int next = next_pair.first;
-      int cost = next_pair.second;
+      T cost = next_pair.second;
       if (dist[now] + cost >= dist[next])
       {
         continue;
@@ -223,7 +223,7 @@ vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
 }
 
 template <typename T>
-vector<int> bfs_with_cost(int n, vector<vector<pair<int, T>>> to, int start)
+vector<T> bfs_with_cost(int n, vector<vector<pair<int, T>>> to, int start)
 {
   vector<T> dist(n + 1, inf);
   queue<int> q;
@@ -236,7 +236,7 @@ vector<int> bfs_with_cost(int n, vector<vector<pair<int, T>>> to, int start)
     for (auto next_pair : to[now])
     {
       int next = next_pair.first;
-      int cost = next_pair.second;
+      T cost = next_pair.second;
       if (dist[next] <= dist[now] + cost)
       {
         continue;
