@@ -135,59 +135,6 @@ void sub_mod(int &a, int b, int mod)
   a %= mod;
 }
 
-struct edge
-{
-  ll to, cost;
-};
-typedef pair<ll, ll> P;
-struct graph
-{
-  ll V;
-  vector<vector<edge>> G;
-  vector<ll> d;
-
-  graph(ll n) { init(n); }
-
-  void init(ll n)
-  {
-    V = n;
-    G.resize(V);
-    d.resize(V);
-    rep(i, V) { d[i] = inf; }
-  }
-
-  void add_edge(ll s, ll t, ll cost)
-  {
-    edge e;
-    e.to = t, e.cost = cost;
-    G[s].push_back(e);
-  }
-
-  void dijkstra(ll s)
-  {
-    rep(i, V) { d[i] = inf; }
-    d[s] = 0;
-    priority_queue<P, vector<P>, greater<P>> que;
-    que.push(P(0, s));
-    while (!que.empty())
-    {
-      P p = que.top();
-      que.pop();
-      ll v = p.second;
-      if (d[v] < p.first)
-        continue;
-      for (auto e : G[v])
-      {
-        if (d[e.to] > d[v] + e.cost)
-        {
-          d[e.to] = d[v] + e.cost;
-          que.push(P(d[e.to], e.to));
-        }
-      }
-    }
-  }
-};
-
 bool top_sort(int n, vector<vector<int>> to)
 {
   vector<int> graph(n + 1);
@@ -243,10 +190,11 @@ bool top_sort(int n, vector<vector<int>> to)
 //     }
 // }
 
-vector<int> dijkstra(int n, vector<vector<pair<int, int>>> to, int start)
+template <typename T>
+vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
 {
-  vector<int> dist(n + 1, inf);
-  priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+  vector<T> dist(n + 1, inf);
+  priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>> pq;
   dist[start] = 0;
   pq.push({0, start});
   while (pq.size() > 0)
@@ -274,9 +222,10 @@ vector<int> dijkstra(int n, vector<vector<pair<int, int>>> to, int start)
   return dist;
 }
 
-vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
+template <typename T>
+vector<int> bfs_with_cost(int n, vector<vector<pair<int, T>>> to, int start)
 {
-  vector<int> dist(n + 1, inf);
+  vector<T> dist(n + 1, inf);
   queue<int> q;
   dist[start] = 0;
   q.push(start);

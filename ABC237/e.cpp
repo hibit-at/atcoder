@@ -64,9 +64,7 @@ void print_to(vector<vector<T>> to)
 template <typename T>
 void chmax(T &a, T b) { a = max(a, b); }
 
-int n, m;
 vector<ll> h;
-vector<vector<pair<int, ll>>> to;
 
 ll cost(int from, int next)
 {
@@ -82,8 +80,42 @@ ll cost(int from, int next)
 
 const ll inf = 1e18;
 
+template <typename T>
+vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
+{
+    vector<T> dist(n + 1, inf);
+    priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>> pq;
+    dist[start] = 0;
+    pq.push({0, start});
+    while (pq.size() > 0)
+    {
+        auto now_pair = pq.top();
+        pq.pop();
+        int now = now_pair.second;
+        int now_dist = now_pair.first;
+        if (dist[now] < now_dist)
+        {
+            continue;
+        }
+        for (auto next_pair : to[now])
+        {
+            int next = next_pair.first;
+            int cost = next_pair.second;
+            if (dist[now] + cost >= dist[next])
+            {
+                continue;
+            }
+            dist[next] = dist[now] + cost;
+            pq.push({dist[next], next});
+        }
+    }
+    return dist;
+}
+
 int main(void)
 {
+    int n, m;
+    vector<vector<pair<int, ll>>> to;
     cin >> n >> m;
     h.resize(n + 1);
     rep1(i, n)
@@ -98,34 +130,6 @@ int main(void)
         to[u].push_back({v, cost(u, v)});
         to[v].push_back({u, cost(v, u)});
     }
-    // print_to_with_cost(to);
-    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<pair<ll, int>>> pq;
-    vector<ll> dist(n + 1, inf);
-    dist[1] = 0;
-    pq.push({0, 1});
-    while (pq.size() > 0)
-    {
-        auto now_pair = pq.top();
-        pq.pop();
-        int now = now_pair.second;
-        // debug(now);
-        ll now_dist = now_pair.first;
-        if (dist[now] < now_dist)
-        {
-            continue;
-        }
-        for (auto next_pair : to[now])
-        {
-            int next = next_pair.first;
-            ll cost = next_pair.second;
-            if (dist[now] + cost >= dist[next])
-            {
-                continue;
-            }
-            dist[next] = dist[now] + cost;
-            pq.push({dist[next], next});
-        }
-    }
-    // print_vector(dist);
+    vector<ll> dist = dijkstra(n, to, 1);
     cout << -(*min_element(all(dist))) << endl;
 }
