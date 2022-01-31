@@ -24,8 +24,10 @@ typedef long long ll;
 int h, w, sx, sy;
 vector<vector<char>> maze;
 vector<vector<bool>> seen;
-int dx[] = {1, -1, 0, 0};
-int dy[] = {0, 0, 1, -1};
+vector<pair<int, int>> path;
+priority_queue<int> ans;
+int dh[] = {1, -1, 0, 0};
+int dw[] = {0, 0, 1, -1};
 
 void print_maze(vector<vector<char>> maze)
 {
@@ -41,56 +43,45 @@ void print_maze(vector<vector<char>> maze)
 template <typename T>
 void chmax(T &a, T b) { a = max(a, b); }
 
-int dfs(int x, int y, int path)
+void dfs(int now_h, int now_w)
 {
-    if (x == -1)
-    {
-        return 0;
-    }
-    if (x == h)
-    {
-        return 0;
-    }
-    if (y == -1)
-    {
-        return 0;
-    }
-    if (y == w)
-    {
-        return 0;
-    }
-    if (maze[x][y] == '#')
-    {
-        return 0;
-    }
-    if (seen[x][y])
-    {
-        if (x == sx && y == sy)
-        {
-            return path;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-    seen[x][y] = true;
-    // debug(x);
-    // debug(y);
-    int ans = 0;
+    seen[now_h][now_w] = true;
+    path.push_back({now_h, now_w});
     rep(i, 4)
     {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        chmax<int>(ans, dfs(nx, ny, path + 1));
+        int next_h = now_h + dh[i];
+        int next_w = now_w + dw[i];
+        if (next_h < 0 || next_h >= h)
+        {
+            continue;
+        }
+        if (next_w < 0 || next_w >= w)
+        {
+            continue;
+        }
+        if (maze[next_h][next_w] == '#')
+        {
+            continue;
+        }
+        if (seen[next_h][next_w])
+        {
+            pair<int, int> next = {next_h, next_w};
+            if (next == path.front() && path.size() > 2)
+            {
+                ans.push(path.size());
+            }
+            continue;
+        }
+        dfs(next_h, next_w);
     }
-    return ans;
+    path.pop_back();
+    seen[now_h][now_w] = false;
+    return;
 }
 
-int main(void)
+int main()
 {
     cin >> h >> w;
-    seen = vector<vector<bool>>(h, vector<bool>(w, false));
     maze.resize(h);
     rep(i, h)
     {
@@ -100,21 +91,24 @@ int main(void)
             cin >> maze[i][j];
         }
     }
-    print_maze(maze);
-    int ans = -1;
+    seen.resize(h);
+    rep(i, h)
+    {
+        seen[i].resize(w);
+    }
     rep(i, h)
     {
         rep(j, w)
         {
-            seen = vector<vector<bool>>(h, vector<bool>(w, false));
-            sx = i;
-            sy = j;
-            int root = dfs(i, j, 0);
-            debug(i);
-            debug(j);
-            debug(root);
-            chmax<int>(ans, root);
+            dfs(i, j);
         }
     }
-    cout << ans << endl;
+    if (ans.size())
+    {
+        cout << ans.top() << endl;
+    }
+    else
+    {
+        cout << -1 << endl;
+    }
 }

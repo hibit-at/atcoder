@@ -99,12 +99,12 @@ void chmin(T &a, T b) { a = min(a, b); }
 
 void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)
 {
-    if (dist[now] + cost < dist[next])
-    {
-        dist[next] = dist[now] + 1;
-        q.push(next);
-    }
-    return;
+  if (dist[now] + cost < dist[next])
+  {
+    dist[next] = dist[now] + 1;
+    q.push(next);
+  }
+  return;
 }
 
 ll gcd(ll a, ll b)
@@ -134,59 +134,6 @@ void sub_mod(int &a, int b, int mod)
   a += mod;
   a %= mod;
 }
-
-struct edge
-{
-  ll to, cost;
-};
-typedef pair<ll, ll> P;
-struct graph
-{
-  ll V;
-  vector<vector<edge>> G;
-  vector<ll> d;
-
-  graph(ll n) { init(n); }
-
-  void init(ll n)
-  {
-    V = n;
-    G.resize(V);
-    d.resize(V);
-    rep(i, V) { d[i] = inf; }
-  }
-
-  void add_edge(ll s, ll t, ll cost)
-  {
-    edge e;
-    e.to = t, e.cost = cost;
-    G[s].push_back(e);
-  }
-
-  void dijkstra(ll s)
-  {
-    rep(i, V) { d[i] = inf; }
-    d[s] = 0;
-    priority_queue<P, vector<P>, greater<P>> que;
-    que.push(P(0, s));
-    while (!que.empty())
-    {
-      P p = que.top();
-      que.pop();
-      ll v = p.second;
-      if (d[v] < p.first)
-        continue;
-      for (auto e : G[v])
-      {
-        if (d[e.to] > d[v] + e.cost)
-        {
-          d[e.to] = d[v] + e.cost;
-          que.push(P(d[e.to], e.to));
-        }
-      }
-    }
-  }
-};
 
 bool top_sort(int n, vector<vector<int>> to)
 {
@@ -243,9 +190,42 @@ bool top_sort(int n, vector<vector<int>> to)
 //     }
 // }
 
-vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
+template <typename T>
+vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
 {
-  vector<int> dist(n + 1, inf);
+  vector<T> dist(n + 1, inf);
+  priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>> pq;
+  dist[start] = 0;
+  pq.push({0, start});
+  while (pq.size() > 0)
+  {
+    auto now_pair = pq.top();
+    pq.pop();
+    int now = now_pair.second;
+    int now_dist = now_pair.first;
+    if (dist[now] < now_dist)
+    {
+      continue;
+    }
+    for (auto next_pair : to[now])
+    {
+      int next = next_pair.first;
+      T cost = next_pair.second;
+      if (dist[now] + cost >= dist[next])
+      {
+        continue;
+      }
+      dist[next] = dist[now] + cost;
+      pq.push({dist[next], next});
+    }
+  }
+  return dist;
+}
+
+template <typename T>
+vector<T> bfs_with_cost(int n, vector<vector<pair<int, T>>> to, int start)
+{
+  vector<T> dist(n + 1, inf);
   queue<int> q;
   dist[start] = 0;
   q.push(start);
@@ -256,7 +236,7 @@ vector<int> bfs_with_cost(int n, vector<vector<pair<int, int>>> to, int start)
     for (auto next_pair : to[now])
     {
       int next = next_pair.first;
-      int cost = next_pair.second;
+      T cost = next_pair.second;
       if (dist[next] <= dist[now] + cost)
       {
         continue;
@@ -455,7 +435,6 @@ void print_pair(pair<T, S> p)
 {
   cout << "(" p.first << ", " << p.second << ")" << endl;
 }
-
 
 vector<pair<int, char>> swapmap(map<char, int> mp)
 {
