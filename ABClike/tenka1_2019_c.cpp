@@ -21,25 +21,38 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-vector<ll> peak, sum;
+template <typename T>
+void print_vector(vector<T> v)
+{
+    for (T i : v)
+    {
+        cout << i << ',';
+    }
+    cout << endl;
+    return;
+}
+
+template <typename T>
+void chmin(T &a, T b) { a = min(a, b); }
 
 int main(void)
 {
     int n;
-    cin >> n;
-    peak.resize(n + 1);
-    sum.resize(n + 1);
-    ll a = 0;
-    rep(i, n)
-    {
-        cin >> a;
-        peak[i + 1] = max(peak[i], a);
-        sum[i + 1] = sum[i] + a;
-    }
-    ll sum_sum = 0;
+    string s;
+    cin >> n >> s;
+    vector<int> black(n + 1);
+    vector<int> white(n + 1);
     rep1(i, n)
     {
-        sum_sum += sum[i];
-        cout << peak[i] * ll(i) + sum_sum << endl;
+        black[i] = s[i - 1] == '#';
+        white[i] = s[i - 1] == '.';
+        black[i] += black[i - 1];
+        white[i] += white[i - 1];
     }
+    int ans = 1e9;
+    rep(i, n + 1)
+    {
+        chmin(ans, black[i] + white[n] - white[i]);
+    }
+    cout << ans << endl;
 }
