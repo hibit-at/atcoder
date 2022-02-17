@@ -21,33 +21,45 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
+vector<int> h;
+
+const int inf = 1e9;
+
+template <typename T>
+void chmin(T &a, T b) { a = min(a, b); }
+
+vector<int> dp;
+
+template <typename T>
+void print_vector(vector<T> v)
+{
+    for (T i : v)
+    {
+        cout << i << ',';
+    }
+    cout << endl;
+    return;
+}
+
 int main(void)
 {
     int n;
-    ll k;
-    cin >> n >> k;
-    map<int, ll> mp;
-    rep(i, n)
+    cin >> n;
+    h.resize(n + 1);
+    dp.resize(n + 1, inf);
+    dp[1] = 0;
+    rep1(i, n)
     {
-        int a;
-        ll b;
-        cin >> a >> b;
-        mp[a] += b;
+        cin >> h[i];
     }
-    map<ll, int> sum;
-    for (auto p : mp)
+    for (int i = 2; i <= n; i++)
     {
-        if (sum.size() == 0)
+        chmin(dp[i], dp[i - 1] + abs(h[i] - h[i - 1]));
+        if (i - 2 >= 1)
         {
-            sum[p.second] = p.first;
-            continue;
+            chmin(dp[i], dp[i - 2] + abs(h[i] - h[i - 2]));
         }
-        auto end = sum.end();
-        end--;
-        sum[p.second + end->first] = p.first;
+        print_vector(dp);
     }
-    for(auto s: sum){
-        cout << s.first << "," << s.second << endl;
-    }
-    cout << sum.lower_bound(k)->second << endl;
+    cout << dp[n] << endl;
 }
