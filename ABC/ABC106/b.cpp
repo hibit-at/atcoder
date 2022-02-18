@@ -14,18 +14,37 @@
 #include <stack>
 
 using namespace std;
-#define rep(i, n) for (ll i = 0; i < n; i++)
-#define rep1(i, n) for (ll i = 1; i < n + 1; i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define rep1(i, n) for (int i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
-
 typedef long long ll;
 
-int main(void) {
-    vector<int> a = {2,2,4,4,4,6,6};
-    cout << lower_bound(a.begin(),a.end(),4) - a.begin() << endl;
-    cout << *lower_bound(a.begin(),a.end(),4) << endl;
-    cout << upper_bound(a.begin(),a.end(),4) - a.begin() << endl;
-    cout << *upper_bound(a.begin(),a.end(),4) << endl;
-}   
+int devisor(int n)
+{
+    int ans = 0;
+    rep1(i, n)
+    {
+        if (n % i == 0)
+        {
+            ans++;
+        }
+    }
+    return ans;
+}
+
+int main(void)
+{
+    int n;
+    cin >> n;
+    int ans = 0;
+    rep1(i, n)
+    {
+        if (devisor(i) == 8 && i%2 == 1)
+        {
+            ans++;
+        }
+    }
+    cout << ans << endl;
+}
