@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -13,21 +14,15 @@
 #include <stack>
 
 using namespace std;
-#define rep(i, n) for (ll i = 0; i < n; i++)
-#define rep1(i, n) for (ll i = 1; i < n + 1; i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define rep1(i, n) for (int i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
 
 typedef long long ll;
 
-int k;
-string s, t;
-vector<double> leftover;
-vector<ll> hand_taka;
-vector<ll> hand_aoki;
-double hand;
-const ll mod = 1e18;
+const ll inf = 1e18;
 
 template <typename T>
 void print_vector(vector<T> v)
@@ -53,71 +48,74 @@ ll rpow(ll a, ll r, ll mod)
     return ans;
 }
 
-ll score(int card, vector<ll> playerhand)
+void use_check(vector<ll> &avail, vector<ll> &player, string s)
+{
+    s.pop_back();
+    for (char c : s)
+    {
+        avail[c - '0']--;
+        player[c - '0']++;
+    }
+    s.push_back('#');
+    return;
+}
+
+ll calc_score(vector<ll> &player)
 {
     ll ans = 0;
-    rep(i, 9)
+    rep1(i, 9)
     {
-        if (i == card)
-        {
-            ans += (i + 1) * rpow(10, playerhand[i] + 1, mod);
-        }
-        else
-        {
-            ans += (i + 1) * rpow(10, playerhand[i], mod);
-        }
-        // debug(ans)
+        ans += i * rpow(10, player[i], inf);
     }
     return ans;
 }
 
-double solve(int taka, int aoki)
+int main()
 {
-    debug(taka);
-    double prob_t = leftover[taka] / hand;
-    ll taka_score = score(taka, hand_taka);
-    debug(taka_score);
-    debug(aoki);
-    double prob_a = leftover[aoki] / hand;
-    ll aoki_score = score(aoki, hand_aoki);
-    debug(aoki_score);
-    if (taka_score > aoki_score)
-    {
-        return prob_t * prob_a;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int main(void)
-{
+    ll k;
+    string s, t;
     cin >> k >> s >> t;
-    hand = 9 * k - 8;
-    leftover.resize(9, 2*k);
-    hand_taka.resize(9, 0);
-    hand_aoki.resize(9, 0);
-    rep(i, 4)
+    vector<ll> avail(10, 0);
+    rep1(i, 9)
     {
-        int now = s[i] - '1';
-        leftover[now]--;
-        hand_taka[now]++;
+        avail[i] = k;
     }
-    rep(i, 4)
+    vector<ll> takahashi(10, 0);
+    vector<ll> aoki(10, 0);
+    use_check(avail, takahashi, s);
+    use_check(avail, aoki, t);
+    ll win_cases = 0;
+    rep1(i, 9)
     {
-        int now = t[i] - '1';
-        leftover[now]--;
-        hand_aoki[now]++;
-    }
-    print_vector<double>(leftover);
-    double ans = 0;
-    rep(i, 9)
-    {
-        rep(j, 9)
+        if (avail[i] == 0)
         {
-            ans += solve(i, j);
+            continue;
         }
+        ll cases = 1;
+        cases *= avail[i];
+        avail[i]--;
+        rep1(j, 9)
+        {
+            if (avail[j] == 0)
+            {
+                continue;
+            }
+            cases *= avail[j];
+            takahashi[i]++;
+            aoki[j]++;
+            ll takahashi_score = calc_score(takahashi);
+            ll aoki_score = calc_score(aoki);
+            if (takahashi_score > aoki_score)
+            {
+                win_cases += cases;
+            }
+            takahashi[i]--;
+            aoki[j]--;
+            cases /= avail[j];
+        }
+        avail[i]++;
+        cases /= avail[i];
     }
-    cout << ans << endl;
+    ll all_cases = (9 * k - 8) * (9 * k - 9);
+    cout << setprecision(20) << (double)win_cases / all_cases << endl;
 }
