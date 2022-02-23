@@ -134,7 +134,7 @@ int main(void)
 {
     int n, w;
     cin >> n >> w;
-    vector<ll> init(8, 0);
+    vector<ll> init(2e5+10, 0);
     LazySegmentTree lst(init);
     rep(i, n)
     {
@@ -142,9 +142,6 @@ int main(void)
         ll p;
         cin >> s >> t >> p;
         lst.span_update(s, t, p);
-        debug("node_and_lazy");
-        print_vector(lst.node);
-        print_vector(lst.lazy);
     }
     if (lst.getMax(0, n) > w)
     {
