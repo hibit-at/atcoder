@@ -62,14 +62,14 @@ struct LazySegmentTree
         }
     }
 
-    void eval(int k, int L, int R)
+    void eval(int k)
     {
         if (lazy[k] == 0)
         {
             return;
         }
         node[k] += lazy[k];
-        if (L + 1 < R)
+        if (k < n - 1)
         {
             lazy[k * 2 + 1] += lazy[k] / 2;
             lazy[k * 2 + 2] += lazy[k] / 2;
@@ -83,7 +83,7 @@ struct LazySegmentTree
         {
             R = n;
         }
-        eval(k, L, R);
+        eval(k);
         if (b <= L || R <= a)
         {
             return;
@@ -91,7 +91,7 @@ struct LazySegmentTree
         if (a <= L && R <= b) // 完全に内側の時
         {
             lazy[k] += (R - L) * x;
-            eval(k, L, R);
+            eval(k);
         }
         else
         {
@@ -99,8 +99,8 @@ struct LazySegmentTree
             add_span(a, b, x, k * 2 + 2, (L + R) / 2, R);
             node[k] = node[2 * k + 1] + node[2 * k + 2];
         }
-        print_vector(this -> node);
-        print_vector(this -> lazy);
+        print_vector(this->node);
+        print_vector(this->lazy);
     }
 
     ll getSum(int a, int b, int k = 0, int L = 0, int R = -1)
@@ -113,7 +113,7 @@ struct LazySegmentTree
         {
             return 0;
         }
-        eval(k, L, R);
+        eval(k);
         if (a <= L && R <= b) // 完全に内側
         {
             return node[k];
@@ -124,16 +124,15 @@ struct LazySegmentTree
     }
 };
 
-
-
 int main(void)
 {
     vector<ll> init = {1, 3, 5, 7, 9, 11, 13, 15};
     LazySegmentTree lst(init);
-    lst.add_span(1,7,1);
-    lst.add_span(0,4,2);
-    rep(i,8){
-        cout << lst.getSum(0,8) << endl;
+    lst.add_span(1, 7, 1);
+    lst.add_span(0, 4, 2);
+    rep(i, 8)
+    {
+        cout << lst.getSum(0, 8) << endl;
     }
     print_vector(lst.node);
     print_vector(lst.lazy);
