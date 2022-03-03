@@ -36,7 +36,7 @@ int main()
         if (c == 2)
         {
             auto right = st.upper_bound(x);
-            auto left = st.lower_bound(x);
+            auto left = st.upper_bound(x);
             left--;
             cout << *right - *left << endl;
         }

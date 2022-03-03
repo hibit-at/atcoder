@@ -19,17 +19,10 @@ using namespace std;
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
-
-// utils
-
 typedef long long ll;
-const ll inf = 1e18;
 
 template <typename T>
-void chmin(T &a, T b) { a = min(a, b); }
-
-template <typename T>
-void print_vector(vector<T> v)
+void prll_vector(vector<T> v)
 {
     for (T i : v)
     {
@@ -39,61 +32,60 @@ void print_vector(vector<T> v)
     return;
 }
 
-// global variants
-
-int n;
-vector<ll> h, s;
-
-bool solve(ll target)
+bool solve(ll target, vector<ll> h, ll n, ll a, ll b)
 {
-    vector<ll> life(n);
     rep(i, n)
     {
-        if (target - h[i] < 0)
-        {
-            return false;
-        }
-        life[i] = (target - h[i]) / s[i];
+        h[i] -= b * target;
     }
-    sort(all(life));
-    // print_vector(life);
-    int size = life.size();
-    rep(i, size)
+    // prll_vector(h);
+    a -= b;
+    ll count = 0;
+    rep(i, n)
     {
-        if (life[i] < i)
+        if (h[i] <= 0)
         {
-            return false;
+            continue;
         }
+        count += (h[i] + a - 1) / a;
     }
-    return true;
+    // debug(count);
+    if (count <= target)
+    {
+        // cout << "possible" << endl;
+        return true;
+    }
+    else
+    {
+        // cout << "impossible" << endl;
+        return false;
+    }
 }
-
-// main
 
 int main(void)
 {
-    cin >> n;
-    h.resize(n);
-    s.resize(n);
+    ll n, a, b;
+    cin >> n >> a >> b;
+    vector<ll> h(n);
     rep(i, n)
     {
-        cin >> h[i] >> s[i];
+        cin >> h[i];
     }
-    // print_vector(h);
-    // print_vector(s);
-    ll ng = 0;
-    ll ok = 1e18;
+    ll ng = -1;
+    ll ok = 1e9 + 1;
     while (abs(ng - ok) > 1)
+    // rep(target, 10)
     {
-        ll mid = ng + ok;
-        mid /= 2;
-        if (solve(mid))
+        ll target = (ok + ng) / 2;
+        // ll target = 2;
+        // cout << target << " " << solve(target, h, n, a, b) << endl;
+        if (solve(target, h, n, a, b))
         {
-            ok = mid;
+            ok = target;
         }
         else
         {
-            ng = mid;
+            ng = target;
         }
     }
     cout << ok << endl;
