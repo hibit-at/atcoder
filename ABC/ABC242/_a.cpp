@@ -21,11 +21,20 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-vector<vector<string>> maze;
-
-bool dfs()
-
-int main(void){
-    set<int> st = {1,2,3,4};
-    cout << *st.lower_bound(2) << endl;
+int main(void)
+{
+    int a, b, c, x;
+    cin >> a >> b >> c >> x;
+    if (x <= a)
+    {
+        cout << 1 << endl;
+    }
+    else if (x <= b)
+    {
+        cout << double(c) / double(b - a) << endl;
+    }
+    else
+    {
+        cout << setprecision(20) << 0 << endl;
+    }
 }

@@ -75,7 +75,7 @@ bool solve(ll n, ll target, vector<ll> a)
 {
     rep(i, n)
     {
-        if (a[i] >= target)
+        if (a[i] > target)
         {
             a[i] = 1;
         }
@@ -102,8 +102,8 @@ bool solve(ll n, ll target, vector<ll> a)
         bit.add(s[j] + offset, 1);
     }
     ll m = n * (n + 1) / 2;
-    // debug(inversion);
-    if (inversion <= m / 2)
+    debug(inversion);
+    if (inversion >= m / 2)
     {
         // cout << "possible" << endl;
         return true;
@@ -124,23 +124,23 @@ int main(void)
     {
         cin >> a[i];
     }
-    ll ok = 0;
-    ll ng = 1e9 + 1;
-    while (abs(ok - ng) > 1)
-    // rep1(target, 40)
+    // ll ok = 0;
+    // ll ng = 1e9 + 1;
+    // while (abs(ok - ng) > 1)
+    rep1(target, 40)
     {
         // ll target = 10;
-        ll target = (ok + ng) / 2;
+        // ll target = (ok + ng) / 2;
         if (solve(n, target, a))
         {
-            // cout << target << " possible" << endl;
-            ok = target;
+            cout << target << " possible" << endl;
+            // ok = target;
         }
         else
         {
-            // cout << target << " impossible" << endl;
-            ng = target;
+            cout << target << " impossible" << endl;
+            // ng = target;
         }
     }
-    cout << ok << endl;
+    // cout << ok << endl;
 }

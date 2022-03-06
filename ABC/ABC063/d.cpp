@@ -38,7 +38,6 @@ bool solve(ll target, vector<ll> h, ll n, ll a, ll b)
     {
         h[i] -= b * target;
     }
-    // prll_vector(h);
     a -= b;
     ll count = 0;
     rep(i, n)
@@ -49,15 +48,12 @@ bool solve(ll target, vector<ll> h, ll n, ll a, ll b)
         }
         count += (h[i] + a - 1) / a;
     }
-    // debug(count);
     if (count <= target)
     {
-        // cout << "possible" << endl;
         return true;
     }
     else
     {
-        // cout << "impossible" << endl;
         return false;
     }
 }
@@ -77,14 +73,14 @@ int main(void)
     // rep(target, 10)
     {
         ll target = (ok + ng) / 2;
-        // ll target = 2;
-        // cout << target << " " << solve(target, h, n, a, b) << endl;
         if (solve(target, h, n, a, b))
         {
+            // cout << target << " ok" << endl;
             ok = target;
         }
         else
         {
+            // cout << targt << " ng" << endl;
             ng = target;
         }
     }

@@ -7,10 +7,10 @@
 #include <queue>
 #include <set>
 #include <sstream>
+#include <stack>
 #include <string>
 #include <utility>
 #include <vector>
-#include <stack>
 
 using namespace std;
 #define rep(i, n) for (ll i = 0; i < n; i++)
@@ -21,38 +21,33 @@ using namespace std;
 
 typedef long long ll;
 
-ll d(ll n)
-{
+ll d(ll n) {
     ll ans = 0;
-    while (n > 0)
-    {
+    while (n > 0) {
         ans++;
         n /= 10;
     }
     return ans;
 }
 
-int main(void)
-{
+int main(void) {
     ll a, b, x;
     cin >> a >> b >> x;
-    ll ok = -1;
-    ll ng = 1e9 + 1;
-    while (abs(ok - ng) > 1)
+    ll ok = -1;      // step3 で追加。リストでok側になってる方
+    ll ng = 1e9 + 1; // step3 で追加。リストでng側になってる方
+    while (abs(ok - ng) > 1) // step3 で追加
+    // rep(target, 20) // step2 で追加。step3 でコメントアウト。
     {
-        // rep1(target, 20)
-        // { ここはstep2で消える
-        // ll target = 9; ここはstep1で消える
-        ll target = (ng + ok) / 2;
+        // ll target = 9; step2 でコメントアウト
+        ll target = (ok + ng) / 2;
         ll price = a * target + b * d(target);
-        // cout << target << " " << price << " " << (price <= x) << endl;　ここはstep2で消える
-        if (price <= x)
-        {
-            ok = target;
-        }
-        else
-        {
-            ng = target;
+        // cout << price << endl; step2 でコメントアウト
+        if (price <= x) {
+            // cout << target << " ok" << endl;
+            ok = target; // step3 で追加
+        } else {
+            // cout << target << " ng" << endl;
+            ng = target; // step3 で追加
         }
     }
     cout << ok << endl;

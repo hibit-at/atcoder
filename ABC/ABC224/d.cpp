@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <limits.h>
 #include <map>
 #include <math.h>
@@ -13,23 +14,21 @@
 #include <stack>
 
 using namespace std;
-#define rep(i, n) for (ll i = 0; i < n; i++)
-#define rep1(i, n) for (ll i = 1; i < n + 1; i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
+#define rep1(i, n) for (int i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
-
 typedef long long ll;
 
-void print_to(vector<vector<int>> to)
+template <typename T>
+void print_vector_vector(vector<vector<T>> vv)
 {
-    int n = to.size();
-    rep(i, n)
+    for (vector<T> v : vv)
     {
-        cout << "from " << i << " : to ";
-        for (int next : to[i])
+        for (T i : v)
         {
-            cout << next << ",";
+            cout << i << ",";
         }
         cout << endl;
     }
@@ -40,47 +39,69 @@ void print_vector(vector<T> v)
 {
     for (T i : v)
     {
-        cout << i << ",";
+        cout << i << ',';
     }
     cout << endl;
     return;
-}
-
-vector<vector<int>> to(10);
-
-int dfs(int from, vector<int> pos, vector<bool> seen)
-{
-    int ans = 1;
-    for (auto next : to[from])
-    {
-        debug(next);
-        vector<int> next_pos = pos;
-        next_pos[from] = pos[next];
-        dfs(next, next_pos,)
-    }
-    return ans;
 }
 
 int main(void)
 {
     int m;
     cin >> m;
-    rep(i, m)
+    vector<vector<int>> to(10, vector<int>());
+    while (m--)
     {
-        int v, u;
-        cin >> v >> u;
-        to[v].push_back(u);
+        int u, v;
+        cin >> u >> v;
         to[u].push_back(v);
+        to[v].push_back(u);
     }
-    print_to(to);
-    vector<int> pos(10);
+    string s = "x999999999"; // どのコマがどこにいるか？
     rep1(i, 8)
     {
         int p;
         cin >> p;
-        pos[p] = i;
+        s[p] = i + '0';
     }
-    print_vector<int>(pos);
-    vector<bool> seen(10, false);
-    dfs(1, pos, seen);
+    queue<string> q;
+    q.push(s);
+    map<string, int> mp;
+    mp[s] = 0;
+    while (q.size() > 0)
+    {
+        string s = q.front();
+        q.pop();
+        int next = -1;
+        rep1(i, 9)
+        {
+            if (s[i] == '9')
+            {
+                next = i;
+            }
+        }
+        if(next == -1){
+            continue;
+        }
+        for (int from : to[next])
+        {
+            string t = s;
+            swap(t[from], t[next]);
+            if (mp.count(t))
+            {
+                continue;
+            }
+            mp[t] = mp[s] + 1;
+            q.push(t);
+        }
+    }
+    string goal = "x123456789";
+    if (mp.count(goal) == 0)
+    {
+        cout << -1 << endl;
+    }
+    else
+    {
+        cout << mp[goal] << endl;
+    }
 }
