@@ -12,8 +12,10 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#include <atcoder/modint>
 
 using namespace std;
+using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
 #define all(A) A.begin(), A.end()
@@ -21,21 +23,19 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-const ll mod = 998244353;
+
 
 void solve()
 {
     int n;
     string s;
     cin >> n >> s;
-    ll ans = 0;
+    modint998244353 ans = 0;
     int m = (n + 1) / 2;
     rep(i, m)
     {
         ans *= 26;
-        ans %= mod;
         ans += s[i] - 'A';
-        ans %= mod;
     }
     string t = "";
     rep(i, m)
@@ -55,11 +55,8 @@ void solve()
     if (t <= s)
     {
         ans++;
-        ans %= mod;
     }
-    // debug(t);
-    // debug(ans);
-    cout << ans << endl;
+    cout << ans.val() << endl;
 }
 
 int main(void)
