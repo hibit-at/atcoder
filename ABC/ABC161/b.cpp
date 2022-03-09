@@ -21,11 +21,30 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-vector<vector<string>> maze;
-
-bool dfs()
-
-int main(void){
-    set<int> st = {1,2,3,4};
-    cout << *st.lower_bound(2) << endl;
+int main(void)
+{
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+    int sum = accumulate(all(a), 0);
+    // debug(sum);
+    for (int i : a)
+    {
+        if (i*4*m < sum)
+        {
+            n--;
+        }
+    }
+    if (n >= m)
+    {
+        cout << "Yes" << endl;
+    }
+else
+    {
+        cout << "No" << endl;
+    }
 }
