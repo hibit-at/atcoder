@@ -372,6 +372,24 @@ bool isPrime(ll n)
     return true;
 }
 
+template <typename T>
+void print_join(vector<T> v)
+{
+    int n = v.size();
+    rep(i, n)
+    {
+        cout << v[i];
+        if (i < n - 1)
+        {
+            cout << ' ';
+        }
+        else
+        {
+            cout << endl;
+        }
+    }
+}
+
 void print_to_with_cost(vector<vector<pair<int, int>>> to)
 {
     int n = to.size();
