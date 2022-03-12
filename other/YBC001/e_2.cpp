@@ -81,7 +81,7 @@ int main(void)
                     if (dp[i][all_zero][now_mod])
                     {
                         dp[i + 1][next_all_zero][(now_mod + next_num * factor[i]) % k] = true;
-                    };
+                    }
                     if (dp[i + 1][0][0])
                     {
                         chmax(ans, i + 1);
