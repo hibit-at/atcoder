@@ -21,6 +21,12 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
+vector<int> swap_vector(int a, int b, vector<int> p)
+{
+    swap(p[a], p[b]);
+    return p;
+}
+
 template <typename T>
 void print_vector(vector<T> v)
 {
@@ -32,37 +38,45 @@ void print_vector(vector<T> v)
     return;
 }
 
-template <typename T>
-void chmin(T &a, T b) { a = min(a, b); }
+bool isSorted(vector<int> p)
+{
+    int n = p.size();
+    rep(i, n - 1)
+    {
+        if (p[i] > p[i + 1])
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 int main(void)
 {
     int n;
     cin >> n;
-    vector<ll> s(n), t(n);
+    vector<int> p(n);
     rep(i, n)
     {
-        cin >> s[i];
+        cin >> p[i];
     }
-    const ll inf = 1e18;
-    vector<ll> dp(n, inf);
-    rep(i, n)
+    if(isSorted(p)){
+        cout << "YES" << endl;
+        return 0;
+    }
+    for (int i = 0; i < n - 1; i++)
     {
-        ll t;
-        cin >> t;
-        dp[i] = t;
+        for (int j = i + 1; j < n; j++)
+        {
+            // debug(i);
+            // debug(j);
+            // print_vector(swap_vector(i, j, p));
+            if (isSorted(swap_vector(i, j, p)))
+            {
+                cout << "YES" << endl;
+                return 0;
+            }
+        }
     }
-    auto start = min_element(all(dp)) - dp.begin();
-    // debug(start)
-    // print_vector(dp);
-    rep(i, n)
-    {
-        // debug((i + start) % n);s
-        chmin(dp[(i + 1 + start) % n], dp[(i + start) % n] + s[(i + start) % n]);
-    }
-    // print_vector(dp);
-    rep(i, n)
-    {
-        cout << dp[i] << endl;
-    }
+    cout << "NO" << endl;
 }

@@ -32,37 +32,35 @@ void print_vector(vector<T> v)
     return;
 }
 
-template <typename T>
-void chmin(T &a, T b) { a = min(a, b); }
-
 int main(void)
 {
     int n;
     cin >> n;
-    vector<ll> s(n), t(n);
+    vector<ll> a(n + 1), b(n);
+    ll limit = 0;
+    rep(i, n + 1)
+    {
+        cin >> a[i];
+        limit += a[i];
+    }
     rep(i, n)
     {
-        cin >> s[i];
+        cin >> b[i];
     }
-    const ll inf = 1e18;
-    vector<ll> dp(n, inf);
+    ll ans = limit;
     rep(i, n)
     {
-        ll t;
-        cin >> t;
-        dp[i] = t;
+        a[i] -= b[i];
+        if (a[i] < 0)
+        {
+            a[i + 1] = max(a[i + 1] + a[i], 0LL);
+            a[i] = 0;
+        }
+        // print_vector(a);
     }
-    auto start = min_element(all(dp)) - dp.begin();
-    // debug(start)
-    // print_vector(dp);
-    rep(i, n)
+    rep(i, n+1)
     {
-        // debug((i + start) % n);s
-        chmin(dp[(i + 1 + start) % n], dp[(i + start) % n] + s[(i + start) % n]);
+        ans -= a[i];
     }
-    // print_vector(dp);
-    rep(i, n)
-    {
-        cout << dp[i] << endl;
-    }
+    cout << ans << endl;
 }

@@ -22,17 +22,6 @@ using namespace std;
 typedef long long ll;
 
 template <typename T>
-void print_vector(vector<T> v)
-{
-    for (T i : v)
-    {
-        cout << i << ',';
-    }
-    cout << endl;
-    return;
-}
-
-template <typename T>
 void chmin(T &a, T b) { a = min(a, b); }
 
 int main(void)
@@ -52,15 +41,10 @@ int main(void)
         cin >> t;
         dp[i] = t;
     }
-    auto start = min_element(all(dp)) - dp.begin();
-    // debug(start)
-    // print_vector(dp);
-    rep(i, n)
+    rep(i, 2 * n)
     {
-        // debug((i + start) % n);s
-        chmin(dp[(i + 1 + start) % n], dp[(i + start) % n] + s[(i + start) % n]);
+        chmin(dp[(i + 1) % n], dp[i % n] + s[i % n]);
     }
-    // print_vector(dp);
     rep(i, n)
     {
         cout << dp[i] << endl;

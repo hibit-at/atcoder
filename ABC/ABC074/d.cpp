@@ -37,7 +37,7 @@ void print_vector_vector(vector<vector<T>> vv)
 template <typename T>
 void chmin(T &a, T b) { a = min(a, b); }
 
-bool isOnlyPath(vector<vector<ll>> wf, int start, int end)
+bool isOnlyPath(vector<vector<ll>> &wf, int start, int end)
 {
     int n = wf.size();
     rep(via, n)
@@ -53,17 +53,6 @@ bool isOnlyPath(vector<vector<ll>> wf, int start, int end)
         }
     }
     return true;
-}
-
-template <typename T>
-void print_vector(vector<T> v)
-{
-    for (T i : v)
-    {
-        cout << i << ',';
-    }
-    cout << endl;
-    return;
 }
 
 int main(void)
@@ -92,17 +81,6 @@ int main(void)
             }
         }
     }
-    vector<vector<vector<ll>>> via(n, vector<vector<ll>>(n, vector<ll>(n, inf)));
-    rep(i, n)
-    {
-        rep(j, n)
-        {
-            rep(k, n)
-            {
-                via[i][j][k] = wf[i][k] + wf[k][j];
-            }
-        }
-    }
     // print_vector_vector(wf);
     ll ans = 0;
     rep(i, n)
@@ -113,36 +91,14 @@ int main(void)
             {
                 continue;
             }
-            if (dp[i][j] != wf[i][j])
+            if (wf[i][j] != dp[i][j])
             {
                 cout << -1 << endl;
                 return 0;
             }
-            // debug(i);
-            // debug(j);
-            if (via[i][j][i] != via[i][j][j])
+            if (isOnlyPath(wf, i, j))
             {
-                cout << "error!" << endl;
-                return 0;
-            }
-            ll mindist = via[i][j][i];
-            // print_vector(via[i][j]);
-            bool okay = true;
-            rep(k, n)
-            {
-                if (i == k || j == k)
-                {
-                    continue;
-                }
-                if (via[i][j][k] == mindist)
-                {
-                    okay = false;
-                    break;
-                }
-            }
-            if (okay)
-            {
-                ans += mindist;
+                ans += wf[i][j];
             }
         }
     }
