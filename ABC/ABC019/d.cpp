@@ -21,13 +21,46 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-vector<vector<int>> to;
+vector<vector<pair<int, int>>> to;
 
-int main(void){
+const int inf = 2e9;
+
+int main(void)
+{
     int n;
     cin >> n;
-    to.resize(n+1);
-    rep(i,n){
-        
+    to.resize(n, vector<pair<int, int>>());
+    int tmp = 0;
+    int point = 0;
+    rep(i, n)
+    {
+        if (i == 0)
+        {
+            continue;
+        }
+        cout << "? 1 " << i + 1 << endl;
+        int dist;
+        cin >> dist;
+        if (tmp < dist)
+        {
+            point = i;
+            tmp = dist;
+        }
     }
+    rep(i, n)
+    {
+        if (i == point)
+        {
+            continue;
+        }
+        cout << "? " << point + 1 << " " << i + 1 << endl;
+        int dist;
+        cin >> dist;
+        if (tmp < dist)
+        {
+            tmp = dist;
+        }
+    }
+    cout << "! " << tmp << endl;
+    return 0;
 }
