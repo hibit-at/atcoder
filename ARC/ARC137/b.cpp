@@ -21,42 +21,41 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint = modint998244353;
+template <typename T>
+void print_vector(vector<T> v)
+{
+    for (T i : v)
+    {
+        cout << i << ',';
+    }
+    cout << endl;
+    return;
+}
 
 int main(void)
 {
-    int n, K;
-    cin >> n >> K;
-    vector<mint> dp(n);
-    vector<bool> free(n, true);
-    rep(i, K)
-    {
-        char c;
-        int k;
-        cin >> c >> k;
-        k--;
-        free[k] = false;
-        rep(j, n)
-        {
-            if (c == 'R' && j <= k)
-            {
-                dp[j]++;
-            }
-            if (c == 'L' && k <= j)
-            {
-                dp[j]++;
-            }
-        }
-    }
-    mint ans = 1;
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    map<int, int> mp;
     rep(i, n)
     {
-        if (free[i])
+        int x;
+        cin >> x;
+        if (x == 0)
         {
-            ans *= dp[i];
+            a[i] = 1;
         }
+        else
+        {
+            a[i] = -1;
+        }
+        if (i > 0)
+        {
+            a[i] += a[i - 1];
+        }
+        mp[a[i]]++;
     }
-    cout << ans.val() << endl;
+    print_vector(a);
+    cout << mp.size() << endl;
 }

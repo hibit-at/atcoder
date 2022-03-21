@@ -23,24 +23,23 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    string t;
-    rep(i, n)
+    ll a, b, c;
+    cin >> a >> b >> c;
+    ll x = 2 * b - a - c;
+    if (x >= 0)
     {
-        if (s[i] == 'B' && s[i + 1] == 'B')
+        cout << x << endl;
+    }
+    else
+    {
+        x *= -1;
+        if (x % 2 == 0)
         {
-            continue;
+            cout << x / 2 << endl;
         }
-        t.push_back(s[i]);
+        else
+        {
+            cout << 1 + (x + 1) / 2 << endl;
+        }
     }
-    debug(t);
-    map<char, int> mp;
-    for (char c : t)
-    {
-        mp[c]++;
-    }
-    
 }
