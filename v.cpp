@@ -21,22 +21,76 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void)
+#include <atcoder/dsu>
+using namespace atcoder;
+
+int n, m;
+vector<vector<int>> to;
+vector<ll> dp;
+vector<ll> sell;
+vector<ll> a;
+
+const ll inf = 1e18;
+template <typename T>
+void chmax(T &a, T b) { a = max(a, b); }
+
+ll dfs(int now)
 {
-    vector<int> a;
-    rep(i, 3)
+    if (dp[now] > -inf)
     {
-        int x;
-        cin >> x;
-        a.push_back(x);
+        return dp[now];
     }
-    sort(all(a));
-    if (a[1] * 2 == a[0] + a[2])
+    for (int next : to[now])
     {
-        cout << "Yes" << endl;
+        chmax(sell[now], dfs(next));
     }
-    else
+    return dp[now] = max(a[now], sell[now]);
+}
+
+template <typename T>
+void print_vector(vector<T> v)
+{
+    for (T i : v)
     {
-        cout << "No" << endl;
+        cout << i << ',';
     }
+    cout << endl;
+    return;
+}
+
+int main()
+{
+    cin >> n >> m;
+    a.resize(n);
+    rep(i, n)
+    {
+        cin >> a[i];
+    }
+    // print_vector(a);
+    to.resize(n, vector<int>());
+    rep(i, m)
+    {
+        int x, y;
+        cin >> x >> y;
+        x--;
+        y--;
+        to[x].push_back(y);
+    }
+    dp.resize(n, -inf);
+    sell.resize(n, -inf);
+    rep(i, n)
+    {
+        dfs(i);
+    }
+    // print_vector(dp);
+    ll ans = -inf;
+    rep(i, n)
+    {
+        if (to[i].size() == 0)
+        {
+            continue;
+        }
+        chmax(ans, sell[i] - a[i]);
+    }
+    cout << ans << endl;
 }
