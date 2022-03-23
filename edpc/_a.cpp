@@ -25,21 +25,7 @@ vector<int> h;
 
 const int inf = 1e9;
 
-template <typename T>
-void chmin(T &a, T b) { a = min(a, b); }
-
 vector<int> memo;
-
-template <typename T>
-void print_vector(vector<T> v)
-{
-for (T i : v)
-  {
-    cout << i << ',';
-  }
-  cout << endl;
-  return;
-}
 
 int dfs(int now)
 {
@@ -52,8 +38,18 @@ int dfs(int now)
         return inf;
     }
     int ans = inf;
+    auto chmin = [](auto &a, auto b)
+    { a = min(a, b); };
     chmin(ans, dfs(now - 1) + abs(h[now] - h[now - 1]));
     chmin(ans, dfs(now - 2) + abs(h[now] - h[now - 2]));
+    auto print_vector = [](auto v)
+    {
+        for (auto i : v)
+        {
+            cout << i << ',';
+        }
+        cout << endl;
+    };
     // print_vector(memo);
     return memo[now] = ans;
 }
