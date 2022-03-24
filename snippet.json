@@ -1,54 +1,4 @@
 {
-    "snp chmax": {
-        "prefix": "chmax",
-        "body": [
-            "template <typename T>",
-            "void chmax(T &a, T b) { a = max(a, b); }"
-        ],
-        "description": "chmax"
-    },
-    "snp chmin": {
-        "prefix": "chmin",
-        "body": [
-            "template <typename T>",
-            "void chmin(T &a, T b) { a = min(a, b); }"
-        ],
-        "description": "chmin"
-    },
-    "snp print_vector": {
-        "prefix": "print_vector",
-        "body": [
-            "template <typename T>",
-            "void print_vector(vector<T> v)",
-            "{",
-            "for (T i : v)",
-            "  {",
-            "    cout << i << ',';",
-            "  }",
-            "  cout << endl;",
-            "  return;",
-            "}"
-        ],
-        "description": "print_vector"
-    },
-    "snp print_vector_vector": {
-        "prefix": "print_vector_vector",
-        "body": [
-            "template <typename T>",
-            "void print_vector_vector(vector<vector<T>> vv)",
-            "{",
-            "  for (vector<T> v : vv)",
-            "  {",
-            "    for (T i : v)",
-            "    {",
-            "      cout << i << \",\";",
-            "    }",
-            "    cout << endl;",
-            "  }",
-            "}"
-        ],
-        "description": "print_vector_vector"
-    },
     "snp UnionFind": {
         "prefix": "UnionFind",
         "body": [
@@ -249,23 +199,18 @@
         ],
         "description": "yesno"
     },
-    "snp print_front": {
-        "prefix": "print_front",
+    "snp_gcd": {
+        "prefix": "gcd",
         "body": [
-            "template <typename T>",
-            "void print_front(T q)",
+            "ll gcd(ll a, ll b)",
             "{",
-            "  while (q.size() > 0)",
-            "  {",
-            "    int now = q.front();",
-            "    q.pop();",
-            "    cout << now << \" \";",
-            "  }",
-            "  cout << endl;",
+            "    if (b == 0)",
+            "        return a;",
+            "    return gcd(b, a % b);",
             "}",
             ""
         ],
-        "description": "print_front"
+        "description": "snp_gcd"
     },
     "snp minpq": {
         "prefix": "minpq",
@@ -273,53 +218,6 @@
             "priority_queue<int,vector<int>, greater<int>>"
         ],
         "description": "minpq"
-    },
-    "snp gcd": {
-        "prefix": "gcd",
-        "body": [
-            "template <typename T>",
-            "T gcd(T a, T b)",
-            "{",
-            "  if (b == 0)",
-            "    return a;",
-            "  return gcd(b, a % b);",
-            "}"
-        ],
-        "description": "gcd"
-    },
-    "snp chminqueue": {
-        "prefix": "chminqueue",
-        "body": [
-            "void chminque(int now, int next, int cost, vector<int> &dist, queue<int> &q)",
-            "{",
-            "    if (dist[now] + cost < dist[next])",
-            "    {",
-            "        dist[next] = dist[now] + 1;",
-            "        q.push(next);",
-            "    }",
-            "    return;",
-            "}"
-        ],
-        "description": "chminqueue"
-    },
-    "snp rpow": {
-        "prefix": "rpow",
-        "body": [
-            "ll rpow(ll a, ll r, ll mod)",
-            "{",
-            "  if (r == 0)",
-            "    return 1;",
-            "  ll ans = rpow(a, r / 2, mod);",
-            "  ans *= ans;",
-            "  ans %= mod;",
-            "  if (r % 2 == 1)",
-            "    ans *= a;",
-            "  ans %= mod;",
-            "  return ans;",
-            "}",
-            ""
-        ],
-        "description": "rpow"
     },
     "snp dijkstra": {
         "prefix": "dijkstra",
@@ -386,31 +284,8 @@
         ],
         "description": "bfs"
     },
-    "snp_print_join": {
-        "prefix": "print_join",
-        "body": [
-            "template <typename T>",
-            "void print_join(vector<T> v)",
-            "{",
-            "    int n = v.size();",
-            "    rep(i, n)",
-            "    {",
-            "        cout << v[i];",
-            "        if (i < n - 1)",
-            "        {",
-            "            cout << ' ';",
-            "        }",
-            "        else",
-            "        {",
-            "            cout << endl;",
-            "        }",
-            "    }",
-            "}"
-        ],
-        "description": "snp_print_join"
-    },
-    "snp_l_print_vector": {
-        "prefix": "l_print_vector",
+    "snp_print_vector": {
+        "prefix": "print_vector",
         "body": [
             "auto print_vector = [](auto v)",
             "{",
@@ -421,10 +296,10 @@
             "    cout << endl;",
             "};"
         ],
-        "description": "snp_l_print_vector"
+        "description": "snp_print_vector"
     },
-    "snp_l_print_vector_vector": {
-        "prefix": "l_print_vector_vector",
+    "snp_print_vector_vector": {
+        "prefix": "print_vector_vector",
         "body": [
             "auto print_vector_vector = [](auto vv)",
             "{",
@@ -438,6 +313,44 @@
             "  }",
             "};"
         ],
-        "description": "snp_l_print_vector_vector"
+        "description": "snp_print_vector_vector"
+    },
+    "snp_pint": {
+        "prefix": "pint",
+        "body": [
+            "pair<int,int>"
+        ],
+        "description": "snp_pint"
+    },
+    "snp_print_front": {
+        "prefix": "print_front",
+        "body": [
+            "auto print_front = [](auto q)",
+            "{",
+            "    while (q.size() > 0)",
+            "    {",
+            "        cout << q.front() << ',';",
+            "        q.pop();",
+            "    }",
+            "    cout << endl;",
+            "};"
+        ],
+        "description": "snp_print_front"
+    },
+    "snp_chmin": {
+        "prefix": "chmin",
+        "body": [
+            "auto chmin = [](auto &a, auto b)",
+            "{ a = min(a, b); };"
+        ],
+        "description": "snp_chmin"
+    },
+    "snp_chmax": {
+        "prefix": "chmax",
+        "body": [
+            "auto chmax = [](auto &a, auto b)",
+            "{ a = max(a, b); };"
+        ],
+        "description": "snp_chmax"
     }
 }

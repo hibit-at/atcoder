@@ -21,76 +21,15 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-#include <atcoder/dsu>
-using namespace atcoder;
-
-int n, m;
-vector<vector<int>> to;
-vector<ll> dp;
-vector<ll> sell;
-vector<ll> a;
-
-const ll inf = 1e18;
-template <typename T>
-void chmax(T &a, T b) { a = max(a, b); }
-
-ll dfs(int now)
+int main(void)
 {
-    if (dp[now] > -inf)
-    {
-        return dp[now];
-    }
-    for (int next : to[now])
-    {
-        chmax(sell[now], dfs(next));
-    }
-    return dp[now] = max(a[now], sell[now]);
-}
-
-template <typename T>
-void print_vector(vector<T> v)
-{
-    for (T i : v)
-    {
-        cout << i << ',';
-    }
-    cout << endl;
-    return;
-}
-
-int main()
-{
-    cin >> n >> m;
-    a.resize(n);
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
     rep(i, n)
     {
         cin >> a[i];
     }
-    // print_vector(a);
-    to.resize(n, vector<int>());
-    rep(i, m)
-    {
-        int x, y;
-        cin >> x >> y;
-        x--;
-        y--;
-        to[x].push_back(y);
-    }
-    dp.resize(n, -inf);
-    sell.resize(n, -inf);
-    rep(i, n)
-    {
-        dfs(i);
-    }
-    // print_vector(dp);
-    ll ans = -inf;
-    rep(i, n)
-    {
-        if (to[i].size() == 0)
-        {
-            continue;
-        }
-        chmax(ans, sell[i] - a[i]);
-    }
-    cout << ans << endl;
+    n--;
+    cout << (n + k - 2) / (k - 1) << endl;
 }

@@ -1,5 +1,7 @@
-a = input()
-if a.isupper():
-    print('A')
-else:
-    print('a')
+n, k = list(map(int, input().split(' ')))
+a = list(map(int, input().split(' ')))
+bottom = min(a)
+s = ''.join([str(ax) for ax in a])
+print(s)
+t = s.split(str(bottom))
+print(t)
