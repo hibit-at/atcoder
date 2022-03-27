@@ -24,54 +24,50 @@ typedef long long ll;
 #include <atcoder/scc>
 using namespace atcoder;
 
-int main()
+int main(void)
 {
     int n, m;
     cin >> n >> m;
     vector<vector<int>> to(n, vector<int>(0));
     scc_graph graph(n);
-    rep(i, m)
+    while (m--)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        graph.add_edge(u, v);
-        to[u].push_back(v);
+        int a, b;
+        cin >> a >> b;
+        graph.add_edge(a, b);
     }
     auto scc = graph.scc();
-    int k = scc.size();
-    vector<int> idx(n);
-    rep(i, k)
+    auto print_vector_vector = [](auto vv)
     {
-        for (auto v : scc[i])
+        for (auto v : vv)
         {
-            idx[v] = i;
-        }
-    }
-    vector<int> dp(k, 0);
-    for (int i = k - 1; i >= 0; i--)
-    {
-        if (scc[i].size() == 1)
-        {
-            int from = scc[i][0];
-            for (auto next : to[from])
+            for (auto i : v)
             {
-                dp[i] |= dp[idx[next]];
+                cout << i << ',';
             }
+            cout << endl;
         }
-        else
-        {
-            dp[i] = 1;
-        }
-    }
-    int ans = 0;
-    rep(i, k)
+    };
+    cout << scc.size() << endl;
+    // print_vector_vector(scc);
+    for (auto v : scc)
     {
-        if (dp[i])
+        cout << v.size() << ' ';
+        auto print_join = [](auto v)
         {
-            ans += scc[i].size();
-        }
+            int size = v.size();
+            rep(i, size)
+            {
+                if (i < size - 1)
+                {
+                    cout << v[i] << ' ';
+                }
+                else
+                {
+                    cout << v[i] << endl;
+                }
+            }
+        };
+        print_join(v);
     }
-    cout << ans << endl;
 }

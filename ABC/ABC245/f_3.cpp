@@ -28,7 +28,7 @@ int main()
 {
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> to(n, vector<int>(0));
+    vector<vector<int>> rev(n, vector<int>(0));
     scc_graph graph(n);
     rep(i, m)
     {
@@ -37,41 +37,35 @@ int main()
         u--;
         v--;
         graph.add_edge(u, v);
-        to[u].push_back(v);
+        rev[v].push_back(u);
     }
     auto scc = graph.scc();
-    int k = scc.size();
-    vector<int> idx(n);
-    rep(i, k)
+    vector<bool> check(n);
+    for (auto v : scc)
     {
-        for (auto v : scc[i])
+        if (v.size() == 1)
         {
-            idx[v] = i;
+            continue;
         }
-    }
-    vector<int> dp(k, 0);
-    for (int i = k - 1; i >= 0; i--)
-    {
-        if (scc[i].size() == 1)
+        for (int now : v)
         {
-            int from = scc[i][0];
-            for (auto next : to[from])
+            queue<int> q;
+            q.push(now);
+            while (q.size() > 0)
             {
-                dp[i] |= dp[idx[next]];
+                int front = q.front();
+                q.pop();
+                check[front] = true;
+                for (int from : rev[front])
+                {
+                    if (check[from])
+                    {
+                        continue;
+                    }
+                    q.push(from);
+                }
             }
         }
-        else
-        {
-            dp[i] = 1;
-        }
     }
-    int ans = 0;
-    rep(i, k)
-    {
-        if (dp[i])
-        {
-            ans += scc[i].size();
-        }
-    }
-    cout << ans << endl;
+    cout << accumulate(all(check), 0) << endl;
 }

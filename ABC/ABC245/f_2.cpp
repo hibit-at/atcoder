@@ -28,50 +28,42 @@ int main()
 {
     int n, m;
     cin >> n >> m;
-    vector<vector<int>> to(n, vector<int>(0));
-    scc_graph graph(n);
+    vector<vector<int>> rev(n, vector<int>(0));
+    vector<int> graph_out(n);
     rep(i, m)
     {
         int u, v;
         cin >> u >> v;
         u--;
         v--;
-        graph.add_edge(u, v);
-        to[u].push_back(v);
+        rev[v].push_back(u);
+        graph_out[u]++;
     }
-    auto scc = graph.scc();
-    int k = scc.size();
-    vector<int> idx(n);
-    rep(i, k)
+    queue<int> q;
+    rep(i, n)
     {
-        for (auto v : scc[i])
+        if (graph_out[i] == 0)
         {
-            idx[v] = i;
+            q.push(i);
         }
     }
-    vector<int> dp(k, 0);
-    for (int i = k - 1; i >= 0; i--)
+    while (q.size() > 0)
     {
-        if (scc[i].size() == 1)
+        int now = q.front();
+        q.pop();
+        for (int from : rev[now])
         {
-            int from = scc[i][0];
-            for (auto next : to[from])
+            graph_out[from]--;
+            if (graph_out[from] == 0)
             {
-                dp[i] |= dp[idx[next]];
+                q.push(from);
             }
-        }
-        else
-        {
-            dp[i] = 1;
         }
     }
     int ans = 0;
-    rep(i, k)
+    rep(i, n)
     {
-        if (dp[i])
-        {
-            ans += scc[i].size();
-        }
+        ans += graph_out[i] > 0;
     }
     cout << ans << endl;
 }

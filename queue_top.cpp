@@ -27,13 +27,13 @@ int main(void)
     ;
     cin >> n >> m;
     vector<int> graph(n);
-    vector<vector<int>> to(n, vector<int>(0));
+    vector<vector<int>> rev(n, vector<int>(0));
     rep(i, m)
     {
         int u, v;
         cin >> u >> v;
-        to[u].push_back(v);
-        graph[v]++;
+        rev[v].push_back(u);
+        graph[u]++;
     }
     auto print_vector = [](auto v)
     {
@@ -44,7 +44,7 @@ int main(void)
         cout << endl;
     };
     print_vector(graph);
-    stack<int> q;
+    queue<int> q;
     rep(i, n)
     {
         if (graph[i] == 0)
@@ -65,18 +65,20 @@ int main(void)
     // print_front(q);
     while (q.size())
     {
-        int now = q.top();
+        int now = q.front();
         ans.push_back(now);
         q.pop();
-        for (int next : to[now])
+        for (int from : rev[now])
         {
-            graph[next]--;
-            if (graph[next] == 0)
+            graph[from]--;
+            if (graph[from] == 0)
             {
-                q.push(next);
+                q.push(from);
                 // print_front(q);
             }
         }
     }
+    reverse(all(ans));
     print_vector(ans);
+    
 }

@@ -42,80 +42,41 @@ int main(void)
     {
         cin >> d[i];
     }
-    vector<pair<int, int>> choco(n);
-    vector<pair<int, int>> box(m);
+    vector<pair<pair<int, int>, int>> allset;
     rep(i, n)
     {
-        choco[i] = {a[i], b[i]};
+        allset.push_back({{a[i], b[i]}, 0});
     }
     rep(i, m)
     {
-        box[i] = {c[i], d[i]};
+        allset.push_back({{c[i], d[i]}, 1});
     }
-    sort(all(choco));
-    sort(all(box));
-    int count = 0;
-    rep(i, m)
+    sort(all(allset));
+    reverse(all(allset));
+    multiset<int> workset;
+    for (auto now : allset)
     {
-        int xa = choco[count].first;
-        int xb = choco[count].second;
-        int xc = box[i].first;
-        int xd = box[i].second;
-        // debug(xa);
-        // debug(xb);
-        // debug(xc);
-        // debug(xd);
-        if (xa > xc || xb > xd)
+        int type = now.second;
+        int height = now.first.first;
+        int width = now.first.second;
+        // debug(type);
+        // debug(height);
+        // debug(width);
+        if (type == 1)
         {
-            continue;
+            workset.insert(width);
         }
         else
         {
-            count++;
+            auto where = workset.lower_bound(width);
+            if (where == workset.end())
+            {
+                cout << "No" << endl;
+                return 0;
+            }
+            workset.erase(where);
         }
     }
-    // debug(count);
-    if (count >= n)
-    {
-        cout << "Yes" << endl;
-        return 0;
-    }
-    rep(i, n)
-    {
-        choco[i] = {b[i], a[i]};
-    }
-    rep(i, m)
-    {
-        box[i] = {d[i], c[i]};
-    }
-    sort(all(choco));
-    sort(all(box));
-    count = 0;
-    rep(i, m)
-    {
-        int xa = choco[count].second;
-        int xb = choco[count].first;
-        int xc = box[i].second;
-        int xd = box[i].first;
-        // debug(xa);
-        // debug(xb);
-        // debug(xc);
-        // debug(xd);
-        if (xa > xc || xb > xd)
-        {
-            continue;
-        }
-        else
-        {
-            count++;
-        }
-    }
-    if (count >= n)
-    {
-        cout << "Yes" << endl;
-    }
-    else
-    {
-        cout << "No" << endl;
-    }
+    cout << "Yes" << endl;
+    return 0;
 }
