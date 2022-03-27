@@ -21,6 +21,23 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void){
-    
+int main(void)
+{
+    int n;
+    cin >> n;
+    vector<int> buc(2010);
+    rep(i, n)
+    {
+        int a;
+        cin >> a;
+        buc[a] = 1;
+    }
+    rep(i, 2010)
+    {
+        if (buc[i] == 0)
+        {
+            cout << i << endl;
+            return 0;
+        }
+    }
 }

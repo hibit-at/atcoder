@@ -21,6 +21,16 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int main(void){
-    
+int main(void)
+{
+    int a, b, c, d;
+    cin >> a >> b >> c >> d;
+    if (a * 60 + b <= c * 60 + d)
+    {
+        cout << "Takahashi" << endl;
+    }
+    else
+    {
+        cout << "Aoki" << endl;
+    }
 }

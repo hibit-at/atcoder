@@ -1,7 +1,23 @@
-n, k = list(map(int, input().split(' ')))
-a = list(map(int, input().split(' ')))
-bottom = min(a)
-s = ''.join([str(ax) for ax in a])
-print(s)
-t = s.split(str(bottom))
-print(t)
+import re
+
+s = input().split(' ')
+# print(s)
+n = int(input())
+t = [input().replace('*','.') for _ in range(n)]
+# print(t)
+
+ans = []
+
+for ss in s:
+    okay = False
+    for tt in t:
+        res = re.fullmatch(tt,ss)
+        if(res):
+            okay = True
+            ans.append('*'*len(ss))
+            break
+    if okay:
+        continue
+    ans.append(ss)
+
+print(' '.join(ans))
