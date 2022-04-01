@@ -352,5 +352,69 @@
             "{ a = max(a, b); };"
         ],
         "description": "snp_chmax"
+    },
+    "snp_print_join": {
+        "prefix": "print_join",
+        "body": [
+            "auto print_join = [](auto v)",
+            "{",
+            "    int size = v.size();",
+            "    rep(i, size)",
+            "    {",
+            "        if (i < size - 1)",
+            "        {",
+            "            cout << v[i] << ' ';",
+            "        }",
+            "        else",
+            "        {",
+            "            cout << v[i] << endl;",
+            "        }",
+            "    }",
+            "};"
+        ],
+        "description": "snp_print_join"
+    },
+    "snp_print_top": {
+        "prefix": "print_top",
+        "body": [
+            "    auto print_top = [](auto q)",
+            "    {",
+            "        while (q.size() > 0)",
+            "        {",
+            "            cout << q.top() << ',';",
+            "            q.pop();",
+            "        }",
+            "        cout << endl;",
+            "    };"
+        ],
+        "description": "snp_print_top"
+    },
+    "snp_print_vector_pair": {
+        "prefix": "print_vector_pair",
+        "body": [
+            "auto print_vector_pair = [](auto v)",
+            "{",
+            "    for (auto i : v)",
+            "    {",
+            "        cout << \"(\" << i.first << \",\" << i.second << \")\"",
+            "                << \" \";",
+            "    }",
+            "    cout << endl;",
+            "};"
+        ],
+        "description": "snp_print_vector_pair"
+    },
+    "snp_print_map": {
+        "prefix": "print_map",
+        "body": [
+            "    auto print_map(auto mp)",
+            "    {",
+            "        for (auto p : mp)",
+            "        {",
+            "            cout << \"key : \" << p.first << \", value : \" << p.second << endl;",
+            "        }",
+            "    };"
+        ],
+        "description": "snp_print_map"
     }
 }

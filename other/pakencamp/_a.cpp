@@ -23,32 +23,15 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    rep(i, n)
+    int ans = 0;
+    rep(i, 4)
     {
-        cin >> a[i];
-    }
-    reverse(all(a));
-    int now = 2;
-    rep(i, n - 1)
-    {
-        // debug(now);
-        int min_num = now;
-        int max_num = now + a[i] - 1;
-        // debug(min_num);
-        // debug(max_num);
-        if (max_num < a[i + 1])
+        string s;
+        cin >> s;
+        if (s == "1111")
         {
-            cout << -1 << endl;
-            return 0;
+            ans++;
         }
-        while(max_num % a[i+1] != 0){
-            max_num--;
-        }
-        now = max_num;
     }
-    // debug(now);
-    cout << now << ' ' << now + a[n - 1] - 1 << endl;
+    cout << ans << endl;
 }

@@ -23,32 +23,29 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
-    vector<int> a(n);
+    int n, m;
+    cin >> n >> m;
+    map<int, int> mp;
     rep(i, n)
     {
-        cin >> a[i];
+        int a;
+        cin >> a;
+        mp[a]++;
     }
-    reverse(all(a));
-    int now = 2;
-    rep(i, n - 1)
+    int maxans = 0;
+    int minans = 2e9;
+    for (auto p : mp)
     {
-        // debug(now);
-        int min_num = now;
-        int max_num = now + a[i] - 1;
-        // debug(min_num);
-        // debug(max_num);
-        if (max_num < a[i + 1])
-        {
-            cout << -1 << endl;
-            return 0;
-        }
-        while(max_num % a[i+1] != 0){
-            max_num--;
-        }
-        now = max_num;
+        auto chmax = [](auto &a, auto b)
+        { a = max(a, b); };
+        chmax(maxans, p.second);
+        auto chmin = [](auto &a, auto b)
+        { a = min(a, b); };
+        chmin(minans, p.second);
     }
-    // debug(now);
-    cout << now << ' ' << now + a[n - 1] - 1 << endl;
+    if (mp.size() < m)
+    {
+        minans = 0;
+    }
+    cout << minans << ' ' << maxans << endl;
 }

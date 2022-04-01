@@ -21,34 +21,35 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
+#include <atcoder/modint>
+using namespace atcoder;
+using mint = modint998244353;
+
+ll rpow(ll a, ll r, ll mod)
+{
+    if (r == 0)
+        return 1;
+    ll ans = rpow(a, r / 2, mod);
+    ans *= ans;
+    ans %= mod;
+    if (r % 2 == 1)
+        ans *= a;
+    ans %= mod;
+    return ans;
+}
+
 int main(void)
 {
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    rep(i, n)
+    ll n, m;
+    cin >> n >> m;
+    mint ans = m;
+    n -= 2;
+    ans *= m - 1;
+    if (n == 0)
     {
-        cin >> a[i];
+        cout << ans.val() << endl;
+        return 0;
     }
-    reverse(all(a));
-    int now = 2;
-    rep(i, n - 1)
-    {
-        // debug(now);
-        int min_num = now;
-        int max_num = now + a[i] - 1;
-        // debug(min_num);
-        // debug(max_num);
-        if (max_num < a[i + 1])
-        {
-            cout << -1 << endl;
-            return 0;
-        }
-        while(max_num % a[i+1] != 0){
-            max_num--;
-        }
-        now = max_num;
-    }
-    // debug(now);
-    cout << now << ' ' << now + a[n - 1] - 1 << endl;
+    ans *= rpow(m - 2, n, 998244353);
+    cout << ans.val() << endl;
 }

@@ -1,23 +1,14 @@
-import re
+s = input()
 
-s = input().split(' ')
-# print(s)
-n = int(input())
-t = [input().replace('*','.') for _ in range(n)]
-# print(t)
+import itertools
 
-ans = []
+ans = 1e10
 
-for ss in s:
-    okay = False
-    for tt in t:
-        res = re.fullmatch(tt,ss)
-        if(res):
-            okay = True
-            ans.append('*'*len(ss))
-            break
-    if okay:
-        continue
-    ans.append(ss)
+for case in itertools.permutations(s,3):
+    # print(case)
+    j = ''.join(case)
+    i = int(j)
+    print(i)
+    ans = min(ans, abs(753-i))
 
-print(' '.join(ans))
+print(ans)

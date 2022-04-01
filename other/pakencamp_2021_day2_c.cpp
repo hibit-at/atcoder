@@ -23,32 +23,30 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
+    int n, m;
+    cin >> n >> m;
     vector<int> a(n);
     rep(i, n)
     {
         cin >> a[i];
     }
-    reverse(all(a));
-    int now = 2;
-    rep(i, n - 1)
+    set<int> b;
+    rep(i, m)
     {
-        // debug(now);
-        int min_num = now;
-        int max_num = now + a[i] - 1;
-        // debug(min_num);
-        // debug(max_num);
-        if (max_num < a[i + 1])
-        {
-            cout << -1 << endl;
-            return 0;
-        }
-        while(max_num % a[i+1] != 0){
-            max_num--;
-        }
-        now = max_num;
+        int x;
+        cin >> x;
+        b.insert(x);
     }
-    // debug(now);
-    cout << now << ' ' << now + a[n - 1] - 1 << endl;
+    rep(i, n)
+    {
+        if (b.find(a[i]) != b.end())
+        {
+            b.erase(b.find(a[i]));
+        }
+    }
+    cout << b.size() << endl;
+    for (int i : b)
+    {
+        cout << i << endl;
+    }
 }

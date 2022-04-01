@@ -25,30 +25,36 @@ int main(void)
 {
     int n;
     cin >> n;
-    vector<int> a(n);
+    ll x, y;
+    cin >> x >> y;
+    vector<ll> a(n);
     rep(i, n)
     {
         cin >> a[i];
     }
-    reverse(all(a));
-    int now = 2;
-    rep(i, n - 1)
+    vector<ll> s(n + 1);
+    rep(i, n)
     {
-        // debug(now);
-        int min_num = now;
-        int max_num = now + a[i] - 1;
-        // debug(min_num);
-        // debug(max_num);
-        if (max_num < a[i + 1])
-        {
-            cout << -1 << endl;
-            return 0;
-        }
-        while(max_num % a[i+1] != 0){
-            max_num--;
-        }
-        now = max_num;
+        s[i + 1] = a[i];
+        s[i + 1] += s[i];
     }
-    // debug(now);
-    cout << now << ' ' << now + a[n - 1] - 1 << endl;
+    if (s[n] != x + y)
+    {
+        cout << "No" << endl;
+        return 0;
+    }
+    rep(i, n + 1)
+    {
+        rep(j, i)
+        {
+            ll check = s[i] - s[j];
+            // debug(check);
+            if (check == x || check == y)
+            {
+                cout << "Yes" << endl;
+                return 0;
+            }
+        }
+    }
+    cout << "No" << endl;
 }
