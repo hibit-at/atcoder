@@ -1,14 +1,9 @@
+n = int(input())
 s = input()
+t = s.split('C')
 
-import itertools
+def solve(s: str):
+    value = s.count('B') + s.count('A')*2
+    return 'A' * (value//2) + 'B' * (value % 2)
 
-ans = 1e10
-
-for case in itertools.permutations(s,3):
-    # print(case)
-    j = ''.join(case)
-    i = int(j)
-    print(i)
-    ans = min(ans, abs(753-i))
-
-print(ans)
+print('C'.join(map(solve,t)))
