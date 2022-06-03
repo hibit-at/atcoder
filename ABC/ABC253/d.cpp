@@ -21,31 +21,27 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int func(int n)
+ll gcd(ll a, ll b)
 {
-    int ans = 0;
-    while (n % 2 == 0)
-    {
-        debug(n);
-        n /= 2;
-        ans++;
-    }
-    return ans;
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
 }
 
-int main()
+ll lcm(ll a, ll b)
 {
-    int n;
-    cin >> n;
-    int ans = 0;
-    auto chmax = [](auto &a, auto b)
-    { a = max(a, b); };
-    rep(i, n)
-    {
-        int a;
-        cin >> a;
-        debug(a);
-        chmax(ans, func(a));
-    }
-    cout << ans << endl;
+    return a * b / gcd(a, b);
+}
+
+int main(void)
+{
+    ll n, a, b;
+    cin >> n >> a >> b;
+    ll a_size = n / a;
+    ll a_sum = a * (a_size) * (a_size + 1) / 2;
+    ll b_size = n / b;
+    ll b_sum = b * (b_size) * (b_size + 1) / 2;
+    ll ab_size = n / lcm(a, b);
+    ll ab_sum = lcm(a, b) * (ab_size) * (ab_size + 1) / 2;
+    cout << n * (n + 1) / 2 - a_sum - b_sum + ab_sum << endl;
 }

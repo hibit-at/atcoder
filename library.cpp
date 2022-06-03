@@ -190,36 +190,39 @@ bool top_sort(int n, vector<vector<int>> to)
 //                 }
 // }
 
-template <typename T>
-vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)
+struct Edge
 {
-    vector<T> dist(n + 1, inf);
-    priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>> pq;
-    dist[start] = 0;
-    pq.push({0, start});
-    while (pq.size() > 0)
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+using P = pair<long, int>;
+const long long inf = 1LL << 60;
+void dijkstra(const Graph &G, int s, vector<long long> &dis)
+{
+    int N = G.size();
+    dis.resize(N, INF);
+    priority_queue<P, vector<P>, greater<P>> pq; // 「仮の最短距離, 頂点」が小さい順に並ぶ
+    dis[s] = 0;
+    pq.emplace(dis[s], s);
+    while (!pq.empty())
     {
-        auto now_pair = pq.top();
+        P p = pq.top();
         pq.pop();
-        int now = now_pair.second;
-        int now_dist = now_pair.first;
-        if (dist[now] < now_dist)
-        {
+        int v = p.second;
+        if (dis[v] < p.first)
+        { // 最短距離で無ければ無視
             continue;
         }
-        for (auto next_pair : to[now])
+        for (auto &e : G[v])
         {
-            int next = next_pair.first;
-            T cost = next_pair.second;
-            if (dist[now] + cost >= dist[next])
-            {
-                continue;
+            if (dis[e.to] > dis[v] + e.cost)
+            { // 最短距離候補なら priority_queue に追加
+                dis[e.to] = dis[v] + e.cost;
+                pq.emplace(dis[e.to], e.to);
             }
-            dist[next] = dist[now] + cost;
-            pq.push({dist[next], next});
         }
     }
-    return dist;
 }
 
 vector<vector<int>> bfs_grid(vector<vector<char>> maze, int sh, int sw)
@@ -330,6 +333,21 @@ vector<ll> divisor(ll n)
         }
     }
     sort(all(ans));
+    return ans;
+}
+
+template <typename T>
+set<T> devisors(T n)
+{
+    set<T> ans;
+    for (T i = 1; i <= n; i++)
+    {
+        if (n % i == 0)
+        {
+            st.insert(i);
+            st.insert(n / i);
+        }
+    }
     return ans;
 }
 

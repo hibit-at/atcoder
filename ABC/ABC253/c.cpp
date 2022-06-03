@@ -21,31 +21,33 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int func(int n)
+int main(void)
 {
-    int ans = 0;
-    while (n % 2 == 0)
+    multiset<int> st;
+    int q;
+    cin >> q;
+    while (q--)
     {
-        debug(n);
-        n /= 2;
-        ans++;
+        int t;
+        cin >> t;
+        if (t == 1)
+        {
+            int x;
+            cin >> x;
+            st.insert(x);
+        }
+        if (t == 2)
+        {
+            int x, c;
+            cin >> x >> c;
+            while (c-- && st.find(x) != st.end())
+            {
+                st.erase(st.find(x));
+            }
+        }
+        if (t == 3)
+        {
+            cout << *prev(st.end()) - *st.begin() << endl;
+        }
     }
-    return ans;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    int ans = 0;
-    auto chmax = [](auto &a, auto b)
-    { a = max(a, b); };
-    rep(i, n)
-    {
-        int a;
-        cin >> a;
-        debug(a);
-        chmax(ans, func(a));
-    }
-    cout << ans << endl;
 }

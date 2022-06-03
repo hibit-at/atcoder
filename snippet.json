@@ -112,21 +112,21 @@
         ],
         "description": "print_to"
     },
-    "print_maze": {
+    "snp_print_maze": {
         "prefix": "print_maze",
         "body": [
-            "void print_maze(vector<vector<char>> maze)",
+            "auto print_maze = [](auto maze)",
             "{",
-            "  int n = maze.size();",
-            "  int m = maze[0].size();",
-            "  rep(i, n)",
-            "  {",
-            "    rep(j, m) { cout << maze[i][j]; }",
-            "    cout << endl;",
-            "  }",
-            "}"
+            "    int n = maze.size();",
+            "    int m = maze[0].size();",
+            "    rep(i, n)",
+            "    {",
+            "        rep(j, m) { cout << maze[i][j]; }",
+            "        cout << endl;",
+            "    }",
+            "};"
         ],
-        "description": "print_maze"
+        "description": "snp_print_maze"
     },
     "snp include": {
         "prefix": "include",
@@ -219,42 +219,39 @@
         ],
         "description": "minpq"
     },
-    "snp dijkstra": {
+    "snp_dijkstra": {
         "prefix": "dijkstra",
         "body": [
-            "template <typename T>",
-            "vector<T> dijkstra(int n, vector<vector<pair<int, T>>> to, int start)",
-            "{",
-            "  vector<T> dist(n + 1, inf);",
-            "  priority_queue<pair<int, T>, vector<pair<int, T>>, greater<pair<int, T>>> pq;",
-            "  dist[start] = 0;",
-            "  pq.push({0, start});",
-            "  while (pq.size() > 0)",
-            "  {",
-            "    auto now_pair = pq.top();",
-            "    pq.pop();",
-            "    int now = now_pair.second;",
-            "    int now_dist = now_pair.first;",
-            "    if (dist[now] < now_dist)",
-            "    {",
-            "      continue;",
+            "struct Edge {",
+            "    long long to;",
+            "    long long cost;",
+            "};",
+            "using Graph = vector<vector<Edge>>;",
+            "using P = pair<long, int>;",
+            "const long long INF = 1LL << 60;",
+            "void dijkstra(const Graph &G, int s, vector<long long> &dis) {",
+            "    int N = G.size();",
+            "    dis.resize(N, INF);",
+            "    priority_queue<P, vector<P>, greater<P>> pq;  // 「仮の最短距離, 頂点」が小さい順に並ぶ",
+            "    dis[s] = 0;",
+            "    pq.emplace(dis[s], s);",
+            "    while (!pq.empty()) {",
+            "        P p = pq.top();",
+            "        pq.pop();",
+            "        int v = p.second;",
+            "        if (dis[v] < p.first) {  // 最短距離で無ければ無視",
+            "            continue;",
+            "        }",
+            "        for (auto &e : G[v]) {",
+            "            if (dis[e.to] > dis[v] + e.cost) {  // 最短距離候補なら priority_queue に追加",
+            "                dis[e.to] = dis[v] + e.cost;",
+            "                pq.emplace(dis[e.to], e.to);",
+            "            }",
+            "        }",
             "    }",
-            "    for (auto next_pair : to[now])",
-            "    {",
-            "      int next = next_pair.first;",
-            "      T cost = next_pair.second;",
-            "      if (dist[now] + cost >= dist[next])",
-            "      {",
-            "        continue;",
-            "      }",
-            "      dist[next] = dist[now] + cost;",
-            "      pq.push({dist[next], next});",
-            "    }",
-            "  }",
-            "  return dist;",
             "}"
         ],
-        "description": "dijkstra"
+        "description": "snp_dijkstra"
     },
     "snp bfs": {
         "prefix": "bfs",
@@ -303,14 +300,14 @@
         "body": [
             "auto print_vector_vector = [](auto vv)",
             "{",
-            "  for (auto v : vv)",
-            "  {",
-            "    for (auto i : v)",
+            "    for (auto v : vv)",
             "    {",
-            "      cout << i << ',';",
+            "        for (auto i : v)",
+            "        {",
+            "            cout << i << ',';",
+            "        }",
+            "        cout << endl;",
             "    }",
-            "    cout << endl;",
-            "  }",
             "};"
         ],
         "description": "snp_print_vector_vector"
@@ -377,15 +374,15 @@
     "snp_print_top": {
         "prefix": "print_top",
         "body": [
-            "    auto print_top = [](auto q)",
+            "auto print_top = [](auto q)",
+            "{",
+            "    while (q.size() > 0)",
             "    {",
-            "        while (q.size() > 0)",
-            "        {",
-            "            cout << q.top() << ',';",
-            "            q.pop();",
-            "        }",
-            "        cout << endl;",
-            "    };"
+            "        cout << q.top() << ',';",
+            "        q.pop();",
+            "    }",
+            "    cout << endl;",
+            "};"
         ],
         "description": "snp_print_top"
     },
@@ -407,14 +404,70 @@
     "snp_print_map": {
         "prefix": "print_map",
         "body": [
-            "    auto print_map(auto mp)",
+            "auto print_map = [](auto mp)",
+            "{",
+            "    for (auto p : mp)",
             "    {",
-            "        for (auto p : mp)",
-            "        {",
-            "            cout << \"key : \" << p.first << \", value : \" << p.second << endl;",
-            "        }",
-            "    };"
+            "        cout << \"key : \" << p.first << \", value : \" << p.second << endl;",
+            "    }",
+            "};"
         ],
         "description": "snp_print_map"
+    },
+    "snp_vint": {
+        "prefix": "vint",
+        "body": [
+            "vector<int>"
+        ],
+        "description": "snp_vi"
+    },
+    "snp_zaz": {
+        "prefix": "zaz",
+        "body": [
+            "auto zaz = [](auto a)",
+            "{",
+            "    auto b = a;",
+            "    sort(all(b));",
+            "    b.erase(unique(all(b)), b.end());",
+            "    vector<int> ans;",
+            "    for (auto i : a)",
+            "    {",
+            "        auto where = lower_bound(all(b), i);",
+            "        ans.push_back(where - b.begin());",
+            "    }",
+            "    return ans;",
+            "};"
+        ],
+        "description": "snp_zaz"
+    },
+    "snp_pll": {
+        "prefix": "pll",
+        "body": [
+            "pair<ll,ll>"
+        ],
+        "description": "snp_pll"
+    },
+    "snp_print_pair": {
+        "prefix": "print_pair",
+        "body": [
+            "auto print_pair = [](auto p)",
+            "{",
+            "    cout << '(' << p.first << ',' << p.second << ')';",
+            "};"
+        ],
+        "description": "snp_print_pair"
+    },
+    "snp_print_lines": {
+        "prefix": "print_lines",
+        "body": [
+            "auto print_lines = [](auto v)",
+            "{",
+            "    for (auto i : v)",
+            "    {",
+            "        cout << i << endl;",
+            "    }",
+            "};"
+        ],
+        "description": "snp_print_lines"
     }
 }

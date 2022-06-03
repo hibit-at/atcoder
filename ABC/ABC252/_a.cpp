@@ -21,31 +21,17 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int func(int n)
-{
-    int ans = 0;
-    while (n % 2 == 0)
-    {
-        debug(n);
-        n /= 2;
-        ans++;
-    }
-    return ans;
-}
-
-int main()
+int main(void)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    auto chmax = [](auto &a, auto b)
-    { a = max(a, b); };
+    vector<string> s(n);
     rep(i, n)
     {
-        int a;
-        cin >> a;
-        debug(a);
-        chmax(ans, func(a));
+        cin >> s[i];
     }
-    cout << ans << endl;
+    auto solve = [&](int target){
+
+    };
+    solve(0);
 }

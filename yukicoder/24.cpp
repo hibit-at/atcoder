@@ -21,31 +21,41 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-int func(int n)
+string binary_expression(int n, int d)
 {
-    int ans = 0;
-    while (n % 2 == 0)
-    {
-        debug(n);
-        n /= 2;
-        ans++;
-    }
+    string ans = "";
+    rep(i, d) { ans.push_back((n >> i & 1) + '0'); }
     return ans;
 }
 
-int main()
+int main(void)
 {
     int n;
     cin >> n;
-    int ans = 0;
-    auto chmax = [](auto &a, auto b)
-    { a = max(a, b); };
+    int state = (1 << 10) - 1;
     rep(i, n)
     {
-        int a;
-        cin >> a;
-        debug(a);
-        chmax(ans, func(a));
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        int mask = 0;
+        mask |= 1 << a;
+        mask |= 1 << b;
+        mask |= 1 << c;
+        mask |= 1 << d;
+        string s;
+        cin >> s;
+        if (s == "NO")
+        {
+            mask = ((1 << 10) - 1) ^ mask;
+        }
+        state &= mask;
     }
-    cout << ans << endl;
+    rep(i, 10)
+    {
+        if ((state >> i) & 1)
+        {
+            cout << i << endl;
+            return 0;
+        }
+    }
 }

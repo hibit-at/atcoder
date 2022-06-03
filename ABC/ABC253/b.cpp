@@ -23,13 +23,23 @@ typedef long long ll;
 
 int main(void)
 {
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    rep(i, n)
+    int h, w;
+    cin >> h >> w;
+    vector<int> x(0);
+    vector<int> y(0);
+    rep(i, h)
     {
-        cin >> a[i];
-        a[i] -= i + 1;
+        string s;
+        cin >> s;
+        rep(j, w)
+        {
+            char c = s[j];
+            if (c == 'o')
+            {
+                x.push_back(i);
+                y.push_back(j);
+            }
+        }
     }
     auto print_vector = [](auto v)
     {
@@ -39,13 +49,7 @@ int main(void)
         }
         cout << endl;
     };
-    // print_vector(a);
-    sort(all(a));
-    ll med = a[n / 2];
-    ll ans = 0;
-    rep(i, n)
-    {
-        ans += abs(a[i] - med);
-    }
-    cout << ans << endl;
+    // print_vector(x);
+    // print_vector(y);
+    cout << abs(x[0] - x[1]) + abs(y[0] - y[1]) << endl;
 }

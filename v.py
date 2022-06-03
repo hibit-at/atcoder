@@ -1,9 +1,10 @@
-n = int(input())
-s = input()
-t = s.split('C')
+def dfs(s : str) -> str:
+    if s == '':
+        return 'YES'
+    words = ['ch','o','k','u']
+    for word in words:
+        if s.endswith(word):
+            return dfs(s[:-len(word)])
+    return 'NO'
 
-def solve(s: str):
-    value = s.count('B') + s.count('A')*2
-    return 'A' * (value//2) + 'B' * (value % 2)
-
-print('C'.join(map(solve,t)))
+print(dfs(input()))
