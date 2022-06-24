@@ -114,7 +114,7 @@ ll gcd(ll a, ll b)
     return gcd(b, a % b);
 }
 
-ll lcm(ll a, ll b) { return a * b / gcd(a, b); }
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
 
 int index(vector<int> v, int target)
 {
@@ -532,9 +532,10 @@ void print_pair(pair<T, S> p)
     cout << "(" p.first << ", " << p.second << ")" << endl;
 }
 
-vector<pair<int, char>> swapmap(map<char, int> mp)
+template <typename T>
+vector<pair<int, T>> swapmap(map<T, int> mp)
 {
-    vector<pair<int, char>> vp;
+    vector<pair<int, T>> vp;
     for (auto p : mp)
     {
         vp.push_back(make_pair(p.second, p.first));

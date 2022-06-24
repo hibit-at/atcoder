@@ -31,33 +31,14 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    ll n;
+    int n;
     cin >> n;
-    vector<ll> dec(0);
-    rep1(i, 1e5)
-    {
-        if (i == 1)
-        {
-            continue;
-        }
-        ll pos = ll(i) * i;
-        if (pos < 0)
-        {
-            debug(pos);
-        }
-        dec.push_back(pos);
-        while (pos <= 1e10)
-        {
-            // debug(pos);
-            pos *= i;
-            if (pos > 1e10)
-            {
-                break;
-            }
-            dec.push_back(pos);
-        }
+    vector<int> s(n+1);
+    rep(i,n){
+        int a;
+        cin >> a;
+        s[i+1] = s[i] + a;
     }
-    sort(all(dec));
     auto print_vector = [](auto v)
     {
         for (auto i : v)
@@ -66,12 +47,11 @@ int main(void)
         }
         cout << endl;
     };
-    dec.erase(unique(all(dec)), dec.end());
-    // print_vec@tor(dec);
-    auto itr = upper_bound(all(dec), n);
-    itr--;
-    int where = itr - dec.begin() + 1;
-    // debug(where);
-    // debug(*it@r);
-    cout << n - where << endl;
+    int ans = 0;
+    rep(i,n){
+        int criteria = s[n] - s[n-i-1];
+        // debug(criteria);
+        ans += criteria > 3;
+    }
+    cout << ans << endl;
 }

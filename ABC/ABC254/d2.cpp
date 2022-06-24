@@ -29,35 +29,33 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-int main(void)
+vector<ll> divisor(ll n)
 {
-    ll n;
-    cin >> n;
-    vector<ll> dec(0);
-    rep1(i, 1e5)
+    vector<ll> ans;
+    for (ll i = 1; i * i <= n; i++)
     {
-        if (i == 1)
+        if (n % i == 0)
         {
-            continue;
-        }
-        ll pos = ll(i) * i;
-        if (pos < 0)
-        {
-            debug(pos);
-        }
-        dec.push_back(pos);
-        while (pos <= 1e10)
-        {
-            // debug(pos);
-            pos *= i;
-            if (pos > 1e10)
+            ans.push_back(i);
+            if (i * i != n)
             {
-                break;
+                ans.push_back(n / i);
             }
-            dec.push_back(pos);
         }
     }
-    sort(all(dec));
+    sort(all(ans));
+    return ans;
+}
+
+int main(void)
+{
+    int n;
+    cin >> n;
+    vector<ll> s(0);
+    rep1(i, n)
+    {
+        s.push_back(i * i);
+    }
     auto print_vector = [](auto v)
     {
         for (auto i : v)
@@ -66,12 +64,11 @@ int main(void)
         }
         cout << endl;
     };
-    dec.erase(unique(all(dec)), dec.end());
-    // print_vec@tor(dec);
-    auto itr = upper_bound(all(dec), n);
-    itr--;
-    int where = itr - dec.begin() + 1;
-    // debug(where);
-    // debug(*it@r);
-    cout << n - where << endl;
+    // print_vector(s);
+    int ans = 0;
+    rep1(i, n)
+    {
+        ll check = 1;
+    }
+    cout << ans << endl;
 }

@@ -128,7 +128,7 @@
         ],
         "description": "snp_print_maze"
     },
-    "snp include": {
+    "snp_include": {
         "prefix": "include",
         "body": [
             "#include <algorithm>",
@@ -154,9 +154,15 @@
             "#define debug(var) cout << #var << \" = \" << var << endl;",
             "typedef long long ll;",
             "",
+            "template< typename T >",
+            "istream &operator>>(istream &is, vector< T > &v) {",
+            "    for(T &in : v) is >> in;",
+            "    return is;",
+            "}",
+            "",
             "int main(void)"
         ],
-        "description": "include"
+        "description": "snp_include"
     },
     "snp divisor": {
         "prefix": "divisor",
@@ -469,5 +475,28 @@
             "};"
         ],
         "description": "snp_print_lines"
+    },
+    "snp_modint": {
+        "prefix": "modint",
+        "body": [
+            "#include <atcoder/modint>",
+            "using namespace atcoder;"
+        ],
+        "description": "snp_modint"
+    },
+    "snp_comb": {
+        "prefix": "comb",
+        "body": [
+            "vector<mint> factor(1e6 + 1, 1);",
+            "rep(i, 1e6)",
+            "{",
+            "    factor[i + 1] = factor[i] * (i + 1);",
+            "}",
+            "auto comb = [&](int n, int r)",
+            "{",
+            "    return factor[n] / factor[n - r] / factor[r];",
+            "};"
+        ],
+        "description": "snp_comb"
     }
 }
