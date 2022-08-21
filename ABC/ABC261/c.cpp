@@ -31,14 +31,21 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    map<string, int> mp;
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
+        string s;
+        cin >> s;
+        if (mp.count(s) == 0)
         {
-            continue;
+            cout << s << endl;
         }
-        debug(i);
+        else
+        {
+            cout << s << '(' << mp[s] << ')' << endl;
+        }
+        mp[s]++;
     }
-    debug("ok!");
 }

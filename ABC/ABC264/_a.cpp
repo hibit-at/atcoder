@@ -31,14 +31,19 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int r, c;
+    cin >> r >> c;
+    r -= 7;
+    c += 7;
+    r = abs(r);
+    c = abs(c);
+    int man = max(r, c);
+    if (man % 2 == 0)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        cout << "white" << endl;
     }
-    debug("ok!");
+    else
+    {
+        cout << "black" << endl;
+    }
 }

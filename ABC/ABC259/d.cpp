@@ -29,16 +29,54 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
+#include <atcoder/segtree>
+#include <atcoder/modint>
+using namespace atcoder;
+// using namespace atcoder;
+
+using S = modint;
+
+S gcd(ll a, ll b)
+{
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+S lcm(S a, S b) { return a / gcd(a.val(), b.val()) * b; }
+
+S op(S a, S b)
+{
+    return lcm(a, b);
+}
+
+S e()
+{
+    return 1;
+}
+
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    // modint1000000007;
+    modint::set_mod(1000000007);
+    vector<S> v(n);
+    segtree<S, op, e> seg(v);
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
+        ll m;
+        cin >> m;
+        S tmp = 1;
+        rep(j, m)
         {
-            continue;
+            ll p, e;
+            cin >> p >> e;
+            while (e--)
+            {
+                // tmp *= p;
+            }
         }
-        debug(i);
+        debug(tmp.val());
     }
-    debug("ok!");
 }

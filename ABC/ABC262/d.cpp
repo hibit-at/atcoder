@@ -29,20 +29,24 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-#include <atcoder/string>
+#include <atcoder/modint>
 using namespace atcoder;
+using mint = modint998244353;
 
 int main(void)
 {
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int ans = 0;
-    rep(i, n)
+    vector<ll> a(n);
+    cin >> a;
+    auto solve = [&](ll d)
     {
-        string t = s.substr(i);
-        vector<int> z = z_algorithm(t);
+        // debug(d);
+        vector<ll> b(n);
+        rep(i, n)
+        {
+            b[i] = a[i] % d;
+        }
         auto print_vector = [](auto v)
         {
             int size = v.size();
@@ -58,7 +62,26 @@ int main(void)
                 }
             }
         };
-        print_vector(z);
+        // print_vector(b);
+        vector<vector<vector<mint>>> dp(n + 1, vector<vector<mint>>(n + 1, vector<mint>(d, 0)));
+        dp[0][0][0] = 1;
+        rep(i, n)
+        {
+            rep(j, n)
+            {
+                rep(k, d)
+                {
+                    dp[i + 1][j][k] += dp[i][j][k];
+                    dp[i + 1][j + 1][(k + b[i]) % d] += dp[i][j][k];
+                }
+            }
+        }
+        return dp[n][d][0];
+    };
+    mint ans = 0;
+    rep1(i, n)
+    {
+        ans += solve(i);
     }
-    cout << ans << endl;
+    cout << ans.val() << endl;
 }

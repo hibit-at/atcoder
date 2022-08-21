@@ -29,16 +29,24 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-int main(void)
+#include <atcoder/modint>
+using namespace atcoder;
+using mint = modint;
+
+int main()
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n, q;
+    string s;
+    cin >> n >> s >> q;
+    bool flip = false;
+    modint::set_mod(2 * n);
+    while (q--)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        int t, a, b;
+        cin >> t >> a >> b;
+        if (t == 1) swap(s[(mint(a - 1) + n * flip).val()], s[(mint(b - 1) + n * flip).val()]);
+        if (t == 2) flip ^= 1;
     }
-    debug("ok!");
+    rep(i, 2 * n) cout << s[(mint(i) + n * flip).val()];
+    cout << endl;
 }

@@ -29,16 +29,19 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
+#include <atcoder/segtree>
+using namespace atcoder;
+
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n, L, R;
+    cin >> n >> L >> R;
+    vector<ll> s(n + 1);
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        ll a;
+        cin >> a;
+        s[i + 1] = s[i] + a;
     }
-    debug("ok!");
+    
 }

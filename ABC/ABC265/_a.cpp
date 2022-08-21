@@ -31,14 +31,31 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+#define int ll
+    int n, m, t;
+    cin >> n >> m >> t;
+    vector<int> a(n - 1);
+    cin >> a;
+    vector<int> bonus(n);
+    rep(i, m)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        int x, y;
+        cin >> x >> y;
+        x--;
+        bonus[x] = y;
     }
-    debug("ok!");
+    rep(i, n)
+    {
+        t += bonus[i];
+        if (t <= a[i])
+        {
+            cout << "No" << endl;
+            return 0;
+        }
+        else
+        {
+            t -= a[i];
+        }
+    }
+    cout << "Yes" << endl;
 }

@@ -31,14 +31,31 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    map<int, multiset<int>> mp;
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
+        int m;
+        cin >> m;
+        rep(j, m)
         {
-            continue;
+            int p, m;
+            cin >> p >> m;
+            mp[p].insert(m);
         }
-        debug(i);
     }
-    debug("ok!");
+    for (auto &[key, val] : mp)
+    {
+        while (val.size() > 2)
+        {
+            val.erase(val.begin());
+        }
+        for (int i : val)
+        {
+            cout << i << ",";
+        }
+        cout << endl;
+    }
+    
 }

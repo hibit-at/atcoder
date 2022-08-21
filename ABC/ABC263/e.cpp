@@ -29,16 +29,32 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
+#include <atcoder/modint>
+using namespace atcoder;
+using mint = modint998244353;
+
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    vector<int> a(n - 1);
+    cin >> a;
+    vector<vector<mint>> dp(100, vector<mint>(n + 1));
+    dp[0][0] = 1;
+    rep(i, 99)
     {
-        if (__builtin_popcount(i) != 1)
+        rep(j, n)
         {
-            continue;
+            dp[i + 1][j] += dp[i][j] / (a[j] + 1);
+            dp[i + 1][min(j + a[j], n)] -= dp[i][j] / (a[j] + 1);
         }
-        debug(i);
     }
-    debug("ok!");
+    rep(i, 100)
+    {
+        rep(j, n + 1)
+        {
+            cout << dp[i][j].val() << " ";
+        }
+        cout << endl;
+    }
 }

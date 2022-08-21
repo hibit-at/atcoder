@@ -29,16 +29,33 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
+string binary_expression(int n, int d)
+{
+    string ans = "";
+    rep(i, d) { ans.push_back((n >> i & 1) + '0'); }
+    return ans;
+}
+
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    ll c;
+    cin >> n >> c;
+    ll mask = (1 << 30) - 1;
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        int t;
+        ll a;
+        cin >> t >> a;
+        a += (a << 30);
+        if (t == 1)
+            mask &= a;
+        if (t == 2)
+            mask |= a;
+        if (t == 3)
+            mask ^= a;
+        ll subnet = (1 << 30) - 1;
+        c = (c & (subnet & mask)) | ((subnet - c) & (mask >> 30));
+        cout << c << endl;
     }
-    debug("ok!");
 }

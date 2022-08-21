@@ -21,24 +21,12 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-template <typename T>
-istream &operator>>(istream &is, vector<T> &v)
-{
-    for (T &in : v)
-        is >> in;
+template< typename T >
+istream &operator>>(istream &is, vector< T > &v) {
+    for(T &in : v) is >> in;
     return is;
 }
 
-int main(void)
-{
-    int n = 30;
-    rep(i, 1 << n)
-    {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
-    }
-    debug("ok!");
+int main(void){
+    
 }

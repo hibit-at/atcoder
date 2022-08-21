@@ -31,14 +31,24 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    map<int, int> mp;
+    rep(i, 5)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        int a;
+        cin >> a;
+        mp[a]++;
     }
-    debug("ok!");
+    auto F = mp.begin();
+    auto S = next(mp.begin());
+    if (F->second == 2 && S->second == 3)
+    {
+        cout << "Yes" << endl;
+        return 0;
+    }
+    if (F->second == 3 && S->second == 2)
+    {
+        cout << "Yes" << endl;
+        return 0;
+    }
+    cout << "No" << endl;
 }

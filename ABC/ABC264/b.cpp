@@ -29,16 +29,36 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-int main(void)
+string solve(int r, int c)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    r -= 7;
+    c -= 7;
+    r = abs(r);
+    c = abs(c);
+    int man = max(r, c);
+    if (man % 2 == 0)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        return "white";
     }
-    debug("ok!");
+    else
+    {
+        return "black";
+    }
+}
+
+int main()
+{
+    int r, c;
+    cin >> r >> c;
+    // rep(i, 15)
+    // {
+    //     rep(j, 15)
+    //     {
+    //         cout << solve(i, j) << ",";
+    //     }
+    //     cout << endl;
+    // }
+    r--;
+    c--;
+    cout << solve(r, c) << endl;
 }

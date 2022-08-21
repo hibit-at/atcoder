@@ -29,36 +29,49 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-#include <atcoder/string>
-using namespace atcoder;
-
 int main(void)
 {
+    #define int ll
     int n;
     cin >> n;
-    string s;
-    cin >> s;
-    int ans = 0;
+    vector<int> a(n);
+    cin >> a;
+    ll forward = 0;
     rep(i, n)
     {
-        string t = s.substr(i);
-        vector<int> z = z_algorithm(t);
-        auto print_vector = [](auto v)
+        forward += a[i] == i + 1;
+    }
+    vector<map<int, int>> pos(n + 1);
+    rep(i, n)
+    {
+        pos[a[i]][i + 1]++;
+    }
+    ll backward = 0;
+    rep(i, n)
+    {
+        // debug(i);
+        int target = a[i];
+        if (pos[i+1].size() == 0)
         {
-            int size = v.size();
-            rep(i, size)
+            continue;
+        }
+        auto print_map = [](auto mp)
+        {
+            for (auto p : mp)
             {
-                if (i < size - 1)
-                {
-                    cout << v[i] << ' ';
-                }
-                else
-                {
-                    cout << v[i] << endl;
-                }
+                cout << "key : " << p.first << ", value : " << p.second << endl;
             }
         };
-        print_vector(z);
+        // debug(target);
+        // print_map(pos[i+1]);
+        if (pos[i+1].count(target) > 0 && i+1 != target)
+        {
+            backward++;
+        }
     }
+    // debug(forward);
+    // debug(backward);
+    ll ans = forward * (forward - 1) / 2;
+    ans += backward / 2;
     cout << ans << endl;
 }

@@ -31,14 +31,31 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    vector<string> maze(n);
+    cin >> maze;
+    rep(i, n)
     {
-        if (__builtin_popcount(i) != 1)
+        rep(j, n)
         {
-            continue;
+            if (i == j)
+            {
+                continue;
+            }
+            if (maze[i][j] == 'D' && maze[j][i] == 'D')
+            {
+                continue;
+            }
+            else
+            {
+                if (maze[i][j] == maze[j][i])
+                {
+                    cout << "incorrect" << endl;
+                    return 0;
+                }
+            }
         }
-        debug(i);
     }
-    debug("ok!");
+    cout << "correct" << endl;
 }

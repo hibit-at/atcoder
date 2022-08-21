@@ -29,36 +29,52 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-#include <atcoder/string>
+#include <atcoder/fenwicktree>
 using namespace atcoder;
 
 int main(void)
 {
-    int n;
-    cin >> n;
+    map<char, int> mp;
+    mp['a'] = 0;
+    mp['t'] = 1;
+    mp['c'] = 2;
+    mp['o'] = 3;
+    mp['d'] = 4;
+    mp['e'] = 5;
+    mp['r'] = 6;
+    vector<int> a;
     string s;
     cin >> s;
-    int ans = 0;
-    rep(i, n)
+    for (char c : s)
     {
-        string t = s.substr(i);
-        vector<int> z = z_algorithm(t);
-        auto print_vector = [](auto v)
+        a.push_back(mp[c]);
+    }
+    auto print_vector = [](auto v)
+    {
+        int size = v.size();
+        int cnt = 1;
+        for (auto i : v)
         {
-            int size = v.size();
-            rep(i, size)
+            cout << i;
+            if (cnt < size)
             {
-                if (i < size - 1)
-                {
-                    cout << v[i] << ' ';
-                }
-                else
-                {
-                    cout << v[i] << endl;
-                }
+                cout << " ";
             }
-        };
-        print_vector(z);
+            else
+            {
+                cout << endl;
+            }
+            cnt++;
+        }
+    };
+    // print_vector(a);
+    fenwick_tree<int> ft(7);
+    int ans = 0;
+    rep(i, 7)
+    {
+        int now = a[i];
+        ans += ft.sum(a[i] + 1, 7);
+        ft.add(a[i], 1);
     }
     cout << ans << endl;
 }

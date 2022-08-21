@@ -29,36 +29,57 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-#include <atcoder/string>
-using namespace atcoder;
+vector<int> ans;
+int n, m;
 
-int main(void)
+void dfs()
 {
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int ans = 0;
-    rep(i, n)
+    if (ans.size() == n)
     {
-        string t = s.substr(i);
-        vector<int> z = z_algorithm(t);
         auto print_vector = [](auto v)
         {
             int size = v.size();
-            rep(i, size)
+            int cnt = 1;
+            for (auto i : v)
             {
-                if (i < size - 1)
+                cout << i;
+                if (cnt < size)
                 {
-                    cout << v[i] << ' ';
+                    cout << " ";
                 }
                 else
                 {
-                    cout << v[i] << endl;
+                    cout << endl;
                 }
+                cnt++;
             }
         };
-        print_vector(z);
+        print_vector(ans);
+        return;
     }
-    cout << ans << endl;
+    if (ans.size() == 0)
+    {
+        rep1(i, m)
+        {
+            ans.push_back(i);
+            dfs();
+            ans.pop_back();
+        }
+    }
+    else
+    {
+        int tail = ans.back();
+        for (int i = tail + 1; i <= m; i++)
+        {
+            ans.push_back(i);
+            dfs();
+            ans.pop_back();
+        }
+    }
+}
+
+int main(void)
+{
+    cin >> n >> m;
+    dfs();
 }

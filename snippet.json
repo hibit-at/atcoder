@@ -46,52 +46,6 @@
         ],
         "description": "UnionFind"
     },
-    "snp top_sort": {
-        "prefix": "top_sort",
-        "body": [
-            "bool top_sort(int n, vector<vector<int>> to)",
-            "{",
-            "  vector<int> graph(n + 1);",
-            "  rep1(i, n)",
-            "  {",
-            "    for (int next : to[i])",
-            "    {",
-            "      graph[next]++;",
-            "    }",
-            "  }",
-            "  stack<int> st;",
-            "  rep1(i, n)",
-            "  {",
-            "    if (graph[i] == 0)",
-            "    {",
-            "      st.push(i);",
-            "    }",
-            "  }",
-            "  while (st.size() > 0)",
-            "  {",
-            "    int now = st.top();",
-            "    st.pop();",
-            "    for (int next : to[now])",
-            "    {",
-            "      graph[next]--;",
-            "      if (graph[next] == 0)",
-            "      {",
-            "        st.push(next);",
-            "      }",
-            "    }",
-            "  }",
-            "  rep1(i, n)",
-            "  {",
-            "    if (graph[i] > 0)",
-            "    {",
-            "      return false;",
-            "    }",
-            "  }",
-            "  return true;",
-            "}"
-        ],
-        "description": "top_sort"
-    },
     "snp print_to": {
         "prefix": "print_to",
         "body": [
@@ -214,14 +168,15 @@
             "        return a;",
             "    return gcd(b, a % b);",
             "}",
-            ""
+            "",
+            "ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }"
         ],
         "description": "snp_gcd"
     },
     "snp minpq": {
         "prefix": "minpq",
         "body": [
-            "priority_queue<int,vector<int>, greater<int>>"
+            "priority_queue<S,vector<S>, greater<S>>"
         ],
         "description": "minpq"
     },
@@ -258,48 +213,6 @@
             "}"
         ],
         "description": "snp_dijkstra"
-    },
-    "snp bfs": {
-        "prefix": "bfs",
-        "body": [
-            "vector<int> bfs(int n, vector<vector<int>> to, int start)",
-            "{",
-            "  vector<int> dist(n + 1, inf);",
-            "  queue<int> q;",
-            "  dist[start] = 0;",
-            "  q.push(start);",
-            "  while (q.size() > 0)",
-            "  {",
-            "    int now = q.front();",
-            "    q.pop();",
-            "    for (int next : to[now])",
-            "    {",
-            "      if (dist[next] <= dist[now] + 1)",
-            "      {",
-            "        continue;",
-            "      }",
-            "      dist[next] = dist[now] + 1;",
-            "      q.push(next);",
-            "    }",
-            "  }",
-            "  return dist;",
-            "}"
-        ],
-        "description": "bfs"
-    },
-    "snp_print_vector": {
-        "prefix": "print_vector",
-        "body": [
-            "auto print_vector = [](auto v)",
-            "{",
-            "    for (auto i : v)",
-            "    {",
-            "        cout << i << ',';",
-            "    }",
-            "    cout << endl;",
-            "};"
-        ],
-        "description": "snp_print_vector"
     },
     "snp_print_vector_vector": {
         "prefix": "print_vector_vector",
@@ -356,26 +269,29 @@
         ],
         "description": "snp_chmax"
     },
-    "snp_print_join": {
-        "prefix": "print_join",
+    "snp_print_vector": {
+        "prefix": "print_vector",
         "body": [
-            "auto print_join = [](auto v)",
+            "auto print_vector = [](auto v)",
             "{",
             "    int size = v.size();",
-            "    rep(i, size)",
+            "    int cnt = 1;",
+            "    for (auto i : v)",
             "    {",
-            "        if (i < size - 1)",
+            "        cout << i;",
+            "        if (cnt < size)",
             "        {",
-            "            cout << v[i] << ' ';",
+            "            cout << \" \";",
             "        }",
             "        else",
             "        {",
-            "            cout << v[i] << endl;",
+            "            cout << endl;",
             "        }",
+            "        cnt++;",
             "    }",
             "};"
         ],
-        "description": "snp_print_join"
+        "description": "snp_print_vector"
     },
     "snp_print_top": {
         "prefix": "print_top",
@@ -495,8 +411,39 @@
             "auto comb = [&](int n, int r)",
             "{",
             "    return factor[n] / factor[n - r] / factor[r];",
+            "};",
+            "auto H = [&](int n, int r)",
+            "{",
+            "    return comb(n + r - 1, r - 1);",
             "};"
         ],
         "description": "snp_comb"
+    },
+    "snp_dsu": {
+        "prefix": "dsu",
+        "body": [
+            "#include <atcoder/dsu>",
+            "using namespace atcoder;"
+        ],
+        "description": "snp_dsu"
+    },
+    "snp_vvv": {
+        "prefix": "vvv",
+        "body": [
+            "using VI = vector<int>;",
+            "using VVI = vector<VI>;",
+            "using VVVI = vector<VVI>;",
+            "using VVVVI = vector<VVVI>;",
+            "using VVVVVI = vector<VVVVI>;"
+        ],
+        "description": "snp_vvv"
+    },
+    "snp_dxdy": {
+        "prefix": "dxdy",
+        "body": [
+            "vector<int> dx = {1,-1,0,0};",
+            "vector<int> dy = {0,0,1,-1};"
+        ],
+        "description": "snp_dxdy"
     }
 }

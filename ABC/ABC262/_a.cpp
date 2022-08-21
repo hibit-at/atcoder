@@ -31,14 +31,31 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<vector<int>> dist(n, vector<int>(n));
+    rep(i, m)
     {
-        if (__builtin_popcount(i) != 1)
-        {
-            continue;
-        }
-        debug(i);
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        dist[u][v] = 1;
+        dist[v][u] = 1;
     }
-    debug("ok!");
+    int ans = 0;
+    rep(a, n)
+    {
+        for (int b = a + 1; b < n; b++)
+        {
+            for (int c = b + 1; c < n; c++)
+            {
+                // cout << a << b << c << endl;
+                ans += (dist[a][b] * dist[b][c] * dist[c][a]);
+            }
+        }
+    }
+    cout << ans << endl;
 }

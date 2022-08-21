@@ -31,14 +31,33 @@ istream &operator>>(istream &is, vector<T> &v)
 
 int main(void)
 {
-    int n = 30;
-    rep(i, 1 << n)
+    int test;
+    cin >> test;
+    while (test--)
     {
-        if (__builtin_popcount(i) != 1)
+        int n, c, q;
+        cin >> n >> c >> q;
+        string s;
+        cin >> s;
+        map<ll, ll> mp;
+        ll end = 0;
+        ll shift = 0;
+        while (c--)
         {
-            continue;
+            ll L, R;
+            L--;
+            ll span = L - R;
+            end += span;
+            ll shift = L % n;
+            mp[end] = shift;
         }
-        debug(i);
+        auto print_map = [](auto mp)
+        {
+            for (auto p : mp)
+            {
+                cout << "key : " << p.first << ", value : " << p.second << endl;
+            }
+        };
+        print_map(mp);
     }
-    debug("ok!");
 }
