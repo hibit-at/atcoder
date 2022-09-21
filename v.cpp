@@ -12,6 +12,7 @@
 #include <utility>
 #include <vector>
 #include <stack>
+#include <complex>
 
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
@@ -21,6 +22,51 @@ using namespace std;
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
+template <typename T1, typename T2>
+ostream &operator<<(ostream &os, const pair<T1, T2> &p)
+{
+    os << "(" << p.first << "," << p.second << ")";
+    return os;
+}
+
+template <typename T1, typename T2>
+istream &operator>>(istream &is, pair<T1, T2> &p)
+{
+    is >> p.first >> p.second;
+    return is;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const vector<T> &v)
+{
+    for (int i = 0; i < (int)v.size(); i++)
+    {
+        os << v[i] << (i + 1 != (int)v.size() ? " " : "");
+    }
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const vector<vector<T>> &v)
+{
+    for (int i = 0; i < (int)v.size(); i++)
+    {
+        os << v[i] << endl;
+    }
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
+{
+    for (int i = 0; i < (int)v.size(); i++)
+    {
+        os << "i = " << i << endl;
+        os << v[i];
+    }
+    return os;
+}
+
 template <typename T>
 istream &operator>>(istream &is, vector<T> &v)
 {
@@ -29,60 +75,63 @@ istream &operator>>(istream &is, vector<T> &v)
     return is;
 }
 
-#include <atcoder/modint>
+template <typename T, typename S>
+ostream &operator<<(ostream &os, map<T, S> &mp)
+{
+    for (auto &[key, val] : mp)
+    {
+        os << key << ":" << val << " ";
+    }
+    cout << endl;
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, set<T> st)
+{
+    auto itr = st.begin();
+    for (int i = 0; i < (int)st.size(); i++)
+    {
+        os << *itr << (i + 1 != (int)st.size() ? " " : "");
+        itr++;
+    }
+    return os;
+}
+
+template <typename T>
+ostream &operator<<(ostream &os, multiset<T> st)
+{
+    auto itr = st.begin();
+    for (int i = 0; i < (int)st.size(); i++)
+    {
+        os << *itr << (i + 1 != (int)st.size() ? " " : "");
+        itr++;
+    }
+    return os;
+}
+
+#include <atcoder/fenwicktree>
 using namespace atcoder;
-using mint = modint1000000007;
 
 int main()
 {
-    int h, w;
-    cin >> h >> w;
-    vector<vector<int>> maze(h + 2, vector<int>(w + 2));
-    using S = pair<int, pair<int, int>>;
-    priority_queue<S, vector<S>, greater<S>> pq;
-    rep1(i, h)
+    int n, m, q;
+    cin >> n >> m >> q;
+    fenwick_tree<int> Ltree(n), Rtree(n);
+    rep(i, m)
     {
-        rep1(j, w)
-        {
-            int a;
-            cin >> a;
-            maze[i][j] = a;
-            pq.push({a, {i, j}});
-        }
+        int L, R;
+        cin >> L >> R;
+        L--;
+        R--;
+        Ltree.add(L, 1);
+        Rtree.add(R, 1);
     }
-    vector<vector<mint>> dp(h + 2, vector<mint>(w + 2,1));
-    while (pq.size())
+    while (q--)
     {
-        auto [val, pos] = pq.top();
-        pq.pop();
-        auto [i, j] = pos;
-        vector<int> dx = {1, -1, 0, 0};
-        vector<int> dy = {0, 0, 1, -1};
-        rep(k, 4)
-        {
-            if (maze[i][j] < maze[i + dx[k]][j + dy[k]])
-            {
-                dp[i + dx[k]][j + dy[k]] += dp[i][j];
-            }
-        }
+        int p, q;
+        cin >> p >> q;
+        p--;
+        
     }
-    auto print_vector_vector = [](auto vv)
-    {
-        for (auto v : vv)
-        {
-            for (auto i : v)
-            {
-                cout << i.val() << ',';
-            }
-            cout << endl;
-        }
-    };
-    // print_vector_vector(dp);
-    mint ans = 0;
-    rep1(i,h){
-        rep1(j,w){
-            ans += dp[i][j];
-        }
-    }
-    cout << ans.val() << endl;
 }

@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -113,21 +112,57 @@ ostream &operator<<(ostream &os, multiset<T> st)
 
 int main()
 {
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
+    string t;
+    cin >> t;
+    if (t[0] == '1')
     {
-        a[i] = n % 10;
-        n /= 10;
+        cout << "No" << endl;
+        return 0;
     }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    vector<int> s(10);
+    rep(i, 10)
+    {
+        s[i] = t[i] - '0';
+    }
+    vector<int> lanes(7);
+    int lane0 = s[6];
+    lanes[0] = lane0 > 0;
+    int lane1 = s[3];
+    lanes[1] = lane1 > 0;
+    int lane2 = s[1] + s[7];
+    lanes[2] = lane2 > 0;
+    int lane3 = s[0] + s[4];
+    lanes[3] = lane3 > 0;
+    int lane4 = s[2] + s[8];
+    lanes[4] = lane4 > 0;
+    int lane5 = s[5];
+    lanes[5] = lane5 > 0;
+    int lane6 = s[9];
+    lanes[6] = lane6 > 0;
+    // debug(lanes);
+    string u;
+    int pos = 0;
+    while (pos < 7)
+    {
+        int head = lanes[pos];
+        while (lanes[pos] == head)
+        {
+            pos++;
+            if(pos == 7){
+                break;
+            }
+        }
+        u.push_back(head + '0');
+    }
+    // debug(u);
+    int m = u.size();
+    rep(i, m - 3 + 1)
+    {
+        if (u.substr(i, 3) == "101")
+        {
+            cout << "Yes" << endl;
+            return 0;
+        }
+    }
+    cout << "No" << endl;
 }

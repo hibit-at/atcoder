@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -113,21 +112,60 @@ ostream &operator<<(ostream &os, multiset<T> st)
 
 int main()
 {
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
+    int n, m;
+    cin >> n >> m;
+    vector<ll> a(n);
+    cin >> a;
+    vector<ll> cost(n);
+    vector<vector<int>> to(n, vector<int>());
+    rep(i, m)
     {
-        a[i] = n % 10;
-        n /= 10;
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        cost[u] += a[v];
+        cost[v] += a[u];
+        to[u].push_back(v);
+        to[v].push_back(u);
     }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    // debug(cost);
+    using S = tuple<ll, ll, int>;
+    priority_queue<S, vector<S>, greater<S>> pq;
+    vector<pair<ll, int>> vp(n);
+    rep(i, n)
+    {
+        vp[i] = {cost[i], i};
+    }
+    sort(all(vp));
+    reverse(all(vp));
+    // debug(vp);
+    vector<bool> used(n);
+    ll ans = 0;
+    for (auto [now_cost, now] : vp)
+    {
+        if (used[now])
+        {
+            continue;
+        }
+        vector<pair<ll, int>> next_candidate;
+        for (int next : to[now])
+        {
+            next_candidate.push_back({cost[next], next});
+        }
+        sort(all(next_candidate));
+        // debug(next_candidate);
+        for (auto [next_cost, next] : next_candidate)
+        {
+            auto chmax = [](auto &a, auto b)
+            { a = max(a, b); };
+            chmax(ans, cost[next]);
+            used[next] = true;
+            for (int next_next : to[next])
+            {
+                cost[next_next] -= a[next];
+            }
+        }
+    }
+    cout << ans << endl;
 }

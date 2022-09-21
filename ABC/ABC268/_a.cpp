@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -111,23 +110,12 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-int main()
-{
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
-    {
-        a[i] = n % 10;
-        n /= 10;
+int main(){
+    map<int,int> mp;
+    rep(i,5){
+        int a;
+        cin >> a;
+        mp[a]++;
     }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    cout << mp.size() << endl;
 }

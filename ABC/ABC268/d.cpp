@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -111,23 +110,94 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
+int n, m;
+string now;
+vector<string> ans;
+set<string> st;
+vector<int> used;
+vector<string> s;
+
+void dfs()
+{
+    if (ans.size())
+    {
+        return;
+    }
+    // debug(now);
+    int sz = now.size();
+    if (sz > 16)
+    {
+        return;
+    }
+    if (3 <= now.size() && now.size() <= 16)
+    {
+        int used_check = accumulate(all(used), 0);
+        if (st.count(now) == 0 && now.back() != '_' && used_check == n)
+        {
+            // debug("ok");
+            ans.push_back(now);
+            return;
+        }
+    }
+    now.push_back('_');
+    dfs();
+    now.pop_back();
+    if (now.back() == '_')
+    {
+        rep(i, n)
+        {
+            if (used[i])
+            {
+                continue;
+            }
+            int next_sz = s[i].size();
+            if (sz + next_sz <= 16)
+            {
+                for (char c : s[i])
+                {
+                    now.push_back(c);
+                }
+                used[i] = true;
+                dfs();
+                used[i] = false;
+                rep(j, next_sz)
+                {
+                    now.pop_back();
+                }
+            }
+        }
+    }
+}
+
 int main()
 {
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
+    // int n, m;
+    cin >> n >> m;
+    s.resize(n);
+    used.resize(n);
+    cin >> s;
+    rep(i, m)
     {
-        a[i] = n % 10;
-        n /= 10;
+        string t;
+        cin >> t;
+        st.insert(t);
     }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    // debug(s);
+    // debug(st);
+    rep(i, n)
+    {
+        now = s[i];
+        used[i] = true;
+        dfs();
+        used[i] = false;
+        now = "";
+    }
+    if (ans.size())
+    {
+        cout << ans[0] << endl;
+    }
+    else
+    {
+        cout << -1 << endl;
+    }
 }

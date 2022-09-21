@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -113,21 +112,26 @@ ostream &operator<<(ostream &os, multiset<T> st)
 
 int main()
 {
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
+    #define int ll
+    int n, m;
+    cin >> n >> m;
+    vector<ll> a(n);
+    cin >> a;
+    vector<vector<ll>> dp(n + 1, vector<ll>(m + 1, -1e18));
+    dp[0][0] = 0;
+    rep(i, n)
     {
-        a[i] = n % 10;
-        n /= 10;
+        rep(j, m + 1)
+        {
+            auto chmax = [](auto &a, auto b)
+            { a = max(a, b); };
+            chmax(dp[i + 1][j], dp[i][j]);
+            if (j < m)
+            {
+                chmax(dp[i + 1][j + 1], dp[i][j] + a[i] * (j + 1));
+            }
+        }
     }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    // debug(dp);
+    cout << dp[n][m] << endl;
 }

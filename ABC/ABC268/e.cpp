@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -113,21 +112,41 @@ ostream &operator<<(ostream &os, multiset<T> st)
 
 int main()
 {
-    ll n;
+#define int ll
+    int n;
     cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
+    vector<ll> a(n);
+    rep(i, n)
     {
-        a[i] = n % 10;
-        n /= 10;
+        cin >> a[i];
+        a[i] -= i;
+        if (a[i] < 0)
+        {
+            a[i] += n;
+        }
     }
-    reverse(all(a));
+    sort(all(a));
     debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    vector<ll> sum(n + 1);
+    rep(i, n)
+    {
+        sum[i + 1] = sum[i] + a[i];
+    }
+    ll ans = 1e18;
+    for (int i : a)
+    {
+        int idx = upper_bound(all(a), i) - a.begin();
+        debug(i);
+        debug(idx);
+        ll tmp = 0;
+        tmp += sum[n] - sum[idx];
+        tmp -= i * (n - idx);
+        tmp += i * idx;
+        tmp -= sum[idx];
+        debug(tmp);
+        auto chmin = [](auto &a, auto b)
+        { a = min(a, b); };
+        chmin(ans, tmp);
+    }
+    cout << ans << endl;
 }

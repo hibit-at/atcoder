@@ -652,3 +652,78 @@ public:
     void update(int l, int r, int x) { update(l, r, x, 1, 0, sz); }
     int range_max(int l, int r) { return range_max(l, r, 1, 0, sz); }
 };
+
+struct Point
+{
+    double x = 0;
+    double y = 0;
+
+    void rotation(double angle)
+    {
+        double new_x = x * cos(angle) - y * sin(angle);
+        double new_y = x * sin(angle) + y * cos(angle);
+        x = new_x;
+        y = new_y;
+    }
+
+    void rotation(int degree)
+    {
+        double pi = atan(1) * 4;
+        double angle = double(degree) / 180 * pi;
+        rotation(angle);
+    }
+
+    double norm()
+    {
+        return sqrt(x * x + y * y);
+    }
+
+    Point operator+(Point &other)
+    {
+        Point ans;
+        ans.x = x + other.x;
+        ans.y = y + other.y;
+        return ans;
+    }
+
+    Point operator-(Point &other)
+    {
+        Point ans;
+        ans.x = x - other.x;
+        ans.y = y - other.y;
+        return ans;
+    }
+
+    double operator*(Point &other)
+    {
+        return x * other.x + y * other.y;
+    }
+
+    double operator^(Point &other)
+    {
+        return x * other.y - y * other.x;
+    }
+};
+
+int ccw(Point A, Point B, Point C)
+{
+    Point AB = B - A;
+    Point AC = C - A;
+    if ((AB ^ AC) > 0)
+    {
+        return 1;
+    }
+    else if ((AB ^ AC) == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+bool intersect(Point A, Point B, Point C, Point D)
+{
+    return (ccw(A, B, D) * ccw(A, B, C)) == -1;
+}
