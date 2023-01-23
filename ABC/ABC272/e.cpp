@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,42 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
-}
+#include <atcoder/dsu>
+using namespace atcoder;
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, m;
+    cin >> n >> m;
+    set<pair<ll, ll>> st;
+    rep(i, n)
+    {
+        ll a;
+        cin >> a;
+        st.insert({a, i + 1});
+    }
+    // cout << sst << endl;
+    while (m--)
+    {
+        int uf_size = st.size();
+        dsu uf(uf_size + 1);
+        set<pair<ll, ll>> alter;
+        for (auto [a, b] : st)
+        {
+            alter.insert({a + b, b});
+            if (a + b >= 0 && a + b < uf_size)
+            {
+                uf.merge(a + b + 1, a + b);
+            }
+        }
+        int ans = uf.size(0);
+        // debug(uf.size(0));
+        while (alter.lower_bound({ans,0}) != alter.end())
+        {
+            alter.erase(alter.lower_bound({ans,0}));
+        }
+        // debug(alter);
+        swap(st, alter);
+        cout << ans - 1 << endl;
+    }
 }

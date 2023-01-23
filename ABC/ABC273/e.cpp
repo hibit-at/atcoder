@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,44 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    map<int, int> map_index;
+    vector<vector<int>> vp(1, vector<int>());
+    int working_idx = 0;
+    int q;
+    cin >> q;
+    vector<int> ans;
+    while (q--)
+    {
+        string s;
+        cin >> s;
+        if (s == "ADD")
+        {
+            int x;
+            cin >> x;
+            vp[working_idx].push_back(x);
+            debug(vp[working_idx]);
+        }
+        if (s == "DELETE")
+        {
+            auto current_vector = vp[working_idx];
+            debug(current_vector);
+            if (current_vector.size())
+            {
+                current_vector.pop_back();
+            }
+        }
+        if (s == "SAVE")
+        {
+            int p;
+            cin >> p;
+        }
+        if (s == "LOAD")
+        {
+            int p;
+            cin >> p;
+        }
+    }
+    cout << ans << endl;
 }

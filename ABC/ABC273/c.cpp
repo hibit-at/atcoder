@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,52 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
+#include <atcoder/segtree>
+using namespace atcoder;
+
+int op(int a, int b)
 {
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
+    return a + b;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
+int e()
 {
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
+    return 0;
 }
 
 int main()
 {
     int n;
     cin >> n;
-    vector<int> 
+    vector<int> a(n);
+    cin >> a;
+    auto zaz = [](auto a)
+    {
+        auto b = a;
+        sort(all(b));
+        b.erase(unique(all(b)), b.end());
+        vector<int> ans;
+        for (auto i : a)
+        {
+            auto where = lower_bound(all(b), i);
+            ans.push_back(where - b.begin());
+        }
+        return ans;
+    };
+    a = zaz(a);
+    segtree<int, op, e> seg(n);
+    rep(i, n)
+    {
+        seg.set(a[i], 1);
+    }
+    vector<int> ans(n+1);
+    rep(i, n)
+    {
+        int now = a[i];
+        int count = seg.prod(now+1,n);
+        ans[count]++;
+    }
+    rep(i,n){
+        cout << ans[i] << endl;
+    }
 }

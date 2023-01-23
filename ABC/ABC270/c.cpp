@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,83 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
+struct Edge
 {
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+using P = pair<long, int>;
+const long long INF = 1LL << 60;
+void dijkstra(const Graph &G, int s, vector<long long> &dis, vector<int> &prev)
 {
-    while (q.size())
+    int N = G.size();
+    dis.resize(N, INF);
+    prev.resize(N, -1); // 初期化
+    priority_queue<P, vector<P>, greater<P>> pq;
+    dis[s] = 0;
+    pq.emplace(dis[s], s);
+    while (!pq.empty())
     {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
+        P p = pq.top();
         pq.pop();
+        int v = p.second;
+        if (dis[v] < p.first)
+        {
+            continue;
+        }
+        for (auto &e : G[v])
+        {
+            if (dis[e.to] > dis[v] + e.cost)
+            {
+                dis[e.to] = dis[v] + e.cost;
+                prev[e.to] = v; // 頂点 v を通って e.to にたどり着いた
+                pq.emplace(dis[e.to], e.to);
+            }
+        }
     }
-    return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
+/* get_path(prev, t)
+    入力：dijkstra で得た prev, ゴール t
+    出力： t への最短路のパス
+*/
+vector<int> get_path(const vector<int> &prev, int t)
 {
-    while (mpq.size())
+    vector<int> path;
+    for (int cur = t; cur != -1; cur = prev[cur])
     {
-        os << mpq.top() << " ";
-        mpq.pop();
+        path.push_back(cur);
     }
-    return os;
+    reverse(path.begin(), path.end()); // 逆順なのでひっくり返す
+    return path;
 }
 
 int main()
 {
     int n;
     cin >> n;
-    vector<int> 
+    int x, y;
+    cin >> x >> y;
+    x--;
+    y--;
+    Graph graph(n, vector<Edge>());
+    rep(i, n - 1)
+    {
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        graph[u].push_back({v, 1});
+        graph[v].push_back({u, 1});
+    }
+    vector<ll> dist;
+    vector<int> prev;
+    dijkstra(graph, x, dist, prev);
+    vector<int> ans = get_path(prev, y);
+    for (int &i : ans)
+    {
+        i++;
+    }
+    cout << ans << endl;
 }

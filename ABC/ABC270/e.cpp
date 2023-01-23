@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,77 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
-}
-
 int main()
 {
     int n;
     cin >> n;
-    vector<int> 
+    ll k;
+    cin >> k;
+    vector<ll> a(n);
+    cin >> a;
+    vector<pair<int, int>> order(n);
+    rep(i, n)
+    {
+        order[i] = {a[i], i};
+    }
+    sort(all(order));
+    // debug(order);
+    // debug(a);
+    ll ng = -1;
+    ll ok = ll(1e18);
+    while (abs(ng - ok) > 1)
+    {
+        ll mid = ng + ok;
+        mid /= 2;
+        // debug(mid);
+        ll criteria = 0;
+        rep(i, n)
+        {
+            criteria += min(a[i], mid);
+        }
+        if (criteria >= k)
+        {
+            ok = mid;
+        }
+        else
+        {
+            ng = mid;
+        }
+    }
+    // debug(ok);
+    ll ideal = 0;
+    rep(i, n)
+    {
+        ideal += min(a[i], ok);
+    }
+    // debug(ideal);
+    ll remainder = ideal - k;
+    // debug(remainder);
+    vector<ll> ans(n);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        ans[i] = max(0LL, a[i] - ok);
+    }
+    rep(i, n)
+    {
+        order[i].first -= ok;
+    }
+    // debug(order);
+    if (remainder > 0)
+    {
+        rep(i, n)
+        {
+            if (order[i].first < 0)
+            {
+                continue;
+            }
+            ans[order[i].second]++;
+            remainder--;
+            if (remainder == 0)
+            {
+                break;
+            }
+        }
+    }
+    cout << ans << endl;
 }

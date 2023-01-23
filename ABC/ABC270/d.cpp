@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,51 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
+int n, k;
+vector<int> a(100);
+auto chmax = [](auto &a, auto b)
+{ a = max(a, b); };
+auto chmin = [](auto &a, auto b)
+{ a = min(a, b); };
+vector<vector<int>> dp(10001, vector<int>(2, -1));
 
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
+int dfs(int now, int step)
 {
-    while (q.size())
+    if (now == 0)
     {
-        os << q.front() << " ";
-        q.pop_front();
+        return 0;
     }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
+    if (dp[now][step] > -1)
     {
-        os << st.top() << " ";
-        st.pop();
+        return dp[now][step];
     }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
+    // debug(now);
+    if (step == 0)
     {
-        os << pq.top() << " ";
-        pq.pop();
+        dp[now][step] = 1e9;
     }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
+    rep(i, k)
     {
-        os << mpq.top() << " ";
-        mpq.pop();
+        if (a[i] <= now)
+        {
+            if (step)
+            {
+                chmax(dp[now][1], dfs(now - a[i], 0) + a[i]);
+            }
+            else
+            {
+                chmin(dp[now][0], dfs(now - a[i], 1) - a[i]);
+            }
+        }
     }
-    return os;
+    return dp[now][step];
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    cin >> n >> k;
+    cin >> a;
+    dfs(n, 1);
+    int ans = dp[n][1];
+    cout << ans + (n - ans) / 2 << endl;
 }

@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,63 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, x, y;
+    cin >> n >> x >> y;
+    vector<int> dx, dy;
+    rep(i, n)
+    {
+        int a;
+        cin >> a;
+        if (i % 2 == 0)
+        {
+            dx.push_back(a);
+        }
+        else
+        {
+            dy.push_back(a);
+        }
+    }
+    // debug(dx);
+    // debug(dy);
+    int mx = dx.size();
+    int my = dy.size();
+    vector<map<int, bool>> dpx(mx + 1);
+    vector<map<int, bool>> dpy(my + 1);
+    dpx[0][0] = 1;
+    dpy[0][0] = 1;
+    rep(i, mx)
+    {
+        if (i == 0)
+        {
+            dpx[i + 1][dx[0]] = 1;
+        }
+        else
+        {
+            for (auto [key, val] : dpx[i])
+            {
+                dpx[i + 1][key - dx[i]] = 1;
+                dpx[i + 1][key + dx[i]] = 1;
+            }
+        }
+    }
+    rep(i, my)
+    {
+        for (auto [key, val] : dpy[i])
+        {
+            dpy[i + 1][key - dy[i]] = 1;
+            dpy[i + 1][key + dy[i]] = 1;
+        }
+    }
+    // debug(dpx[mx]);@
+    // debug(dpy[my]);
+    if (dpx[mx][x] && dpy[my][y])
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
+    }
 }

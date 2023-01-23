@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,54 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, m;
+    cin >> n >> m;
+    int inf = 1e9;
+    int lim = m;
+    using VI = vector<int>;
+    using VVI = vector<VI>;
+    using VVVI = vector<VVI>;
+    using VVVVI = vector<VVVI>;
+    using VVVVVI = vector<VVVVI>;
+    VVVI dp(n + 1, VVI(lim + 2, VI(2, inf)));
+    dp[0][0][1] = 0;
+    vector<int> a(n);
+    cin >> a;
+    vector<int> state_factor = {0, 1};
+    rep(i, n)
+    {
+        rep(j, lim + 1)
+        {
+            rep(now_state, 2)
+            {
+                if (dp[i][j][now_state] == inf)
+                {
+                    continue;
+                }
+                rep(next_state, 2)
+                {
+                    auto chmin = [](auto &a, auto b)
+                    { a = min(a, b); };
+                    int target = j + a[i] * state_factor[next_state];
+                    if (target > lim + 1)
+                    {
+                        target = lim + 1;
+                    }
+                    chmin(dp[i + 1][target][next_state], dp[i][j][now_state] + (now_state != next_state));
+                }
+            }
+        }
+    }
+    // cout << dp << endl;
+    rep1(i, m)
+    {
+        int ans = *min_element(all(dp[n][i]));
+        if(ans == inf){
+            cout << -1 << endl;
+            continue;
+        }
+        cout << (ans + 1) / 2 << endl;
+    }
 }

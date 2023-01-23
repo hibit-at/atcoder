@@ -168,7 +168,33 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, q;
+    cin >> n >> q;
+    map<pair<int, int>, int> mp;
+    while (q--)
+    {
+        int t, a, b;
+        cin >> t >> a >> b;
+        a--;
+        b--;
+        if (t == 1)
+        {
+            mp[{a, b}] = 1;
+        }
+        if (t == 2)
+        {
+            mp[{a, b}] = 0;
+        }
+        if (t == 3)
+        {
+            if (mp[{a, b}] && mp[{b, a}])
+            {
+                cout << "Yes" << endl;
+            }
+            else
+            {
+                cout << "No" << endl;
+            }
+        }
+    }
 }

@@ -1,4 +1,3 @@
-
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -18,116 +17,35 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
+#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
 typedef long long ll;
 
-template <typename T1, typename T2>
-ostream &operator<<(ostream &os, const pair<T1, T2> &p)
+#include <atcoder/modint>
+using namespace atcoder;
+using mint = modint998244353;
+// using mint = modint1000000007; 問題によって使い分け
+
+ostream &operator<<(ostream &os, const mint &i)
 {
-    os << "(" << p.first << "," << p.second << ")";
+    os << i.val();
     return os;
 }
 
-template <typename T1, typename T2>
-istream &operator>>(istream &is, pair<T1, T2> &p)
-{
-    is >> p.first >> p.second;
-    return is;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, const vector<T> &v)
+ostream &operator<<(ostream &os, const vector<mint> &v)
 {
     for (int i = 0; i < (int)v.size(); i++)
     {
-        os << v[i] << (i + 1 != (int)v.size() ? " " : "");
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, const vector<vector<T>> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
-    {
-        os << v[i] << endl;
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
-    {
-        os << "i = " << i << endl;
-        os << v[i];
-    }
-    return os;
-}
-
-template <typename T>
-istream &operator>>(istream &is, vector<T> &v)
-{
-    for (T &in : v)
-        is >> in;
-    return is;
-}
-
-template <typename T, typename S>
-ostream &operator<<(ostream &os, map<T, S> &mp)
-{
-    for (auto &[key, val] : mp)
-    {
-        os << key << ":" << val << " ";
-    }
-    cout << endl;
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, set<T> st)
-{
-    auto itr = st.begin();
-    for (int i = 0; i < (int)st.size(); i++)
-    {
-        os << *itr << (i + 1 != (int)st.size() ? " " : "");
-        itr++;
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, multiset<T> st)
-{
-    auto itr = st.begin();
-    for (int i = 0; i < (int)st.size(); i++)
-    {
-        os << *itr << (i + 1 != (int)st.size() ? " " : "");
-        itr++;
+        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
     }
     return os;
 }
 
 int main()
 {
-    ll n;
-    cin >> n;
-    vector<int> a(16);
-    rep(i, 16)
-    {
-        a[i] = n % 10;
-        n /= 10;
-    }
-    reverse(all(a));
-    debug(a);
-    using VI = vector<ll>;
-    using VVI = vector<VI>;
-    using VVVI = vector<VVI>;
-    using VVVVI = vector<VVVI>;
-    using VVVVVI = vector<VVVVI>;
-    VVVVI dp(17, VVVI(10), VVI(3, VI(2)));
-    dp[0][0][0][0] = 1;
+    mint n = 1;
+    vector<mint> v(10,1);
+    cout << n << endl;
 }

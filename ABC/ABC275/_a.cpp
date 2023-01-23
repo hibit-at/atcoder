@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,30 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
+#include <atcoder/modint>
+using namespace atcoder;
+using mint = modint998244353;
+
+ostream &operator<<(ostream &os, mint &i)
 {
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
+    os << i.val();
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
+ostream &operator<<(ostream &os, const vector<mint> &v)
 {
-    while (q.size())
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << q.front() << " ";
-        q.pop_front();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
-    {
-        os << st.top() << " ";
-        st.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
+        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
     }
     return os;
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    ll a, b, c, d, e, f;
+    cin >> a >> b >> c >> d >> e >> f;
+    mint ans = mint(a) * mint(b) * mint(c);
+    ans -= mint(d) * mint(e) * mint(f);
+    cout << ans << endl;
 }

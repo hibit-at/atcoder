@@ -17,7 +17,6 @@
 using namespace std;
 #define rep(i, n) for (int i = 0; i < n; i++)
 #define rep1(i, n) for (int i = 1; i < n + 1; i++)
-#define rev(i, n) for (int i = n - 1; i >= 0; i--)
 #define all(A) A.begin(), A.end()
 #define itr(A, l, r) A.begin() + l, A.begin() + r
 #define debug(var) cout << #var << " = " << var << endl;
@@ -111,64 +110,24 @@ ostream &operator<<(ostream &os, multiset<T> st)
     return os;
 }
 
-template <typename T>
-ostream &operator<<(ostream &os, queue<T> q)
-{
-    while (q.size())
-    {
-        os << q.front() << " ";
-        q.pop();
-    }
-    return os;
-}
+map<ll, ll> memo;
 
-template <typename T>
-ostream &operator<<(ostream &os, deque<T> q)
+ll dfs(ll n)
 {
-    while (q.size())
+    if (n == 0)
     {
-        os << q.front() << " ";
-        q.pop_front();
+        return 1;
     }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, stack<T> st)
-{
-    while (st.size())
+    if (memo.count(n))
     {
-        os << st.top() << " ";
-        st.pop();
+        return memo[n];
     }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T> pq)
-{
-    while (pq.size())
-    {
-        os << pq.top() << " ";
-        pq.pop();
-    }
-    return os;
-}
-
-template <typename T>
-ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
-{
-    while (mpq.size())
-    {
-        os << mpq.top() << " ";
-        mpq.pop();
-    }
-    return os;
+    return memo[n] = dfs(n / 2) + dfs(n / 3);
 }
 
 int main()
 {
-    int n;
+    ll n;
     cin >> n;
-    vector<int> 
+    cout << dfs(n) << endl;
 }

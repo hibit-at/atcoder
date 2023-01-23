@@ -168,7 +168,21 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, k;
+    cin >> n >> k;
+    vector<int> a(n);
+    cin >> a;
+    vector<int> ans;
+    rep(i, n)
+    {
+        if (k + i < n)
+        {
+            ans.push_back(a[k + i]);
+        }
+        else
+        {
+            ans.push_back(0);
+        }
+    }
+    cout << ans << endl;
 }

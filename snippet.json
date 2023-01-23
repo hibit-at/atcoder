@@ -46,26 +46,6 @@
         ],
         "description": "UnionFind"
     },
-    "snp print_to": {
-        "prefix": "print_to",
-        "body": [
-            "template <typename T>",
-            "void print_to(vector<vector<T>> to)",
-            "{",
-            "  int n = to.size();",
-            "  rep(i, n)",
-            "  {",
-            "    cout << \"from \" << i << \" : to \";",
-            "    for (int next : to[i])",
-            "    {",
-            "      cout << next << \",\";",
-            "    }",
-            "    cout << endl;",
-            "  }",
-            "}"
-        ],
-        "description": "print_to"
-    },
     "snp_print_maze": {
         "prefix": "print_maze",
         "body": [
@@ -104,6 +84,7 @@
             "using namespace std;",
             "#define rep(i, n) for (int i = 0; i < n; i++)",
             "#define rep1(i, n) for (int i = 1; i < n + 1; i++)",
+            "#define rev(i, n) for (int i = n - 1; i >= 0; i--)",
             "#define all(A) A.begin(), A.end()",
             "#define itr(A, l, r) A.begin() + l, A.begin() + r",
             "#define debug(var) cout << #var << \" = \" << var << endl;",
@@ -197,6 +178,61 @@
             "    return os;",
             "}",
             "",
+            "template <typename T>",
+            "ostream &operator<<(ostream &os, queue<T> q)",
+            "{",
+            "    while (q.size())",
+            "    {",
+            "        os << q.front() << \" \";",
+            "        q.pop();",
+            "    }",
+            "    return os;",
+            "}",
+            "",
+            "template <typename T>",
+            "ostream &operator<<(ostream &os, deque<T> q)",
+            "{",
+            "    while (q.size())",
+            "    {",
+            "        os << q.front() << \" \";",
+            "        q.pop_front();",
+            "    }",
+            "    return os;",
+            "}",
+            "",
+            "template <typename T>",
+            "ostream &operator<<(ostream &os, stack<T> st)",
+            "{",
+            "    while (st.size())",
+            "    {",
+            "        os << st.top() << \" \";",
+            "        st.pop();",
+            "    }",
+            "    return os;",
+            "}",
+            "",
+            "template <typename T>",
+            "ostream &operator<<(ostream &os, priority_queue<T> pq)",
+            "{",
+            "    while (pq.size())",
+            "    {",
+            "        os << pq.top() << \" \";",
+            "        pq.pop();",
+            "    }",
+            "    return os;",
+            "}",
+            "",
+            "template <typename T>",
+            "ostream &operator<<(ostream &os, priority_queue<T,vector<T>,greater<T>> mpq)",
+            "{",
+            "    while (mpq.size())",
+            "    {",
+            "        os << mpq.top() << \" \";",
+            "        mpq.pop();",
+            "    }",
+            "    return os;",
+            "}",
+            "",
             "int main()"
         ],
         "description": "snp_include"
@@ -223,24 +259,6 @@
             "}"
         ],
         "description": "divisor"
-    },
-    "snp yesno": {
-        "prefix": "yesno",
-        "body": [
-            "void yesno(bool b)",
-            "{",
-            "  if (b)",
-            "  {",
-            "    cout << \"Yes\" << endl;",
-            "  }",
-            "  else",
-            "  {",
-            "    cout << \"No\" << endl;",
-            "  }",
-            "}",
-            ""
-        ],
-        "description": "yesno"
     },
     "snp_gcd": {
         "prefix": "gcd",
@@ -297,44 +315,12 @@
         ],
         "description": "snp_dijkstra"
     },
-    "snp_print_vector_vector": {
-        "prefix": "print_vector_vector",
-        "body": [
-            "auto print_vector_vector = [](auto vv)",
-            "{",
-            "    for (auto v : vv)",
-            "    {",
-            "        for (auto i : v)",
-            "        {",
-            "            cout << i << ',';",
-            "        }",
-            "        cout << endl;",
-            "    }",
-            "};"
-        ],
-        "description": "snp_print_vector_vector"
-    },
     "snp_pint": {
         "prefix": "pint",
         "body": [
             "pair<int,int>"
         ],
         "description": "snp_pint"
-    },
-    "snp_print_front": {
-        "prefix": "print_front",
-        "body": [
-            "auto print_front = [](auto q)",
-            "{",
-            "    while (q.size() > 0)",
-            "    {",
-            "        cout << q.front() << ',';",
-            "        q.pop();",
-            "    }",
-            "    cout << endl;",
-            "};"
-        ],
-        "description": "snp_print_front"
     },
     "snp_chmin": {
         "prefix": "chmin",
@@ -351,80 +337,6 @@
             "{ a = max(a, b); };"
         ],
         "description": "snp_chmax"
-    },
-    "snp_print_vector": {
-        "prefix": "print_vector",
-        "body": [
-            "auto print_vector = [](auto v)",
-            "{",
-            "    int size = v.size();",
-            "    int cnt = 1;",
-            "    for (auto i : v)",
-            "    {",
-            "        cout << i;",
-            "        if (cnt < size)",
-            "        {",
-            "            cout << \" \";",
-            "        }",
-            "        else",
-            "        {",
-            "            cout << endl;",
-            "        }",
-            "        cnt++;",
-            "    }",
-            "};"
-        ],
-        "description": "snp_print_vector"
-    },
-    "snp_print_top": {
-        "prefix": "print_top",
-        "body": [
-            "auto print_top = [](auto q)",
-            "{",
-            "    while (q.size() > 0)",
-            "    {",
-            "        cout << q.top() << ',';",
-            "        q.pop();",
-            "    }",
-            "    cout << endl;",
-            "};"
-        ],
-        "description": "snp_print_top"
-    },
-    "snp_print_vector_pair": {
-        "prefix": "print_vector_pair",
-        "body": [
-            "auto print_vector_pair = [](auto v)",
-            "{",
-            "    for (auto i : v)",
-            "    {",
-            "        cout << \"(\" << i.first << \",\" << i.second << \")\"",
-            "                << \" \";",
-            "    }",
-            "    cout << endl;",
-            "};"
-        ],
-        "description": "snp_print_vector_pair"
-    },
-    "snp_print_map": {
-        "prefix": "print_map",
-        "body": [
-            "auto print_map = [](auto mp)",
-            "{",
-            "    for (auto p : mp)",
-            "    {",
-            "        cout << \"key : \" << p.first << \", value : \" << p.second << endl;",
-            "    }",
-            "};"
-        ],
-        "description": "snp_print_map"
-    },
-    "snp_vint": {
-        "prefix": "vint",
-        "body": [
-            "vector<int>"
-        ],
-        "description": "snp_vi"
     },
     "snp_zaz": {
         "prefix": "zaz",
@@ -451,29 +363,6 @@
             "pair<ll,ll>"
         ],
         "description": "snp_pll"
-    },
-    "snp_print_pair": {
-        "prefix": "print_pair",
-        "body": [
-            "auto print_pair = [](auto p)",
-            "{",
-            "    cout << '(' << p.first << ',' << p.second << ')';",
-            "};"
-        ],
-        "description": "snp_print_pair"
-    },
-    "snp_print_lines": {
-        "prefix": "print_lines",
-        "body": [
-            "auto print_lines = [](auto v)",
-            "{",
-            "    for (auto i : v)",
-            "    {",
-            "        cout << i << endl;",
-            "    }",
-            "};"
-        ],
-        "description": "snp_print_lines"
     },
     "snp_modint": {
         "prefix": "modint",
@@ -633,5 +522,111 @@
             ""
         ],
         "description": "snp_geo"
+    },
+    "snp_nekoset": {
+        "prefix": "nekoset",
+        "body": [
+            "struct nekoset",
+            "{",
+            "private:",
+            "    std::set<std::pair<int, int>> s;",
+            "",
+            "public:",
+            "    nekoset()",
+            "    {",
+            "        s.emplace(INT_MIN, INT_MIN);",
+            "        s.emplace(INT_MAX, INT_MAX);",
+            "    }",
+            "",
+            "    bool contains(int x) const",
+            "    {",
+            "        auto it = std::prev(s.lower_bound(std::make_pair(x + 1, x + 1)));",
+            "        auto [l, u] = *it;",
+            "        return l <= x && x <= u;",
+            "    }",
+            "",
+            "    bool insert(int x)",
+            "    {",
+            "        auto nit = s.lower_bound(std::make_pair(x + 1, x + 1));",
+            "        auto it = std::prev(nit);",
+            "        auto [l, u] = *it;",
+            "        auto [nl, nu] = *nit;",
+            "        if (l <= x && x <= u)",
+            "            return false;",
+            "        if (u == x - 1)",
+            "        {",
+            "            if (nl == x + 1)",
+            "            {",
+            "                s.erase(it);",
+            "                s.erase(nit);",
+            "                s.emplace(l, nu);",
+            "            }",
+            "            else",
+            "            {",
+            "                s.erase(it);",
+            "                s.emplace(l, x);",
+            "            }",
+            "        }",
+            "        else",
+            "        {",
+            "            if (nl == x + 1)",
+            "            {",
+            "                s.erase(nit);",
+            "                s.emplace(x, nu);",
+            "            }",
+            "            else",
+            "            {",
+            "                s.emplace(x, x);",
+            "            }",
+            "        }",
+            "        return true;",
+            "    }",
+            "",
+            "    int mex(int x = 0) const",
+            "    {",
+            "        auto [l, u] = *std::prev(s.lower_bound(std::make_pair(x + 1, x + 1)));",
+            "        if (l <= x && x <= u)",
+            "        {",
+            "            return u + 1;",
+            "        }",
+            "        else",
+            "        {",
+            "            return x;",
+            "        }",
+            "    }",
+            "};"
+        ],
+        "description": "snp_nekoset"
+    },
+    "snp_yn": {
+        "prefix": "yn",
+        "body": [
+            "auto YesNo = [](bool b){",
+            "    if(b){",
+            "        cout << \"Yes\" << endl;",
+            "    }else{",
+            "        cout << \"No\" << endl;",
+            "    }",
+            "};"
+        ],
+        "description": "snp_yn"
+    },
+    "snp_intersect": {
+        "prefix": "intersect",
+        "body": [
+            "auto intersect = [](int a, int b, int c, int d)",
+            "{",
+            "    if (b < c)",
+            "    {",
+            "        return false;",
+            "    }",
+            "    if (d < a)",
+            "    {",
+            "        return false;",
+            "    }",
+            "    return true;",
+            "};"
+        ],
+        "description": "snp_intersect"
     }
 }

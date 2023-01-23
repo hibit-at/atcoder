@@ -166,9 +166,60 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
+#include <atcoder/lazysegtree>
+using namespace atcoder;
+
+using S = long long;
+using F = long long;
+
+const S INF = 8e18;
+const F ID = 8e18;
+
+S op(S a, S b) { return std::min(a, b); }
+S e() { return INF; }
+S mapping(F f, S x) { return (f == ID ? x : f); }
+F composition(F f, F g) { return (f == ID ? g : f); }
+F id() { return ID; }
+
 int main()
 {
     int n;
     cin >> n;
-    vector<int> 
+    vector<ll> a(n);
+    cin >> a;
+    lazy_segtree<S, op, e, F, mapping, composition, id> seg(n);
+    rep(i, n)
+    {
+        seg.set(i, a[i]);
+    }
+    int q;
+    cin >> q;
+    while (q--)
+    {
+        int t;
+        cin >> t;
+        if (t == 1)
+        {
+            ll x;
+            cin >> x;
+            seg.apply(0, n, x);
+        }
+        if (t == 2)
+        {
+            int i;
+            cin >> i;
+            i--;
+            ll x;
+            cin >> x;
+            ll pre = seg.get(i);
+            seg.apply(i, i + 1, pre + x);
+        }
+        if (t == 3)
+        {
+            int i;
+            cin >> i;
+            i--;
+            cout << seg.get(i) << endl;
+        }
+    }
 }

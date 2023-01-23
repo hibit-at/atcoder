@@ -168,7 +168,69 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int h, w, n, dh, dw;
+    cin >> h >> w >> n >> dh >> dw;
+    using VI = vector<int>;
+    using VVI = vector<VI>;
+    using VVVI = vector<VVI>;
+    using VVVVI = vector<VVVI>;
+    using VVVVVI = vector<VVVVI>;
+    VVVI dp(n, VVI(h + 1, VI(w + 1, 0)));
+    rep(r, h)
+    {
+        rep(c, w)
+        {
+            int a;
+            cin >> a;
+            a--;
+            dp[a][r + 1][c + 1]++;
+        }
+    }
+    // cout << dp << endl;
+    rep(a, n)
+    {
+        rep(r, h + 1)
+        {
+            rep(c, w)
+            {
+                dp[a][r][c + 1] += dp[a][r][c];
+            }
+        }
+    }
+    rep(a, n)
+    {
+        rep(r, h)
+        {
+            rep(c, w + 1)
+            {
+                dp[a][r + 1][c] += dp[a][r][c];
+            }
+        }
+    }
+    // cout << dp << endl;
+    rep(r, h - dh + 1)
+    {
+        vector<int> ans;
+        rep(c, w - dw + 1)
+        {
+            int edge_r = r + dh;
+            int edge_c = c + dw;
+            // debug(edge_r);
+            // debug(edge_c);
+            int tmp = 0;
+            rep(a, n)
+            {
+                int criteria = 0;
+                criteria += dp[a][h][w];
+                criteria -= dp[a][edge_r][edge_c];
+                criteria += dp[a][edge_r][c];
+                criteria += dp[a][r][edge_c];
+                criteria -= dp[a][r][c];
+                // debug(criteria);
+                tmp += criteria > 0;
+            }
+            ans.push_back(tmp);
+        }
+        cout << ans << endl;
+    }
 }
