@@ -168,7 +168,34 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 int main()
 {
-    int n;
-    cin >> n;
-    vector<int> 
+    int n, m;
+    cin >> n >> m;
+    vector<int> border;
+    border.push_back(0);
+    border.push_back(n);
+    rep(i, m)
+    {
+        int a;
+        cin >> a;
+        a--;
+        border.push_back(a);
+        border.push_back(a + 1);
+    }
+    sort(all(border));
+    debug(border);
+    int p = border.size();
+    vector<int> spans;
+    rep(i, p)
+    {
+        if (i % 2)
+        {
+            continue;
+        }
+        int span = border[i + 1] - border[i];
+        if (span)
+        {
+            spans.push_back(span);
+        }
+    }
+    debug(spans);
 }
