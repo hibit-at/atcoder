@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,71 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int h, w;
+    cin >> h >> w;
+    vector<vector<char>> maze(h, vector<char>(w, '.'));
+    rep(i, h)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        rep(j, w)
+        {
+            cin >> maze[i][j];
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    if (maze[0][0] != 's')
+    {
+        cout << "No" << endl;
+        return 0;
+    }
+    map<char, int> mp;
+    mp['s'] = 'n';
+    mp['n'] = 'u';
+    mp['u'] = 'k';
+    mp['k'] = 'e';
+    mp['e'] = 's';
+    queue<pair<int, int>> q;
+    q.push({0, 0});
+    vector<vector<bool>> seen(h, vector<bool>(w));
+    seen[0][0] = true;
+    vector<int> dx = {1, -1, 0, 0};
+    vector<int> dy = {0, 0, 1, -1};
+    while (q.size())
+    {
+        auto [cx, cy] = q.front();
+        q.pop();
+        char now = maze[cx][cy];
+        rep(k, 4)
+        {
+            int nx = cx + dx[k];
+            int ny = cy + dy[k];
+            if (nx < 0 || h <= nx)
+            {
+                continue;
+            }
+            if (ny < 0 || w <= ny)
+            {
+                continue;
+            }
+            if (maze[nx][ny] != mp[now])
+            {
+                continue;
+            }
+            if (seen[nx][ny])
+            {
+                continue;
+            }
+            seen[nx][ny] = true;
+            q.push({nx, ny});
+        }
+    }
+    // debug(seen);
+    if (seen[h - 1][w - 1])
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
+    }
 }

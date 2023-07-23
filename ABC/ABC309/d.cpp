@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,64 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int na, nb, m;
+    cin >> na >> nb >> m;
+    vector<vector<int>> to(na + nb, vector<int>());
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        to[a].push_back(b);
+        to[b].push_back(a);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    queue<int> q;
+    q.push(0);
+    vector<ll> dist(na + nb, 1e9);
+    dist[0] = 0;
+    vector<bool> seen(na + nb, false);
+    while (q.size())
+    {
+        int now = q.front();
+        q.pop();
+        seen[now] = true;
+        for (int next : to[now])
+        {
+            // debug(next);
+            if (seen[next])
+            {
+                continue;
+            }
+            q.push(next);
+            dist[next] = dist[now] + 1;
+            seen[next] = true;
+        }
+    }
+    // cout << dist << endl;
+    q.push(na + nb - 1);
+    dist[na + nb - 1] = 0;
+    while (q.size())
+    {
+        int now = q.front();
+        q.pop();
+        seen[now] = true;
+        for (int next : to[now])
+        {
+            // debug(next);
+            if (seen[next])
+            {
+                continue;
+            }
+            q.push(next);
+            dist[next] = dist[now] + 1;
+            seen[next] = true;
+        }
+    }
+    // cout << dist << endl;
+    int L_max = *max_element(dist.begin(), dist.begin() + na);
+    int R_max = *max_element(dist.begin() + na, dist.end());
+    cout << L_max + R_max + 1 << endl;
 }

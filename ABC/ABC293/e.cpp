@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -185,23 +168,43 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 #include <atcoder/modint>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+int solve(ll a, ll x, ll m)
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    // ll a, x, m;
+    // cin >> a >> x >> m;
+    if (a == 1)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cout << x % m << endl;
+        return 0;
     }
-    return os;
+    if (a - 1 == m)
+    {
+        cout << x % m << endl;
+        return 0;
+    }
+    modint::set_mod(m * (a - 1));
+    modint b = modint(a).pow(x) - 1;
+    // debug(b.val());
+    // debug((a - 1) % m);
+    b /= a - 1;
+    // debug(b.val());
+    cout << b.val() % m << endl;
+    return 0;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    // ll a, x, m;
+    // cin >> a >> x >> m;
+    rep1(a, 100)
+    {
+        rep1(x, 100)
+        {
+            rep1(m, 100)
+            {
+                solve(a, x, m);
+            }
+        }
+    }
 }

@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,39 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n), b(m), c(n + m);
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cin >> a[i];
+        c[i] = a[i];
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    rep(i, m)
+    {
+        cin >> b[i];
+        c[i + n] = b[i];
+    }
+    // debug(a);
+    // debug(b);
+    // debug(c);
+    sort(all(c));
+    vector<int> ax;
+    rep(i, n)
+    {
+        int idx = lower_bound(all(c), a[i]) - c.begin() + 1;
+        ax.push_back(idx);
+    }
+    // debug(ax);
+    cout << ax << endl;
+    vector<int> bx;
+    rep(i, m)
+    {
+        int idx = lower_bound(all(c), b[i]) - c.begin() + 1;
+        bx.push_back(idx);
+    }
+    // debug(bx);
+    cout << bx << endl;
 }

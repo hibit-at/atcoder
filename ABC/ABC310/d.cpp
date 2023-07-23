@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -182,26 +165,82 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     }
     return os;
 }
+int n, t, m;
+// vector<vector<int>> hate;
+vector<set<int>> team;
+vector<vector<int>> hater(n);
+set<set<set<int>>> ans;
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+void dfs(int now, int person)
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    if (now >= t)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        return;
     }
-    return os;
+    if (person >= n)
+    {
+        return;
+    }
+    // debug(now);
+    // debug(person);
+    bool okay = true;
+    for (int h : hater[person])
+    {
+        if (team[now].count(h))
+        {
+            // debug("hate");
+            okay = false;
+        }
+    }
+    if (!okay)
+    {
+        return;
+    }
+    team[now].insert(person);
+    if (person == n - 1)
+    {
+        // debug("end");
+        int min_member = 1e9;
+        rep(i, t)
+        {
+            auto chmin = [](auto &a, auto b)
+            { a = min(a, b); };
+            chmin(min_member, int(team[i].size()));
+        }
+        if (min_member > 0)
+        {
+            set<set<int>> tmp;
+            for (auto t : team)
+            {
+                tmp.insert(t);
+            }
+            ans.insert(tmp);
+        }
+        team[now].erase(team[now].find(person));
+        return;
+    }
+    rep(i, t)
+    {
+        dfs(i, person + 1);
+    }
+    team[now].erase(team[now].find(person));
+    return;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    cin >> n >> t >> m;
+    hater.resize(n);
+    team.resize(t);
+    rep(i, m)
+    {
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        hater[a].push_back(b);
+        hater[b].push_back(a);
+    }
+    dfs(0, 0);
+    cout << ans.size() << endl;
 }

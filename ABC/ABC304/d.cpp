@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,55 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+#define int ll
+    int w, h;
+    cin >> w >> h;
+    int n;
+    cin >> n;
+    vector<pair<int, int>> vp(n);
+    cin >> vp;
+    int A;
+    cin >> A;
+    vector<int> a(A);
+    cin >> a;
+    int B;
+    cin >> B;
+    vector<int> b(B);
+    cin >> b;
+    // debug(a);
+    // debug(b);
+    map<pair<int, int>, int> mp;
+    int bottom = 1e9;
+    int peak = -1e9;
+    // set<pair<int, int>> criteria;
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        auto [p, q] = vp[i];
+        int x_idx = lower_bound(all(a), p) - a.begin();
+        int y_idx = lower_bound(all(b), q) - b.begin();
+        // debug(x_idx);
+        // debug(y_idx);
+        mp[{x_idx, y_idx}]++;
+        auto chmax = [](auto &a, auto b)
+        { a = max(a, b); };
+        chmax(peak, mp[{x_idx, y_idx}]);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    if (mp.size() < (A + 1) * (B + 1))
+    {
+        bottom = 0;
+    }
+    else
+    {
+        for (auto [key, val] : mp)
+        {
+            auto chmin = [](auto &a, auto b)
+            { a = min(a, b); };
+            chmin(bottom, val);
+        }
+    }
+    // debug(mp);
+    // debug(mp.size());
+    cout << bottom << " " << peak << endl;
 }

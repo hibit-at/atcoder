@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -185,23 +168,66 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 #include <atcoder/modint>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+long long modinv(long long a, long long m)
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    long long b = m, u = 1, v = 0;
+    while (b)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        long long t = a / b;
+        a -= t * b;
+        swap(a, b);
+        u -= t * v;
+        swap(u, v);
     }
-    return os;
+    u %= m;
+    if (u < 0)
+        u += m;
+    return u;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    ll a, x, m;
+    cin >> a >> x >> m;
+    ll inv = modinv(a - 1, m);
+    ll basemod = ll(1e9) + 7;
+    debug(inv);
+    if (a == 1)
+    {
+        cout << x % m << endl;
+        return 0;
+    }
+    vector<ll> factor(100);
+    factor[0] = a % basemod;
+    rep(i, 99)
+    {
+        factor[i + 1] = factor[i] * factor[i];
+        factor[i + 1] %= basemod;
+    }
+    ll head = 1;
+    rep(i, 100)
+    {
+        if (x & 1)
+        {
+            head *= factor[i];
+            head %= basemod;
+        }
+        x /= 2;
+    }
+    head--;
+    if (head < 0)
+    {
+        head += basemod;
+    }
+    // debug(factor);
+    // debug(head);
+    // debug(inv);
+    if (head % (a - 1) == 0)
+    {
+        head /= a - 1;
+    }
+    // head *= inv;
+    head %= m;
+    cout << head << endl;
 }

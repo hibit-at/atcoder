@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,34 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, q;
+    cin >> n >> q;
+    vector<vector<int>> card(n, vector<int>(2));
+    while (q--)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int t, x;
+        cin >> t >> x;
+        x--;
+        if (t == 1)
+        {
+            card[x][0]++;
+        }
+        if (t == 2)
+        {
+            card[x][1]++;
+        }
+        if (t == 3)
+        {
+            if (card[x][0] >= 2 || card[x][1] >= 1)
+            {
+                cout << "Yes" << endl;
+            }
+            else
+            {
+                cout << "No" << endl;
+            }
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
 }

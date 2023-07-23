@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,58 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
+#include <atcoder/dsu>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+int main()
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> to(n, vector<int>());
+    // dsu uf(n + 2);
+    vector<int> node(n);
+    set<pair<int, int>> seen;
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        if (u == v)
+        {
+            continue;
+        }
+        if (seen.count({u, v}))
+        {
+            continue;
+        }
+        if (seen.count({v, u}))
+        {
+            continue;
+        }
+        to[u].push_back(v);
+        to[v].push_back(u);
+        node[u]++;
+        node[v]++;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(uf.groups());
+    debug(node);
+    int k;
+    cin >> k;
+    vector<pair<int, int>> vp(k);
+    cin >> vp;
+    rep(i, k)
+    {
+        auto [x, y] = vp[i];
+        x--;
+        y--;
+        debug(x);
+        debug(y);
+    }
+    // debug(uf.groups());
+    int Q;
+    cin >> Q;
+    while (Q--)
+    {
+    }
 }

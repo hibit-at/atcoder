@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,50 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    cin >> n >> m;
+    vector<string> c(n);
+    cin >> c;
+    int ans = 0;
+    map<string, int> mp;
+    int def = -1;
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        string s;
+        cin >> s;
+        mp[s] = i;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    vector<int> p(m);
+    rep(i, m+1)
+    {
+        if (i == 0)
+        {
+            cin >> def;
+        }
+        else
+        {
+            cin >> p[i - 1];
+        }
+    }
+    // debug(def);
+    // debug(mp);
+    // debug(p);
+    rep(i, n)
+    {
+        // debug(c[i]);
+        if (mp.count(c[i]) > 0)
+        {
+            int idx = mp[c[i]];
+            // debug(idx);
+            ans += p[mp[c[i]]];
+        }
+        else
+        {
+            ans += def;
+        }
+        // debug(ans);
+    }
+    cout << ans << endl;
 }

@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,48 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n;
+    cin >> n;
+    if (n < 1e3)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cout << n << endl;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    else if (n < 1e4)
+    {
+        n /= 1e1;
+        n *= 1e1;
+        cout << n << endl;
+    }
+    else if (n < 1e5)
+    {
+        n /= 1e2;
+        n *= 1e2;
+        cout << n << endl;
+    }
+    else if (n < 1e6)
+    {
+        n /= 1e3;
+        n *= 1e3;
+        cout << n << endl;
+    }
+    else if (n < 1e7)
+    {
+        n /= 1e4;
+        n *= 1e4;
+        cout << n << endl;
+    }
+    else if (n < 1e8)
+    {
+        n /= 1e5;
+        n *= 1e5;
+        cout << n << endl;
+    }
+    else if (n < 1e9)
+    {
+        n /= 1e6;
+        n *= 1e6;
+        cout << n << endl;
+    }
 }

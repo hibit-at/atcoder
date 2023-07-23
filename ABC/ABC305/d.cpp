@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,46 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+#define int ll
+    int n;
+    cin >> n;
+    vector<ll> a(n);
+    cin >> a;
+    vector<ll> b(n - 1);
+    rep(i, n - 1)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (i % 2)
+        {
+            b[i] = a[i + 1] - a[i];
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    vector<ll> s(n);
+    rep(i, n - 1)
+    {
+        s[i + 1] = s[i] + b[i];
+    }
+    int Q;
+    cin >> Q;
+    while (Q--)
+    {
+        int L, R;
+        cin >> L >> R;
+        auto left_border = lower_bound(all(a), L) - a.begin();
+        auto right_border = upper_bound(all(a), R) - a.begin();
+        right_border--;
+        ll ans = s[right_border] - s[left_border];
+        if (left_border % 2 == 0)
+        {
+            ll plus = *lower_bound(all(a), L) - L;
+            ans += plus;
+        }
+        if (right_border % 2 == 1)
+        {
+            ll plus = R - *upper_bound(all(a), R);
+            ans += plus;
+        }
+        cout << ans << endl;
+    }
 }

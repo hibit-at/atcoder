@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,55 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+bool subA(vector<int> s)
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n = s.size();
+    rep(i, n - 1)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (s[i] > s[i + 1])
+        {
+            return false;
+        }
     }
-    return os;
+    return true;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+bool subB(vector<int> s)
+{
+    int n = s.size();
+    rep(i, n)
+    {
+        if (s[i] < 100 || 675 < s[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool subC(vector<int> s)
+{
+    int n = s.size();
+    rep(i,n)
+    {
+        if (s[i] % 25 > 0)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int main()
+{
+    vector<int> s(8);
+    cin >> s;
+    if (subA(s) && subB(s) && subC(s))
+    {
+        cout << "Yes" << endl;
+    }
+    else
+    {
+        cout << "No" << endl;
+    }
 }

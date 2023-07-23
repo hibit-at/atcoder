@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,63 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, k, q;
+    cin >> n >> k >> q;
+    vector<ll> a(n);
+    multiset<ll> st;
+    multiset<ll> sub;
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        sub.insert(0);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    ll ans = 0;
+    auto chmax = [](auto &a, auto b)
+    { a = max(a, b); };
+    while (q--)
+    {
+        ll x, y;
+        cin >> x >> y;
+        x--;
+        ll before = a[x];
+        // debug(before);
+        if (st.upper_bound(before) != st.begin())
+        {
+            st.erase(st.find(before));
+            ans -= before;
+        }
+        else
+        {
+            sub.erase(sub.find(before));
+        }
+        if (st.upper_bound(y) != st.begin())
+        {
+            st.insert(y);
+            ans += y;
+        }
+        else
+        {
+            sub.insert(y);
+        }
+        while (st.size() < k)
+        {
+            ll change = *prev(sub.end());
+            sub.erase(sub.find(change));
+            st.insert(change);
+            ans += change;
+        }
+        while (st.size() > k)
+        {
+            ll change = *st.begin();
+            st.erase(st.find(change));
+            sub.insert(change);
+            ans -= change;
+        }
+        
+        a[x] = y;
+        // debug(st);
+        // debug(sub);
+        cout << ans << endl;
+    }
 }

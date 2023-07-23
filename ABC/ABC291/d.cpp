@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -185,7 +168,7 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 #include <atcoder/modint>
 using namespace atcoder;
-using mint=modint998244353;
+using mint = modint998244353;
 ostream &operator<<(ostream &os, mint &i)
 {
     os << i.val();
@@ -201,7 +184,34 @@ ostream &operator<<(ostream &os, const vector<mint> &v)
     return os;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    int n;
+    cin >> n;
+    vector<vector<int>> vp(n, vector<int>(2));
+    cin >> vp;
+    // debug(vp);
+    vector<vector<mint>> dp(n, vector<mint>(2));
+    dp[0][0] = 1;
+    dp[0][1] = 1;
+    rep(i, n - 1)
+    {
+        if (vp[i][0] != vp[i + 1][0])
+        {
+            dp[i + 1][0] += dp[i][0];
+        }
+        if (vp[i][0] != vp[i + 1][1])
+        {
+            dp[i + 1][1] += dp[i][0];
+        }
+        if (vp[i][1] != vp[i + 1][0])
+        {
+            dp[i + 1][0] += dp[i][1];
+        }
+        if (vp[i][1] != vp[i + 1][1])
+        {
+            dp[i + 1][1] += dp[i][1];
+        }
+    }
+    cout << (dp[n-1][0] + dp[n-1][1]).val() << endl;
 }

@@ -1,0 +1,1 @@
+g++ .\v.cpp -std=c++1z -D _GLIBCXX_DEBUG

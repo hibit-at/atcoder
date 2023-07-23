@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,49 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m, h, k;
+    cin >> n >> m >> h >> k;
+    string s;
+    cin >> s;
+    vector<pair<int, int>> vp(m);
+    cin >> vp;
+    map<pair<int, int>, int> item;
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        item[vp[i]] = 1;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(item);
+    // debug(vp);
+    vector<int> dx = {1, -1, 0, 0};
+    vector<int> dy = {0, 0, 1, -1};
+    map<char, int> mp;
+    mp['R'] = 0;
+    mp['L'] = 1;
+    mp['U'] = 2;
+    mp['D'] = 3;
+    int cx = 0;
+    int cy = 0;
+    rep(i, n)
+    {
+        cx += dx[mp[s[i]]];
+        cy += dy[mp[s[i]]];
+        h--;
+        if (h < 0)
+        {
+            cout << "No" << endl;
+            return 0;
+        }
+        if (h < k)
+        {
+            if (item[{cx, cy}] > 0)
+            {
+                h = k;
+                item[{cx, cy}]--;
+            }
+        }
+        // debug(h);
+    }
+    cout << "Yes" << endl;
 }

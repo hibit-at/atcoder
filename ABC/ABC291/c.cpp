@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,42 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n;
+    cin >> n;
+    map<pair<int, int>, int> mp;
+    string s;
+    cin >> s;
+    int nx = 0;
+    int ny = 0;
+    mp[{nx, ny}]++;
+    for (char c : s)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (c == 'L')
+        {
+            nx--;
+        }
+        if (c == 'R')
+        {
+            nx++;
+        }
+        if (c == 'D')
+        {
+            ny++;
+        }
+        if (c == 'U')
+        {
+            ny--;
+        }
+        mp[{nx, ny}]++;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(mp);
+    for(auto [key,val] : mp){
+        if(val > 1){
+            cout << "Yes" << endl;
+            return 0;
+        }
+    }
+    cout << "No" << endl;
 }

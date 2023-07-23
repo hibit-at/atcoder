@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,81 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+bool cmp(vector<int> self, vector<int> other)
 {
-    os << i.val();
-    return os;
+    return self[1] > other[1];
 }
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+template <typename T>
+struct BIT2D
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    int H, W;
+    vector<vector<T>> bit; // データの格納先
+    BIT2D(int H_, int W_) { init(H_, W_); }
+    void init(int H_, int W_)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        H = H_ + 1;
+        W = W_ + 1;
+        bit.assign(H, vector<T>(W, 0));
     }
-    return os;
-}
+    void add(int h, int w, T x)
+    {
+        for (int i = h; i < H; i += (i & -i))
+        {
+            for (int j = w; j < W; j += (j & -j))
+            {
+                bit[i][j] += x;
+            }
+        }
+    }
+    // 1≦i≦h かつ 1≦j≦w
+    T sum(int h, int w)
+    {
+        T s(0);
+        for (int i = h; i > 0; i -= (i & -i))
+        {
+            for (int j = w; j > 0; j -= (j & -j))
+            {
+                s += bit[i][j];
+            }
+        }
+        return s;
+    }
+    // h1≦i<h2 かつ w1≦j<w2
+    T query(int h1, int w1, int h2, int w2)
+    {
+        return sum(h2 - 1, w2 - 1) - sum(h2 - 1, w1 - 1) - sum(h1 - 1, w2 - 1) + sum(h1 - 1, w1 - 1);
+    }
+};
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    int n;
+    cin >> n;
+    // map<int, vector<int>> L, R;
+    vector<vector<int>> v;
+    vector<int> L_series;
+    vector<int> R_series;
+    rep(i, n)
+    {
+        vector<int> a(3);
+        cin >> a;
+        sort(all(a));
+        v.push_back(a);
+    }
+    sort(all(v), cmp);
+    debug(v);
+    vector<pair<int,int>> p;
+    rep(i, n)
+    {
+        if (i == 0)
+        {
+            line.push_back(v[i][0] + v[i][2]);
+        }
+        else
+        {
+            int target = v[i][0] + v[i][2];
+            debug(target);
+        }
+    }
 }

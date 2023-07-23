@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,55 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
+#include <atcoder/dsu>
+#include <atcoder/scc>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+int main()
 {
-    for (int i = 0; i < (int)v.size(); i++)
+#define int ll
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> to(n, vector<int>());
+    vector<vector<int>> dp(n, vector<int>(n));
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        to[u].push_back(v);
+        dp[u][v] = 1;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    int ans = 0;
+    rep(i, n)
+    {
+        // debug(i);
+        vector<bool> seen(n);
+        queue<int> q;
+        q.push(i);
+        vector<int> dist(n);
+        dist[i] = 0;
+        while (q.size())
+        {
+            int now = q.front();
+            q.pop();
+            // debug(now);
+            seen[now] = true;
+            if (dist[now] > 1 && dp[i][now] == 0)
+            {
+                ans++;
+            }
+            for (int next : to[now])
+            {
+                if(seen[next]){
+                    continue;
+                }
+                q.push(next);
+                dist[next] = dist[now] + 1;
+            }
+        }
+        // debug(dist);
+    }
+    cout << ans << endl;
 }

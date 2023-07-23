@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,73 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
+#include <atcoder/dsu>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+int main()
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    cin >> n >> m;
+    int lim = 2e5+10;
+    vector<vector<int>> to(n + lim, vector<int>());
+    vector<bool> contains_1(n);
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int a;
+        cin >> a;
+        rep(j, a)
+        {
+            int s;
+            cin >> s;
+            s--;
+            // debug(s);
+            to[i].push_back(n + s);
+            to[n + s].push_back(i);
+            if (s == 0)
+            {
+                contains_1[i] = 1;
+            }
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(to);
+    int inf = 1e9;
+    vector<int> dist(n + lim, inf);
+    dist[n - 1] = 0;
+    int ans = 1e9;
+    queue<int> q;
+    q.push(n - 1);
+    while (q.size())
+    {
+        int now = q.front();
+        q.pop();
+        // debug(now);
+        if (now < n)
+        {
+            if (contains_1[now])
+            {
+                auto chmin = [](auto &a, auto b)
+                { a = min(a, b); };
+                chmin(ans, dist[now]);
+            }
+        }
+        for (int next : to[now])
+        {
+            // debug(next);
+            if (dist[next] <= dist[now] + 1)
+            {
+                continue;
+            }
+            dist[next] = dist[now] + 1;
+            q.push(next);
+        }
+    }
+    // debug(contains_1);
+    // debug(dist);
+    // debug(ans);
+    if (ans == inf)
+    {
+        cout << -1 << endl;
+    }else{
+        cout << ans/2 << endl;
+    }
 }

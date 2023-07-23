@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,43 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    string s, t;
+    cin >> s >> t;
+    int n = s.size();
+    int m = t.size();
+    vector<int> left(m + 1);
+    left[0] = 1;
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (s[i] == '?' || t[i] == '?' || s[i] == t[i])
+        {
+            left[i + 1] |= left[i];
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(left);
+    vector<int> right(m + 1);
+    right[m] = 1;
+    rep(i, m)
+    {
+        // debug(s[n - 1 - i]);
+        // debug(t[m - 1 - i]);
+        if (s[n - 1 - i] == '?' || t[m - 1 - i] == '?' || s[n - 1 - i] == t[m - 1 - i])
+        {
+            right[m - 1 - i] |= right[m - i];
+        }
+    }
+    // debug(right);
+    rep(i, m + 1)
+    {
+        if (left[i] && right[i])
+        {
+            cout << "Yes" << endl;
+        }
+        else
+        {
+            cout << "No" << endl;
+        }
+    }
 }

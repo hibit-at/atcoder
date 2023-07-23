@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,55 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    ll n, m, k;
+    cin >> n >> m >> k;
+    k = n * m - k;
+    vector<double> a(n), b(n), c(m), d(m);
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cin >> a[i] >> b[i];
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    rep(i, m)
+    {
+        cin >> c[i] >> d[i];
+    }
+    double ok = 0;
+    double ng = 1;
+    while (abs(ng - ok) > 1e-15)
+    {
+        double mid = ng + ok;
+        mid /= 2;
+        // debug(mid);
+        vector<double> sugar_a;
+        vector<double> sugar_b;
+        rep(i, n)
+        {
+            sugar_a.push_back(a[i] - (a[i] + b[i]) * mid);
+        }
+        rep(i, m)
+        {
+            sugar_b.push_back(c[i] - (c[i] + d[i]) * mid);
+        }
+        sort(all(sugar_a));
+        sort(all(sugar_b));
+        // debug(sugar_a);
+        // debug(sugar_b);
+        int criteria = 0;
+        rep(i, n)
+        {
+            criteria += lower_bound(all(sugar_b), -sugar_a[i]) - sugar_b.begin();
+        }
+        // debug(criteria);
+        if (criteria <= k)
+        {
+            ok = mid;
+        }
+        else
+        {
+            ng = mid;
+        }
+    }
+    cout << fixed << setprecision(20) << ok*100 << endl;
 }

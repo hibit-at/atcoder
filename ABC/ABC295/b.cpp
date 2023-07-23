@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,51 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int r, c;
+    cin >> r >> c;
+    vector<string> maze(r);
+    cin >> maze;
+    rep(i, r)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        rep(j, c)
+        {
+            if (maze[i][j] != '#' && maze[i][j] != '.')
+            {
+                // debug(maze[i][j]);
+                int man = maze[i][j] - '0';
+                // debug(man);
+                for (int di = -9; di <= 9; di++)
+                {
+                    for (int dj = -9; dj <= 9; dj++)
+                    {
+                        int ci = i + di;
+                        int cj = j + dj;
+                        if (ci < 0 || r <= ci)
+                        {
+                            continue;
+                        }
+                        if (cj < 0 || c <= cj)
+                        {
+                            continue;
+                        }
+                        if (abs(ci - i) + abs(cj - j) > man)
+                        {
+                            continue;
+                        }
+                        // debug(ci);
+                        // debug(cj);
+                        if(maze[ci][cj] == '#'){
+                            maze[ci][cj] = '.';
+                        }
+                    }
+                }
+                maze[i][j] = '.';
+            }
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    rep(i,r){
+        cout << maze[i] << endl;
+    }
 }

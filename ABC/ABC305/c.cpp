@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,41 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int h, w;
+    cin >> h >> w;
+    vector<string> maze(h);
+    cin >> maze;
+    vector<int> h_to_w(h);
+    vector<int> w_to_h(w);
+    rep(i, h)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        rep(j, w)
+        {
+            h_to_w[i] += maze[i][j] == '#';
+            w_to_h[j] += maze[i][j] == '#';
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(h_to_w);
+    // debug(w_to_h);
+    int h_peak = *max_element(all(h_to_w));
+    int w_peak = *max_element(all(w_to_h));
+    vector<int> ans;
+    rep(i, h)
+    {
+        if (h_to_w[i] == h_peak - 1)
+        {
+            ans.push_back(i + 1);
+            break;
+        }
+    }
+    rep(j, w)
+    {
+        if (w_to_h[j] == w_peak - 1)
+        {
+            ans.push_back(j + 1);
+        }
+    }
+    cout << ans << endl;
 }

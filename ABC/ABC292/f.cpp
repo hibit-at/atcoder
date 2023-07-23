@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,49 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    double a, b;
+    cin >> a >> b;
+    if (a > b)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        swap(a, b);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    double scale = a;
+    // debug(scale);
+    a /= scale;
+    b /= scale;
+    // debug(a);
+    // debug(b);
+    double lim = double(2 / sqrt(3));
+    if (b >= lim)
+    {
+        cout << fixed << setprecision(20) << scale * (2 / sqrt(3)) << endl;
+    }
+    else
+    {
+        double PI = atan(1) * 4;
+        double ok = 0;
+        double ng = PI / 6;
+        while (abs(ok - ng) > 1e-9)
+        {
+            double mid = ok + ng;
+            mid /= 2;
+            // debug(mid*180/PI);
+            // debug((PI/2-PI/3-mid)*180/PI);
+            double edge_A = b / cos(mid);
+            double edge_B = a / cos(PI / 2 - PI / 3 - mid);
+            // debug(edge_A);
+            // debug(edge_B);
+            if (edge_A < edge_B)
+            {
+                ok = mid;
+            }
+            else
+            {
+                ng = mid;
+            }
+        }
+        cout << fixed << setprecision(20) << b/cos(ok)*scale << endl;
+    }
 }

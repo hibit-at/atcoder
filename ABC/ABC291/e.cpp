@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,65 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
+#include <atcoder/dsu>
+#include <atcoder/scc>
 using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
-{
-    os << i.val();
-    return os;
-}
 
-ostream &operator<<(ostream &os, const vector<mint> &v)
+int main()
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    cin >> n >> m;
+    dsu uf(n);
+    scc_graph graph(n);
+    vector<int> node(n);
+    set<pair<int, int>> st;
+    vector<vector<int>> to(n, vector<int>());
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int x, y;
+        cin >> x >> y;
+        x--;
+        y--;
+        if (st.count({x, y}))
+        {
+            continue;
+        }
+        uf.merge(x, y);
+        graph.add_edge(x, y);
+        st.insert({x, y});
+        to[x].push_back(y);
+        node[y]++;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    if (uf.groups().size() > 1)
+    {
+        cout << "No" << endl;
+        return 0;
+    }
+    for (auto v : graph.scc())
+    {
+        if (v.size() > 1)
+        {
+            cout << "No" << endl;
+            return 0;
+        }
+    }
+    vector<int> dp(n, 1);
+    for (auto v : graph.scc())
+    {
+        int now = v[0];
+        // debug(now);
+        for (int next : to[now])
+        {
+            // debug(next);
+            auto chmax = [](auto &a, auto b)
+            { a = max(a, b); };
+            chmax(dp[next], dp[now] + 1);
+        }
+    }
+    if(*max_element(all(dp)) < n){
+        cout << "No" << endl;
+    }else{
+        cout << "Yes" << endl;
+        cout << dp << endl;
+    }
 }

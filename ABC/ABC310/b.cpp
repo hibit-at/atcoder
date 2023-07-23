@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,79 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<int> p(n);
+    vector<set<int>> vs(n);
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cin >> p[i];
+        int c;
+        cin >> c;
+        rep(j, c)
+        {
+            int f;
+            cin >> f;
+            vs[i].insert(f);
+        }
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(vs);
+    rep(i, n)
+    {
+        rep(j, n)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            if (p[i] < p[j])
+            {
+                continue;
+            }
+            set<int> set_i = vs[i];
+            set<int> set_j = vs[j];
+            // debug(set_i);
+            // debug(set_j);
+            if (p[i] > p[j])
+            {
+                for (int s : set_j)
+                {
+                    if (set_i.count(s))
+                    {
+                        set_i.erase(set_i.find(s));
+                    }
+                }
+                // debug(set_i);
+                if (set_i.size() == 0)
+                {
+                    cout << "Yes" << endl;
+                    return 0;
+                }
+            }
+            if (p[i] == p[j])
+            {
+                if (set_i.size() < set_j.size())
+                {
+                    for (int s : set_j)
+                    {
+                        if (set_i.count(s))
+                        {
+                            set_i.erase(set_i.find(s));
+                        }
+                    }
+                    // debug(set_i);
+                    if (set_i.size() == 0)
+                    {
+                        cout << "Yes" << endl;
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    cout << "No" << endl;
 }

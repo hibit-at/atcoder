@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,51 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+vector<ll> divisor(ll n)
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    vector<ll> ans;
+    for (ll i = 1; i * i <= n; i++)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (n % i == 0)
+        {
+            ans.push_back(i);
+            if (i * i != n)
+            {
+                ans.push_back(n / i);
+            }
+        }
     }
-    return os;
+    sort(all(ans));
+    return ans;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+int main()
+{
+    ll n, m;
+    cin >> n >> m;
+    ll ans = LLONG_MAX;
+    // debug(ans);
+    for (ll d = 1; d <= m; d++)
+    {
+        // debug(d);
+        ll e = (m + d - 1) / d;
+        if (d > e)
+        {
+            break;
+        }
+        if (e > n)
+        {
+            continue;
+        }
+        // debug(d);
+        // debug(e);
+        auto chmin = [](auto &a, auto b)
+        { a = min(a, b); };
+        chmin(ans, d * e);
+    }
+    if (ans == LLONG_MAX)
+    {
+        ans = -1;
+    }
+    cout << ans << endl;
 }

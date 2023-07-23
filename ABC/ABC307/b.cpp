@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,53 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+bool is_palindrome(string s)
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n = s.size();
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (s[i] != s[n - 1 - i])
+        {
+            return false;
+        }
     }
-    return os;
+    return true;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+string solve()
+{
+    int n;
+    cin >> n;
+    vector<string> s(n);
+    cin >> s;
+    rep(i, n)
+    {
+        rep(j, n)
+        {
+            if (i == j)
+            {
+                continue;
+            }
+            string u;
+            for (char c : s[i])
+            {
+                u.push_back(c);
+            }
+            for (char c : s[j])
+            {
+                u.push_back(c);
+            }
+            // debug(u);
+            if (is_palindrome(u))
+            {
+                return "Yes";
+            }
+        }
+    }
+    return "No";
+}
+
+int main()
+{
+    cout << solve() << endl;
 }

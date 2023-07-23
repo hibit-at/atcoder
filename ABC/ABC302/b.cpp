@@ -166,78 +166,142 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-void solve()
-{
-    int n;
-    cin >> n;
-    int q;
-    cin >> q;
-    ll odd = 0;
-    ll even = 0;
-    ll odd_count = 0;
-    ll even_count = 0;
-    rep(i, n)
-    {
-        ll a;
-        cin >> a;
-        if (a % 2)
-        {
-            odd += a;
-            odd_count++;
-        }
-        else
-        {
-            even += a;
-            even_count++;
-        }
-    }
-    // debug(odd);
-    // debug(even);
-    while (q--)
-    {
-        int t;
-        ll x;
-        cin >> t >> x;
-        if (t == 0)
-        {
-            if (x % 2 == 0)
-            {
-                even += even_count * x;
-            }
-            else
-            {
-                odd += even_count * x + even;
-                odd_count += even_count;
-                even = 0;
-                even_count = 0;
-            }
-        }
-        if (t == 1)
-        {
-            if (x % 2 == 0)
-            {
-                odd += odd_count * x;
-            }
-            else
-            {
-                even += odd_count * x + odd;
-                even_count += odd_count;
-                odd = 0;
-                odd_count = 0;
-            }
-        }
-        // debug(even);
-        // debug(odd);
-        cout << even + odd << endl;
-    }
-}
-
 int main()
 {
-    int t;
-    cin >> t;
-    while (t--)
+    int h, w;
+    cin >> h >> w;
+    vector<vector<char>> maze(h, vector<char>(w));
+    cin >> maze;
+    // cout << maze << endl;
+    // debug("horizontal");
+    rep(i, h)
     {
-        solve();
+        rep(j, w - 4)
+        {
+            string s;
+            rep(k, 5)
+            {
+                s.push_back(maze[i][j + k]);
+            }
+            if (s == "snuke")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1, j + 1 + k};
+                }
+                cout << ans << endl;
+                return 0;
+            }
+            if (s == "ekuns")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1, j + 1 + k};
+                }
+                reverse(all(ans));
+                cout << ans << endl;
+                return 0;
+            }
+        }
+    }
+    // debug("vertical");
+    rep(i, h - 4)
+    {
+        rep(j, w)
+        {
+            string s;
+            rep(k, 5)
+            {
+                s.push_back(maze[i + k][j]);
+            }
+            if (s == "snuke")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1 + k, j + 1};
+                }
+                cout << ans << endl;
+                return 0;
+            }
+            if (s == "ekuns")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1 + k, j + 1};
+                }
+                reverse(all(ans));
+                cout << ans << endl;
+                return 0;
+            }
+        }
+    }
+    rep(i, h - 4)
+    {
+        rep(j, w - 4)
+        {
+            string s;
+            rep(k, 5)
+            {
+                s.push_back(maze[i + k][j + k]);
+            }
+            if (s == "snuke")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1 + k, j + 1 + k};
+                }
+                cout << ans << endl;
+                return 0;
+            }
+            if (s == "ekuns")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 1 + k, j + 1 + k};
+                }
+                reverse(all(ans));
+                cout << ans << endl;
+                return 0;
+            }
+        }
+    }
+    // debug("ok");
+    rep(i, h - 4)
+    {
+        rep(j, w - 4)
+        {
+            string s;
+            rep(k, 5)
+            {
+                s.push_back(maze[i + 4 - k][j + k]);
+            }
+            if (s == "snuke")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 5 - k, j + 1 + k};
+                }
+                cout << ans << endl;
+                return 0;
+            }
+            if (s == "ekuns")
+            {
+                vector<vector<int>> ans(5, vector<int>(2));
+                rep(k, 5)
+                {
+                    ans[k] = {i + 5 - k, j + 1 + k};
+                }
+                reverse(all(ans));
+                cout << ans << endl;
+                return 0;
+            }
+        }
     }
 }

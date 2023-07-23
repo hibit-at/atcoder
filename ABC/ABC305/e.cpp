@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,67 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m, k;
+    cin >> n >> m >> k;
+    vector<vector<int>> to(n, vector<int>());
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int a, b;
+        cin >> a >> b;
+        a--;
+        b--;
+        to[a].push_back(b);
+        to[b].push_back(a);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // vector<bool> guard(n);
+    vector<pair<int, int>> PH(k);
+    map<int, int> memo;
+    rep(i, k)
+    {
+        int p, h;
+        cin >> p >> h;
+        p--;
+        PH[i] = {h, p};
+        memo[p] = h;
+    }
+    sort(all(PH));
+    reverse(all(PH));
+    // debug(PH);
+    priority_queue<pair<int, int>> q;
+    rep(i, k)
+    {
+        q.push(PH[i]);
+    }
+    // debug(q);
+    vector<bool> seen(n);
+    while (q.size())
+    {
+        auto [now_h, now_p] = q.top();
+        q.pop();
+        if (seen[now_p])
+        {
+            continue;
+        }
+        seen[now_p] = true;
+        if (now_h > 0)
+        {
+            for (auto next : to[now_p])
+            {
+                q.push({now_h - 1, next});
+            }
+        }
+    }
+    // debug(seen);
+    vector<int> ans;
+    rep(i, n)
+    {
+        if (seen[i])
+        {
+            ans.push_back(i + 1);
+        }
+    }
+    cout << ans.size() << endl;
+    cout << ans << endl;
 }

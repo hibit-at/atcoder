@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,34 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+vector<int> z_algorithm(const string &s)
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    vector<int> prefix(s.size());
+    for (int i = 1, j = 0; i < s.size(); i++)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        if (i + prefix[i - j] < j + prefix[j])
+        {
+            prefix[i] = prefix[i - j];
+        }
+        else
+        {
+            int k = max(0, j + prefix[j] - i);
+            while (i + k < s.size() && s[k] == s[i + k])
+                ++k;
+            prefix[i] = k;
+            j = i;
+        }
     }
-    return os;
+    prefix[0] = (int)s.size();
+    return prefix;
 }
 
-int main(){
-    mint a = 2;
-    cout << a << endl;
+#include <atcoder/string>
+using namespace atcoder;
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<
 }

@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,28 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    map<int, pair<int, int>> mp;
+    mp[1] = {0, 0};
+    mp[2] = {0, 1};
+    mp[3] = {0, 2};
+    mp[4] = {1, 0};
+    mp[5] = {1, 1};
+    mp[6] = {1, 2};
+    mp[7] = {2, 0};
+    mp[8] = {2, 1};
+    mp[9] = {2, 2};
+    int a, b;
+    cin >> a >> b;
+    int dist = abs(mp[a].second - mp[b].second);
+    // debug(dist);
+    if (dist == 1 && mp[a].first == mp[b].first)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        cout << "Yes" << endl;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    else
+    {
+        cout << "No" << endl;
+    }
 }

@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,34 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n, m;
+    ll d;
+    cin >> n >> m >> d;
+    vector<ll> a(n), b(m);
+    cin >> a >> b;
+    sort(all(a));
+    sort(all(b));
+    // debug(a);
+    // debug(b);
+    ll ans = -1;
+    rep(i, n)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        ll aoki = a[i];
+        int lower_idx = lower_bound(all(b), aoki - d) - b.begin();
+        // debug(lower_idx);
+        int upper_idx = upper_bound(all(b), aoki + d) - b.begin() - 1;
+        // debug(upper_idx);
+        if (lower_idx > upper_idx)
+        {
+            continue;
+        }
+        // debug(aoki);
+        // debug(b[upper_idx]);
+        auto chmax = [](auto &a, auto b)
+        { a = max(a, b); };
+        chmax(ans, aoki + b[upper_idx]);
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    cout << ans << endl;
 }

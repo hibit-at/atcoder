@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,95 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n;
+    cin >> n;
+    // vector<vector<int>> to(n, vector<int>());
+    vector<set<int>> to(n);
+    vector<int> node(n);
+    rep(i, n - 1)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        to[u].insert(v);
+        to[v].insert(u);
+        node[u]++;
+        node[v]++;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    // debug(to);
+    // debug(node);
+    queue<int> q;
+    rep(i, n)
+    {
+        if (node[i] == 1)
+        {
+            q.push(i);
+        }
+    }
+    // debug(q);
+    vector<int> weight(n);
+    while (q.size())
+    {
+        int now = q.front();
+        q.pop();
+        node[now]--;
+        for (int next : to[now])
+        {
+            // debug(next);
+            node[next]--;
+            to[next].erase(now);
+            weight[next]++;
+        }
+        to[now] = {};
+    }
+    rep(i, n)
+    {
+        if (weight[i] == n - 1)
+        {
+            cout << n - 1 << endl;
+            return 0;
+        }
+    }
+    // debug(node);
+    // debug(weight);   
+    // debug(to);
+    vector<int> dist(n, -1);
+    vector<int> ans;
+    rep(i, n)
+    {
+        if (node[i] == 1)
+        {
+            dist[i] = 0;
+            q.push(i);
+            break;
+        }
+    }
+    // debug(q);
+    // debug(dist);
+    while (q.size())
+    {
+        int now = q.front();
+        q.pop();
+        // debug(now);
+        weight[now] += to[now].size();
+        // debug(to[now]);
+        if (dist[now] % 3 == 0)
+        {
+            ans.push_back(weight[now]);
+        }
+        for (int next : to[now])
+        {
+            dist[next] = dist[now] + 1;
+            weight[next]++;
+            to[next].erase(now);
+            q.push(next);
+        }
+        to[now] = {};
+    }
+    // debug(dist);
+    sort(all(ans));
+    cout << ans << endl;
 }

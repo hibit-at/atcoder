@@ -60,27 +60,10 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    int n = v.size();
-    int m = v[0].size();
-    int p = v[0][0].size();
-    rep(k, p)
+    for (int i = 0; i < (int)v.size(); i++)
     {
-        os << "k = " << k << endl;
-        rep(i, n)
-        {
-            rep(j, m)
-            {
-                os << v[i][j][k];
-                if (j < m - 1)
-                {
-                    os << " ";
-                }
-                else
-                {
-                    os << endl;
-                }
-            }
-        }
+        os << "i = " << i << endl;
+        os << v[i];
     }
     return os;
 }
@@ -183,25 +166,63 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/modint>
-using namespace atcoder;
-using mint=modint998244353;
-ostream &operator<<(ostream &os, mint &i)
+int main()
 {
-    os << i.val();
-    return os;
-}
-
-ostream &operator<<(ostream &os, const vector<mint> &v)
-{
-    for (int i = 0; i < (int)v.size(); i++)
+    int n;
+    cin >> n;
+    int m;
+    cin >> m;
+    vector<vector<int>> to(n, vector<int>());
+    vector<int> node(n);
+    rep(i, m)
     {
-        os << v[i].val() << (i + 1 != (int)v.size() ? " " : "");
+        int u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        to[u].push_back(v);
+        to[v].push_back(u);
+        node[u]++;
+        node[v]++;
     }
-    return os;
-}
-
-int main(){
-    mint a = 2;
-    cout << a << endl;
+    int start = -1;
+    rep(i, n)
+    {
+        if (node[i] == 1)
+        {
+            start = i;
+            break;
+        }
+    }
+    if (start == -1)
+    {
+        cout << "No" << endl;
+        return 0;
+    }
+    int cnt = 0;
+    queue<int> q;
+    q.push(start);
+    vector<bool> seen(n);
+    while (q.size())
+    {
+        int now = q.front();
+        seen[now] = true;
+        cnt++;
+        q.pop();
+        for (int next : to[now])
+        {
+            if (seen[next])
+            {
+                continue;
+            }
+            q.push(next);
+            break;
+        }
+    }
+    // debug(cnt);
+    if(cnt == n){
+        cout << "Yes" << endl;
+    }else{
+        cout << "No" << endl;
+    }
 }
