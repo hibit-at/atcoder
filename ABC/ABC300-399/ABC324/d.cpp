@@ -183,61 +183,48 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
-
-auto chmax = [](auto &a, auto b)
-{ a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
-
-void dfs(int now, int par)
+ll sz(ll n)
 {
-    if (par != -1 && node[now] == 1)
+    ll ans = 0;
+    while (n)
     {
-        ans[now] = {border, border};
-        border++;
+        ans++;
+        n /= 10;
     }
-    else
-    {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
-        {
-            if (next == par)
-            {
-                continue;
-            }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
-        }
-    }
+    return ans;
 }
 
 int main()
 {
+    int n;
     cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
-    rep(i, n - 1)
+    string s;
+    cin >> s;
+    map<int, int> mp;
+    for (char c : s)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
+        mp[c - '0']++;
     }
-    dfs(0, -1);
-    rep(i, n)
+    ll ans = 0;
+    for (ll i = 0; i <= 1e7; i++)
     {
-        cout << ans[i] << endl;
+        ll p = i * i;
+        if (sz(p) > n)
+        {
+            break;
+        }
+        map<int, int> xmp;
+        while (p)
+        {
+            xmp[p % 10]++;
+            p /= 10;
+        }
+        int criteria = 0;
+        for (int j = 1; j <= 9; j++)
+        {
+            criteria += xmp[j] == mp[j];
+        }
+        ans += criteria == 9;
     }
+    cout << ans << endl;
 }

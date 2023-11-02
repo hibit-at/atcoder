@@ -1,11 +1,10 @@
 n = int(input())
-s = input()
-st = set()
-ans = 1
-for c in s:
-    st.add(c)
-    # print(st)
-    if st == set(['A', 'B', 'C']):
-        print(ans)
-        exit()
-    ans += 1
+
+to = [[] for i in range(n)]
+
+for i in range(n-1):
+    u,v = list(map(int, input().split(' ')))
+    u -= 1
+    v -= 1
+    to[u].append(v)
+    to[v].append(u)

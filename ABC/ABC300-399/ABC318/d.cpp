@@ -184,60 +184,70 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 }
 
 int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
+vector<vector<ll>> d;
+
+vector<bool> seen;
+vector<int> team;
+vector<int> joy;
+vector<pair<int, int>> check;
+ll ans = -1;
+ll val = 0;
 
 auto chmax = [](auto &a, auto b)
 { a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
 
-void dfs(int now, int par)
+void dfs(int now, int other)
 {
-    if (par != -1 && node[now] == 1)
+    if (now == n + n % 2)
     {
-        ans[now] = {border, border};
-        border++;
+        // debug(joy);
+        // debug(check);
+        chmax(ans, val);
+        return;
     }
-    else
+
+    int pos = 0;
+    while (team[pos] != -1)
     {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
+        pos++;
+    }
+    team[pos] = now;
+    rep(i, n + n % 2)
+    {
+        if (team[i] != -1)
         {
-            if (next == par)
-            {
-                continue;
-            }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
+            continue;
         }
+        team[i] = other;
+        // joy.push_back(d[pos][i]);
+        val += d[pos][i];
+        // check.push_back({pos, i});
+        dfs(now + 2, now + 3);
+        // check.pop_back();
+        val -= d[pos][i];
+        // joy.pop_back();
+        team[i] = -1;
     }
+    team[pos] = -1;
+    return;
 }
 
 int main()
 {
     cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
+    d.resize(n + n % 2, vector<ll>(n + n % 2));
+    team.resize(n + n % 2, -1);
     rep(i, n - 1)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
+        rep(j, n - i - 1)
+        {
+            ll x;
+            cin >> x;
+            d[i][j + 1 + i] = x;
+            d[j + 1 + i][i] = x;
+        }
     }
-    dfs(0, -1);
-    rep(i, n)
-    {
-        cout << ans[i] << endl;
-    }
+    // cout << d << endl;
+    dfs(0, 1);
+    cout << ans << endl;
 }

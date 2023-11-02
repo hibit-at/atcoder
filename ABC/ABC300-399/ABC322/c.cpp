@@ -183,61 +183,21 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
-
-auto chmax = [](auto &a, auto b)
-{ a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
-
-void dfs(int now, int par)
-{
-    if (par != -1 && node[now] == 1)
-    {
-        ans[now] = {border, border};
-        border++;
-    }
-    else
-    {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
-        {
-            if (next == par)
-            {
-                continue;
-            }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
-        }
-    }
-}
-
 int main()
 {
-    cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
-    rep(i, n - 1)
+    int n, m;
+    cin >> n >> m;
+    set<int> st;
+    rep(i, m)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
+        int a;
+        cin >> a;
+        st.insert(a);
     }
-    dfs(0, -1);
+    // debug(st);
     rep(i, n)
     {
-        cout << ans[i] << endl;
+        int ans = *st.lower_bound(i + 1) - (i + 1);
+        cout << ans << endl;
     }
 }

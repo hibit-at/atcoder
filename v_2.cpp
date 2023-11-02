@@ -60,10 +60,27 @@ ostream &operator<<(ostream &os, const vector<vector<T>> &v)
 template <typename T>
 ostream &operator<<(ostream &os, const vector<vector<vector<T>>> &v)
 {
-    for (int i = 0; i < (int)v.size(); i++)
+    int n = v.size();
+    int m = v[0].size();
+    int p = v[0][0].size();
+    rep(k, p)
     {
-        os << "i = " << i << endl;
-        os << v[i];
+        os << "k = " << k << endl;
+        rep(i, n)
+        {
+            rep(j, m)
+            {
+                os << v[i][j][k];
+                if (j < m - 1)
+                {
+                    os << " ";
+                }
+                else
+                {
+                    os << endl;
+                }
+            }
+        }
     }
     return os;
 }
@@ -166,78 +183,22 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-void solve()
+int main()
 {
     int n;
     cin >> n;
-    int q;
-    cin >> q;
-    ll odd = 0;
-    ll even = 0;
-    ll odd_count = 0;
-    ll even_count = 0;
+    vector<int> a(n), b(n);
+    cin >> a >> b;
+    int ans = n * n;
     rep(i, n)
     {
-        ll a;
-        cin >> a;
-        if (a % 2)
+        rep(j, n)
         {
-            odd += a;
-            odd_count++;
-        }
-        else
-        {
-            even += a;
-            even_count++;
+            if (a[i] > a[j] || b[i] < b[j])
+            {
+                ans--;
+            }
         }
     }
-    // debug(odd);
-    // debug(even);
-    while (q--)
-    {
-        int t;
-        ll x;
-        cin >> t >> x;
-        if (t == 0)
-        {
-            if (x % 2 == 0)
-            {
-                even += even_count * x;
-            }
-            else
-            {
-                odd += even_count * x + even;
-                odd_count += even_count;
-                even = 0;
-                even_count = 0;
-            }
-        }
-        if (t == 1)
-        {
-            if (x % 2 == 0)
-            {
-                odd += odd_count * x;
-            }
-            else
-            {
-                even += odd_count * x + odd;
-                even_count += odd_count;
-                odd = 0;
-                odd_count = 0;
-            }
-        }
-        // debug(even);
-        // debug(odd);
-        cout << even + odd << endl;
-    }
-}
-
-int main()
-{
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        solve();
-    }
+    cout << ans << endl;
 }

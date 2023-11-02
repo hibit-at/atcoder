@@ -183,61 +183,156 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
-
-auto chmax = [](auto &a, auto b)
-{ a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
-
-void dfs(int now, int par)
+int main()
 {
-    if (par != -1 && node[now] == 1)
+    int h, w;
+    cin >> h >> w;
+    vector<vector<char>> maze(h, vector<char>(w));
+    using VI = vector<char>;
+    using VVI = vector<VI>;
+    using VVVI = vector<VVI>;
+    using VVVVI = vector<VVVI>;
+    using VVVVVI = vector<VVVVI>;
+    VVVI dp(h, VVI(w, VI(4, '.')));
+    // cout << dp << endl;
+    int sx = -1;
+    int sy = -1;
+    int gx = -1;
+    int gy = -1;
+    rep(i, h)
     {
-        ans[now] = {border, border};
-        border++;
-    }
-    else
-    {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
+        rep(j, w)
         {
-            if (next == par)
+            cin >> maze[i][j];
+            // v^><
+            if (maze[i][j] == 'v')
+            {
+                dp[i][j][0] = 'v';
+            }
+            if (maze[i][j] == '^')
+            {
+                dp[i][j][1] = '^';
+            }
+            if (maze[i][j] == '>')
+            {
+                dp[i][j][2] = '>';
+            }
+            if (maze[i][j] == '<')
+            {
+                dp[i][j][3] = '<';
+            }
+            if (maze[i][j] == '#')
+            {
+                dp[i][j][0] = '#';
+                dp[i][j][1] = '#';
+                dp[i][j][2] = '#';
+                dp[i][j][3] = '#';
+            }
+            if (maze[i][j] == 'S')
+            {
+                // maze[i][j] = '.';
+                sx = i;
+                sy = j;
+            }
+            if (maze[i][j] == 'G')
+            {
+                // maze[i][j] = '.';
+                gx = i;
+                gy = j;
+            }
+        }
+    }
+    rep(i, h - 1)
+    {
+        rep(j, w)
+        {
+            if (dp[i][j][0] == 'v' && maze[i + 1][j] == '.')
+            {
+                dp[i + 1][j][0] = 'v';
+            }
+        }
+    }
+    for (int i = h - 1; i > 0; i--)
+    {
+        rep(j, w)
+        {
+            if (dp[i][j][1] == '^' && maze[i - 1][j] == '.')
+            {
+                dp[i - 1][j][1] = '^';
+            }
+        }
+    }
+    rep(i, h)
+    {
+        rep(j, w - 1)
+        {
+            if (dp[i][j][2] == '>' && maze[i][j + 1] == '.')
+            {
+                dp[i][j + 1][2] = '>';
+            }
+        }
+    }
+    rep(i, h)
+    {
+        for (int j = w - 1; j > 0; j--)
+        {
+            if (dp[i][j][3] == '<' && maze[i][j - 1] == '.')
+            {
+                dp[i][j - 1][3] = '<';
+            }
+        }
+    }
+    // cout << dp << endl;
+    vector<vector<int>> bfs(h, vector<int>(w, 1e9));
+    // debug(make_pair(sx, sy));
+    // debug(make_pair(gx, gy));
+    queue<pair<int, int>> q;
+    q.push({sx, sy});
+    bfs[sx][sy] = 0;
+    vector<vector<bool>> seen(h, vector<bool>(w));
+    seen[sx][sy] = 1;
+    // vector<int> dx = {1,-1,0,0};
+    // vector<int> dy = {0,0,1,-1};
+    vector<pair<int, int>> dxy = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    while (q.size())
+    {
+        auto [cx, cy] = q.front();
+        q.pop();
+        // debug(make_pair(cx, cy));
+        for (auto [dx, dy] : dxy)
+        {
+            int nx = cx + dx;
+            int ny = cy + dy;
+            if (nx < 0 || h <= nx)
             {
                 continue;
             }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
+            if (ny < 0 || w <= ny)
+            {
+                continue;
+            }
+            if (seen[nx][ny])
+            {
+                continue;
+            }
+            int criteria = 0;
+            rep(k, 4)
+            {
+                criteria += dp[nx][ny][k] == '.';
+            }
+            // debug(criteria);
+            if (criteria == 4)
+            {
+                bfs[nx][ny] = bfs[cx][cy] + 1;
+                seen[nx][ny] = 1;
+                q.push({nx, ny});
+            }
         }
     }
-}
-
-int main()
-{
-    cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
-    }
-    dfs(0, -1);
-    rep(i, n)
-    {
-        cout << ans[i] << endl;
+    // cout << bfs << endl;
+    if(bfs[gx][gy] == 1e9){
+        cout << -1 << endl;
+    }else{
+        cout << bfs[gx][gy] << endl;
     }
 }

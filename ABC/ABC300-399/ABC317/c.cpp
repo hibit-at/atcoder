@@ -183,61 +183,47 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
-
-auto chmax = [](auto &a, auto b)
-{ a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
-
-void dfs(int now, int par)
-{
-    if (par != -1 && node[now] == 1)
-    {
-        ans[now] = {border, border};
-        border++;
-    }
-    else
-    {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
-        {
-            if (next == par)
-            {
-                continue;
-            }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
-        }
-    }
-}
-
 int main()
 {
-    cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
-    rep(i, n - 1)
+    int n, m;
+    cin >> n >> m;
+    // vector<vector<pair<int, int>>> to(n);
+    vector<vector<int>> adj(n, vector<int>(n, -1));
+    rep(i, m)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
+        int a, b, c;
+        cin >> a >> b >> c;
+        a--;
+        b--;
+        // to[a].push_back({b, c});
+        // to[b].push_back({a, c});
+        adj[a][b] = c;
+        adj[b][a] = c;
     }
-    dfs(0, -1);
-    rep(i, n)
+    // debug(to);
+    // debug(adj);
+    vector<int> nums(n);
+    iota(all(nums), 0);
+    int ans = -1;
+    // debug(nums);
+    do
     {
-        cout << ans[i] << endl;
-    }
+        // debug(nums);
+        int tmp = 0;
+        rep(i, n - 1)
+        {
+            int from = nums[i];
+            int next = nums[i + 1];
+            if (adj[from][next] == -1)
+            {
+                break;
+            }
+            tmp += adj[from][next];
+        }
+        // debug(tmp);
+        auto chmax = [](auto &a, auto b)
+        { a = max(a, b); };
+        chmax(ans,tmp);
+    } while (next_permutation(all(nums)));
+    cout << ans << endl;
 }

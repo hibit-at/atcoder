@@ -183,61 +183,83 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-int n;
-vector<vector<int>> to;
-int border = 1;
-vector<vector<int>> ans;
-vector<int> node;
-
-auto chmax = [](auto &a, auto b)
-{ a = max(a, b); };
-auto chmin = [](auto &a, auto b)
-{ a = min(a, b); };
-
-void dfs(int now, int par)
+struct Edge
 {
-    if (par != -1 && node[now] == 1)
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+using P = pair<long, int>;
+const long long INF = 1LL << 60;
+void dijkstra(const Graph &G, int s, vector<long long> &dis)
+{
+    int N = G.size();
+    dis.resize(N, INF);
+    priority_queue<P, vector<P>, greater<P>> pq; // 「仮の最短距離, 頂点」が小さい順に並ぶ
+    dis[s] = 0;
+    pq.emplace(dis[s], s);
+    while (!pq.empty())
     {
-        ans[now] = {border, border};
-        border++;
-    }
-    else
-    {
-        ans[now][0] = 2e9;
-        ans[now][1] = -2e9;
-        for (int next : to[now])
+        P p = pq.top();
+        pq.pop();
+        int v = p.second;
+        if (dis[v] < p.first)
+        { // 最短距離で無ければ無視
+            continue;
+        }
+        for (auto &e : G[v])
         {
-            if (next == par)
-            {
-                continue;
+            if (dis[e.to] > dis[v] + e.cost)
+            { // 最短距離候補なら priority_queue に追加
+                dis[e.to] = dis[v] + e.cost;
+                pq.emplace(dis[e.to], e.to);
             }
-            dfs(next, now);
-            chmin(ans[now][0], ans[next][0]);
-            chmax(ans[now][1], ans[next][1]);
         }
     }
 }
 
 int main()
 {
-    cin >> n;
-    to.resize(n);
-    ans.resize(n, vector<int>(2, -1));
-    node.resize(n);
+    ll n, x, y;
+    cin >> n >> x >> y;
+    vector<ll> base(8);
     rep(i, n - 1)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        to[u].push_back(v);
-        to[v].push_back(u);
-        node[u]++;
-        node[v]++;
+        debug(i);
+        ll p, t;
+        cin >> p >> t;
+        rep(j, 8)
+        {
+            if (i == 0)
+            {
+                while (base[j] % 8 != (p + j) % 8)
+                {
+                    base[j]++;
+                }
+                debug(base);
+            }
+            else
+            {
+                while (base[j] % 8 != p)
+                {
+                    base[j]++;
+                }
+                debug(base);
+            }
+            base[j] += t;
+        }
+        debug(base);
     }
-    dfs(0, -1);
-    rep(i, n)
+    int Q;
+    cin >> Q;
+    while (Q--)
     {
-        cout << ans[i] << endl;
+        ll q;
+        cin >> q;
+        ll ans = q + x;
+        // debug(ans);
+        ans += base[(q + x) % 8];
+        ans += y;
+        cout << ans << endl;
     }
 }
