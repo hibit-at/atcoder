@@ -198,52 +198,46 @@ ll e()
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int n, m;
+    cin >> n >> m;
+    vector<ll> x(m);
+    cin >> x;
+    vector<ll> imos(n+1);
+    ll total = 0;
+    rep(i, m - 1)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        ll from = x[i];
+        ll next = x[i + 1];
+        // debug(vector<ll>({from, next}));
+        if (from > next)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            swap(from, next);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        ll cost = next - from;
+        total += min(cost,n-cost);
+        if (cost * 2 <= n) // forward
+        {
+            ll rev = n - cost;
+            imos[from - 1] += rev - cost;
+            imos[next - 1] -= rev - cost;
+        }
+        else
+        {
+            ll rev = n - cost;
+            imos[0] += cost - rev;
+            imos[from-1] -= cost - rev;
+            imos[next-1] += cost - rev;
+            imos[n] -= cost - rev;
+        }
+        // debug(imos);
+    }
+    // debug(imos);
+    rep(i,n){
+        imos[i+1] += imos[i];
+    }
+    imos.pop_back();
+    // debug(imos);
+    // debug(total);
+    ll ans = total + *min_element(all(imos));
+    cout << ans << endl;
 }

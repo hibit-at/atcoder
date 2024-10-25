@@ -183,67 +183,66 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
+void fillLayeredValues(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    int layers = (n + 1) / 2;  // レイヤー数は (n + 1) / 2 で計算可能
 
-ll op(ll a, ll b)
-{
-    return a + b;
+    for (int layer = 0; layer < layers; ++layer) {
+        // 外周の上下左右をそれぞれ layer ごとに埋める
+        for (int i = layer; i < n - layer; ++i) {
+            matrix[layer][i] = layer;                // 上辺
+            matrix[n - 1 - layer][i] = layer;        // 下辺
+            matrix[i][layer] = layer;                // 左辺
+            matrix[i][n - 1 - layer] = layer;        // 右辺
+        }
+    }
 }
 
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
+int main(){
     int n;
     cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+    vector<vector<char>> a(n,vector<char>(n));
+    cin >> a;
+    // cout << a << endl;
+    rep(i,n){
+        rep(j,n){
+
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
+    }
+    auto rotate = [&](vector<vector<char>> org){
+        vector<vector<char>> res(n,vector<char>(n));
+        rep(i,n){
+            rep(j,n){
+                res[j][n-i-1] = org[i][j]; 
+            }
+        }
+        return res;
     };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    vector<vector<char>> rot1 = rotate(a);
+    vector<vector<char>> rot2 = rotate(rot1);
+    vector<vector<char>> rot3 = rotate(rot2);
+    // cout << rot1 << endl;
+    // cout << rot2 << endl;
+    // cout << rot3 << endl;
+    vector<vector<int>> weight(n,vector<int>(n));
+    fillLayeredValues(weight);
+    // cout << weight << endl;
+    vector<vector<char>> ans(n,vector<char>(n));
+    rep(i,n){
+        rep(j,n){
+            if(weight[i][j]%4==0){
+                cout << rot1[i][j];
+            }
+            if(weight[i][j]%4==1){
+                cout << rot2[i][j];
+            }
+            if(weight[i][j]%4==2){
+                cout << rot3[i][j];
+            }
+            if(weight[i][j]%4==3){
+                cout << a[i][j];
+            }
+        }
+        cout << endl;
+    }
 }

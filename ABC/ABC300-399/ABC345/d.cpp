@@ -183,67 +183,118 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
+int n, h, w;
+vector<int> use;
+vector<pair<int, int>> AB;
 
-ll op(ll a, ll b)
+int dfs(int pos, vector<vector<int>> state, vector<pair<int, int>> valid)
 {
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
+    if (pos == valid.size())
+    {
+        int check = 0;
+        rep(i, h)
+        {
+            rep(j, w)
+            {
+                check += state[i][j];
+            }
+        }
+        return check == h * w;
+    }
+    auto [a, b] = valid[pos];
+    int ans = 0;
+    auto chmax = [](auto &a, auto b)
+    { a = max(a, b); };
+    rep(idx, h * w)
+    {
+        int i = idx / w;
+        int j = idx % w;
+        if (state[i][j])
+        {
+            continue;
+        }
+        if (i + a <= h && j + b <= w)
+        {
+            vector<vector<int>> next_state = state;
+            rep(p, a)
+            {
+                rep(q, b)
+                {
+                    next_state[i + p][j + q] = 1;
+                }
+            }
+            chmax(ans, dfs(pos + 1, next_state, valid));
+        }
+        break;
+    }
+    rep(idx, h * w)
+    {
+        int i = idx / w;
+        int j = idx % w;
+        if (state[i][j])
+        {
+            continue;
+        }
+        if (i + b <= h && j + a <= w)
+        {
+            vector<vector<int>> next_state = state;
+            rep(p, b)
+            {
+                rep(q, a)
+                {
+                    next_state[i + p][j + q] = 1;
+                }
+            }
+            chmax(ans, dfs(pos + 1, next_state, valid));
+        }
+        break;
+    }
+    return ans;
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    cin >> n >> h >> w;
+    AB.resize(n);
+    cin >> AB;
+    use.resize(n);
+    rep(i, 1 << n)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        int area = 0;
+        rep(j, n)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            if (i >> j & 1)
             {
-                continue;
+                area += AB[j].first * AB[j].second;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        // debug(area);
+        if (area != h * w)
+        {
+            continue;
+        }
+        vector<pair<int, int>> valid_AB;
+        rep(j, n)
+        {
+            use[j] = (i >> j) & 1;
+            if (use[j])
+            {
+                valid_AB.push_back(AB[j]);
+            }
+        }
+        sort(all(valid_AB));
+        vector<vector<int>> init(h, vector<int>(w, 0));
+        do
+        {
+            // debug(valid_AB);
+            int res = dfs(0, init, valid_AB);
+            // debug(res);
+            if (res)
+            {
+                cout << "Yes" << endl;
+                return 0;
+            }
+        } while (next_permutation(all(valid_AB)));
+    }
+    cout << "No" << endl;
 }

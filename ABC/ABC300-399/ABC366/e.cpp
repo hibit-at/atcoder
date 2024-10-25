@@ -183,67 +183,100 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
+int main(){
+    ll n,d;
+    cin >> n >> d;
+    vector<pair<ll,ll>> vp(n);
+    cin >> vp;
+    vector<ll> x(n),y(n);
+    rep(i,n){
+        x[i] = vp[i].first;
+        y[i] = vp[i].second;
     }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+    sort(all(x));
+    sort(all(y));
+    auto manhatten_memo = [](vector<ll> v,ll left,ll right){
+        ll n = v.size();
+        v.push_back(left-1);
+        v.push_back(right+1);
+        sort(all(v));
+        // debug(v);
+        vector<ll> ans(right-left+1);    
+        int idx_right = (n+1)/2+1;
+        int idx_left =n/2+1;
+        // debug(vector<int>({idx_left,idx_right}));
+        ll now = 0;
+        ll factor = 2;
+        for(int i=idx_right;i<=n;i++){
+            for(int j=v[i];j<v[i+1];j++){
+                ans[j-left] = now;
+                now += factor;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            factor += 2;
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
+        now = 0;
+        factor = 2;
+        for(int i=idx_left;i>1;i--){
+            for(int j=v[i-1];j>v[i-2];j--){
+                ans[j-left] = now;
+                now += factor;
+            }
+            factor += 2;
+        }
+        return ans;
     };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    vector<ll> memo_x = manhatten_memo(x,-2e6,2e6);
+    vector<ll> memo_y = manhatten_memo(y,-2e6,2e6);
+    // debug(x);
+    // debug(y);
+    ll base_x = 0;
+    rep(i,n){
+        base_x += abs(x[i]-x[n/2]);
+    }
+    ll base_y = 0;
+    rep(i,n){
+        base_y += abs(y[i]-y[n/2]);
+    }
+    // debug(vector<ll>({base_x,base_y}));
+    ll ans = 0;
+    for(int cx=-2e6;cx<=2e6;cx++){
+        if(base_x+base_y+memo_x[cx+2e6]>d){
+            continue;
+        }
+        // cout << cx << " " << base_x+base_y+memo_x[cx+2e6] << endl;
+        ll target =  d-base_x -base_y- memo_x[cx+2e6];
+        // debug(target);
+        ll ng = n/2-1;
+        ll ok = 2e6+1;
+        while(abs(ng-ok)>1){
+            ll mid = ng+ok;
+            mid /= 2;
+            if(memo_y[mid+2e6] > target){
+                ok = mid;
+            }else{
+                ng = mid;
+            }
+        }
+        ll upper = ok;
+        ok = n/2;
+        ng = -2e6-1;
+        // for(int i=-10;i<=10;i++){
+        //     cout << memo_y[i+2e6] << " ";
+        // }
+        // cout << endl;
+        while(abs(ng-ok)>1){
+            ll mid = ng+ok;
+            mid /= 2;
+            if(memo_y[mid+2e6] <= target){
+                ok = mid;
+            }else{
+                ng = mid;
+            }
+        }
+        // debug(ok);
+        ll lower = ok;
+        // debug(vector<ll>({lower,upper}));
+        ans += upper - lower;
+    }
+    cout << ans << endl;
 }

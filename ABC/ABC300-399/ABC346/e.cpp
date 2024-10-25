@@ -183,67 +183,66 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    ll h, w, m;
+    cin >> h >> w >> m;
+    vector<pair<int, pair<int, int>>> vp(m);
+    cin >> vp;
+    // cout << vp << endl;
+    reverse(all(vp));
+    ll vertical_free = h;
+    ll horizontal_free = w;
+    map<ll, ll> mp;
+    set<ll> horizontal_use;
+    set<ll> vertical_use;
+    rep(i, m)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        auto [t, AX] = vp[i];
+        // debug(t);
+        auto [a, x] = AX;
+        // debug(a);
+        // debug(x);
+        if (t == 1)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            if (horizontal_use.count(a))
             {
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            mp[x] += horizontal_free;
+            vertical_free--;
+            horizontal_use.insert(a);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        else
+        {
+            if (vertical_use.count(a))
+            {
+                continue;
+            }
+            mp[x] += vertical_free;
+            horizontal_free--;
+            vertical_use.insert(a);
+        }
+    }
+    ll total = 0;
+    for (auto [key, val] : mp)
+    {
+        total += val;
+    }
+    mp[0] += h * w - total;
+    // debug(mp);
+    vector<pair<ll, ll>> ans;
+    for (auto [key, val] : mp)
+    {
+        if (val > 0)
+        {
+            ans.push_back({key, val});
+        }
+    }
+    // debug(ans);
+    cout << ans.size() << endl;
+    for (auto [p, q] : ans)
+    {
+        cout << p << " " << q << endl;
+    }
 }

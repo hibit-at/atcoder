@@ -183,67 +183,46 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
+int main(){
     int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+    double s,t;
+    cin >> n >> s >> t;
+    vector<vector<pair<int,int>>> vp(n,vector<pair<int,int>>(2));
+    cin >> vp;
+    // debug(vp);
+    vector<int> path(n);
+    double ans = INFINITY;
+    iota(all(path),0);
+    do{
+        // debug(path);
+        rep(state,1<<n){
+            vector<int> LR(n);
+            rep(i,n){
+                LR[i] = (state>>i&1);
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            // debug(LR);
+            int cx = 0;
+            int cy = 0;
+            double tmp = 0;
+            rep(i,n){
+                auto [nx,ny] = vp[path[i]][LR[i]];
+                auto [mx,my] = vp[path[i]][LR[i]^1];
+                // debug(vp[path[i]][LR[i]]);
+                // debug(vp[path[i]][LR[i]^1]);
+                double moving = sqrt((nx-cx)*(nx-cx)+(ny-cy)*(ny-cy));
+                double sketch = sqrt((mx-nx)*(mx-nx)+(my-ny)*(my-ny));
+                // debug(moving);
+                // debug(sketch);
+                tmp += moving/s + sketch/t;
+                cx = mx;
+                cy = my;
+            }
+            // debug(tmp);
+            auto chmin = [](auto &a, auto b)
+            { a = min(a, b); };
+            chmin(ans,tmp);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }while(next_permutation(all(path)));
+    cout << fixed << setprecision(20) <<  ans << endl;
+
 }

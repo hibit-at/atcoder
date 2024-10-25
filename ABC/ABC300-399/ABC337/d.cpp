@@ -183,67 +183,66 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int h, w, k;
+    cin >> h >> w >> k;
+    vector<vector<char>> maze(h, vector<char>(w));
+    cin >> maze;
+    // cout << maze << endl;
+    vector<vector<int>> o_sum(h + 1, vector<int>(w + 1));
+    vector<vector<int>> x_sum(h + 1, vector<int>(w + 1));
+    rep(i, h)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        rep(j, w)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            o_sum[i+1][j+1] = o_sum[i+1][j] + (maze[i][j] == '.');
+            x_sum[i+1][j+1] = x_sum[i+1][j] + (maze[i][j] == 'x');
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    rep(i,h){
+        rep(j,w){
+            o_sum[i+1][j+1] += o_sum[i][j+1];
+            x_sum[i+1][j+1] += x_sum[i][j+1];
+        }
+    }
+    // debug(o_sum);
+    // debug(x_sum);
+    int ans = 1e9;
+    rep(i, h)
+    {
+        rep(j, w - k + 1)
+        {
+            int o_cnt = o_sum[i+1][j+k] + o_sum[i][j] - o_sum[i][j+k] - o_sum[i+1][j];
+            // debug(o_cnt);
+            int x_cnt = x_sum[i+1][j+k] + x_sum[i][j] - x_sum[i][j+k] - x_sum[i+1][j];
+            // debug(x_cnt);
+            if(x_cnt == 0){
+                auto chmin = [](auto &a, auto b)
+                { a = min(a, b); };
+                chmin(ans, o_cnt);
+            }
+        }
+    }
+    rep(i, h - k + 1)
+    {
+        rep(j, w)
+        {
+            int o_cnt = o_sum[i+k][j+1] + o_sum[i][j] - o_sum[i+k][j] - o_sum[i][j+1];
+            int x_cnt = x_sum[i+k][j+1] + x_sum[i][j] - x_sum[i+k][j] - x_sum[i][j+1];
+            if(x_cnt == 0){
+                auto chmin = [](auto &a, auto b)
+                { a = min(a, b); };
+                chmin(ans, o_cnt);
+            }
+        }
+    }
+    if (ans < 1e9)
+    {
+        cout << ans << endl;
+    }
+    else
+    {
+        cout << -1 << endl;
+    }
 }

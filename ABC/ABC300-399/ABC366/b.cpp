@@ -183,67 +183,34 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
+int main(){
     int n;
     cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
+    vector<string> vs(n);
+    cin >> vs;
+    // cout << vs << endl;
+    int m = 0;
+    rep(i,n){
+        auto chmax = [](auto &a, auto b)
+        { a = max(a, b); };
+        chmax(m,int(vs[i].size()));
     }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+    // debug(m);
+    vector<vector<char>> ans(m,vector<char>(n,'*'));
+    rep(i,n){
+        rep(j,vs[i].size()){
+            ans[j][i] = vs[i][j];
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    // cout << ans << endl;
+    rep(i,m){
+        reverse(all(ans[i]));
+        while(ans[i].back()=='*'){
+            ans[i].pop_back();
+        }
+        for(char c : ans[i]){
+            cout << c;
+        }
+        cout << endl;
+    }
 }

@@ -183,67 +183,61 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
+#include <atcoder/lazysegtree>
 using namespace atcoder;
+using S = long long;
+using F = long long;
 
-ll op(ll a, ll b)
-{
-    return a + b;
-}
+const S INF = 8e18;
 
-ll e()
-{
-    return 0;
-}
+S op(S a, S b) { return std::min(a, b); }
+S e() { return INF; }
+S mapping(F f, S x) { return f + x; }
+F composition(F f, F g) { return f + g; }
+F id() { return 0; }
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int n, m;
+    cin >> n >> m;
+    vector<ll> a(n);
+    cin >> a;
+    // debug(a);
+    lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+    while (m--)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        int b;
+        cin >> b;
+        ll p = seg.get(b);
+        // debug(p);
+        seg.set(b, 0);
+        ll base = p / n;
+        // debug(base);
+        seg.apply(0, n, base);
+        ll res = p % n;
+        if (res)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            int start_idx = b + 1;
+            int end_idx = b + 1 + res;
+            if (end_idx > n)
             {
-                continue;
+                end_idx %= n;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            // debug(vector<int>({start_idx, end_idx}));
+            if (start_idx < end_idx)
+            {
+                seg.apply(start_idx, end_idx, 1);
+            }
+            else
+            {
+                seg.apply(0, end_idx, 1);
+                seg.apply(start_idx, n, 1);
+            }
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    rep(i, n)
+    {
+        cout << seg.get(i) << " ";
+    }
+    cout << endl;
 }

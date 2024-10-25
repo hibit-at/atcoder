@@ -183,67 +183,94 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
+    int n, q;
+    cin >> n >> q;
+    int L = 0;
+    int R = 1;
+    int ans = 0;
+    while(q--){
+        char h;
+        int t;
+        cin >> h >> t;
+        t--;
+        if(h == 'L'){
+            int org_L = L;
+            int cnt = 0;
+            bool collide = false;
+            // Attempt to move L to the target t by moving left (decreasing)
+            while(L != t){
+                L--;
+                cnt++;
+                if(L < 0){
+                    L += n;
+                }
+                if(L == R){
+                    collide = true;
+                    break;
+                }
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            if(!collide){
+                ans += cnt;
+            }
+            else{
+                // Reset L to original position and try moving right (increasing)
+                L = org_L;
+                cnt = 0;
+                while(L != t){
+                    L++;
+                    cnt++;
+                    L %= n;
+                    if(L == R){
+                        // If collision occurs again, movement is blocked
+                        // Depending on problem constraints, handle accordingly
+                        break;
+                    }
+                }
+                ans += cnt;
+            }
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        else{
+            int org_R = R;
+            int cnt = 0;
+            bool collide = false;
+            // Attempt to move R to the target t by moving right (increasing)
+            while(R != t){
+                R++;
+                cnt++;
+                R %= n;
+                if(R == L){
+                    collide = true;
+                    break;
+                }
+            }
+            if(!collide){
+                ans += cnt;
+            }
+            else{
+                // Reset R to original position and try moving left (decreasing)
+                R = org_R;
+                cnt = 0;
+                while(R != t){
+                    R--;
+                    cnt++;
+                    if(R < 0){
+                        R += n;
+                    }
+                    if(R == L){
+                        // If collision occurs again, movement is blocked
+                        // Depending on problem constraints, handle accordingly
+                        break;
+                    }
+                }
+                ans += cnt;
+            }
+        }
+        // Debugging output (you can remove these in the final version)
+        // Replace `debug` with `cout` or appropriate logging if necessary
+    }
+    cout << ans << endl;
 }

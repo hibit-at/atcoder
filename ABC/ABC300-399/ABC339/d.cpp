@@ -183,67 +183,114 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
 int main()
 {
     int n;
     cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    vector<vector<char>> maze(n, vector<char>(n));
+    using S = vector<pair<int, int>>;
+    int cnt = 0;
+    S state;
+    rep(i, n)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        string s;
+        cin >> s;
+        rep(j, n)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            char c = s[j];
+            maze[i][j] = s[j];
+            if (c == 'P')
+            {
+                state.push_back({i, j});
+            }
+        }
+    }
+    // sort(all(state));
+    using VI = vector<int>;
+    using VVI = vector<VI>;
+    using VVVI = vector<VVI>;
+    using VVVVI = vector<VVVI>;
+    using VVVVVI = vector<VVVVI>;
+    VVVVI memo(n, VVVI(n, VVI(n, VI(n, -1))));
+    // map<S, int> memo;
+    memo[state[0].first][state[0].second][state[1].first][state[1].second] = 0;
+    // debug(state);
+    // debug(memo);
+    // cout << maze << endl;
+    queue<S> q;
+    q.push(state);
+    // vector<int> dx = {1,-1,0,0};
+    // vector<int> dy = {0,0,1,-1};
+    vector<pair<int, int>> dxy = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int ans = 1e9;
+    auto chmin = [](auto &a, auto b)
+    { a = min(a, b); };
+    while (q.size())
+    {
+        pair<int, int> U = q.front()[0];
+        pair<int, int> V = q.front()[1];
+        q.pop();
+        // debug(U);
+        // debug(V);
+        if (U == V)
+        {
+            chmin(ans, memo[U.first][U.second][V.first][V.second]);
+            break;
+        }
+        for (auto [dx, dy] : dxy)
+        {
+            int U_nx = U.first + dx;
+            int U_ny = U.second + dy;
+            if (U_nx < 0 || n <= U_nx)
+            {
+                U_nx = U.first;
+            }
+            if (U_ny < 0 || n <= U_ny)
+            {
+                U_ny = U.second;
+            }
+            if (maze[U_nx][U_ny] == '#')
+            {
+                U_nx = U.first;
+                U_ny = U.second;
+            }
+            // debug(vector<int>({U_nx, U_ny}));
+            int V_nx = V.first + dx;
+            int V_ny = V.second + dy;
+            if (V_nx < 0 || n <= V_nx)
+            {
+                V_nx = V.first;
+            }
+            if (V_ny < 0 || n <= V_ny)
+            {
+                V_ny = V.second;
+            }
+            if (maze[V_nx][V_ny] == '#')
+            {
+                V_nx = V.first;
+                V_ny = V.second;
+            }
+            // debug(vector<int>({V_nx, V_ny}));
+            S next_state(2);
+            next_state[0] = {U_nx, U_ny};
+            next_state[1] = {V_nx, V_ny};
+            // sort(all(next_state));
+            // debug(next_state);
+            if (memo[U_nx][U_ny][V_nx][V_ny] > -1)
             {
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            memo[U_nx][U_ny][V_nx][V_ny] = memo[U.first][U.second][V.first][V.second] + 1;
+            q.push(next_state);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    // debug(memo);
+    if (ans < 1e9)
+    {
+        cout << ans << endl;
+    }
+    else
+    {
+        cout << -1 << endl;
+    }
 }

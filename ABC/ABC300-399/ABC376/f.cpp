@@ -183,67 +183,45 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
+int main(){
+    int n,q;
+    cin >> n >> q;
+    vector<vector<int>> dp(q+1,vector<int>(n,1e9));
+    dp[0][1] = 0;
+    auto chmin = [](auto &a, auto b)
+    { a = min(a, b); };
+    rep(i,q){
+        char h;
+        int t;
+        cin >> h >> t;
+        t--;
+        rep(j,n){
+            if(dp[i][j]==1e9){
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            if(h == 'L'){
+                int L_T_clock = t;
+                int L_T_anti = n-t;
+                int L_R_clock = j;
+                int L_R_anti = n-j;
+                if(L_T_clock < L_R_clock){
+                    chmin(dp[i+1][(j+L_T_clock)%n],dp[i][j]+L_T_clock);
+                }else{
+                    chmin(dp[i+1][(j+L_T_anti)%n],dp[i][j]+L_T_anti);
+                }
+            }else{
+                int R_T_clock = (n+t-j)%n;
+                debug(R_T_clock);
+                int R_T_anti = (2*n-t-j)%n;
+                int R_L_clock = n-j;
+                int R_L_anti = j;
+                if(R_T_clock < R_L_clock){
+                    chmin(dp[i+1][(j+R_T_clock)%n],dp[i][j]+R_T_clock);
+                }else{
+                    chmin(dp[i+1][(j+n-R_T_anti)%n],dp[i][j]+R_T_anti);
+                }
+            }
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    cout << dp << endl;
 }

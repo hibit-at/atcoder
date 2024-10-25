@@ -183,67 +183,82 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
+vector<pair<ll, ll>> prime_factorize(ll n)
 {
-    return a + b;
+    vector<pair<ll, ll>> ans;
+    for (ll i = 2; i * i <= n; i++)
+    {
+        if (n % i == 0)
+        {
+            ll ex = 0;
+            while (n % i == 0)
+            {
+                ex++;
+                n /= i;
+            }
+            ans.push_back({i, ex});
+        }
+    }
+    if (n != 1)
+    {
+        ans.push_back({n, 1});
+    }
+    return ans;
 }
 
-ll e()
+ll naive(int n, vector<ll> a)
 {
-    return 0;
+    set<ll> sq;
+    rep(i, 1000)
+    {
+        sq.insert(i * i);
+    }
+    ll ans = 0;
+    rep(i, n)
+    {
+        rep(j, i)
+        {
+            ans += sq.count(a[i] * a[j]) > 0;
+        }
+    }
+    return ans;
 }
+
+ll solve(int n, vector<ll> a)
+{
+    map<ll, ll> mp;
+    ll ans = 0;
+    rep(i, n)
+    {
+        ll criteria = 1;
+        for (auto [q, r] : prime_factorize(a[i]))
+        {
+            if (r % 2)
+            {
+                criteria *= q;
+            }
+        }
+        // debug(criteria);
+        if (a[i] == 0)
+        {
+            ans += i;
+        }
+        else
+        {
+            ans += mp[criteria] + mp[0];
+        }
+        mp[criteria]++;
+    }
+    return ans;
+}
+
+#include <cassert>
 
 int main()
 {
     int n;
     cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
-        }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    vector<ll> a(n);
+    cin >> a;
+    cout << solve(n, a) << endl;
 }

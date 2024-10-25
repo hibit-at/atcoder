@@ -183,67 +183,57 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    cin >> a;
+    vector<vector<int>> to(n, vector<int>());
+    rep(i, m)
     {
         int u, v;
         cin >> u >> v;
         u--;
         v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
+        to[u].push_back(v);
+        to[v].push_back(u);
     }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
+    using S = pair<int,int>;
+    priority_queue<S,vector<S>, greater<S>> pq;
+    // priority_queue<pair<int, int>> pq;
+    // first...next_weight, second...pos
+    pq.push({a[0], 0});
+    int cnt = 0;
+    vector<int> dp(n, 0);
+    dp[0] = 1;
+    while (pq.size())
     {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        auto [now_weight, now_pos] = pq.top();
+        pq.pop();
+        for (int next_pos : to[now_pos])
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            if (now_weight > a[next_pos])
             {
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            else if (now_weight == a[next_pos])
+            {
+                if (dp[now_pos] > dp[next_pos])
+                {
+                    dp[next_pos] = dp[now_pos];
+                    pq.push({a[next_pos], next_pos});
+                }
+            }
+            else
+            {
+                if (dp[now_pos] + 1 > dp[next_pos])
+                {
+                    dp[next_pos] = dp[now_pos] + 1;
+                    pq.push({a[next_pos], next_pos});
+                }
+            }
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    cout << dp[n - 1] << endl;
 }

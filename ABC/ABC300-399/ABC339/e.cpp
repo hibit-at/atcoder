@@ -185,65 +185,61 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
 
 #include <atcoder/segtree>
 using namespace atcoder;
-
-ll op(ll a, ll b)
+int op(int a, int b)
 {
-    return a + b;
+    return max(a, b);
 }
 
-ll e()
+int e()
 {
     return 0;
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int n, d;
+    cin >> n >> d;
+    vector<int> a(n);
+    cin >> a;
+    auto zaz = [](auto a)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        auto b = a;
+        sort(all(b));
+        b.erase(unique(all(b)), b.end());
+        vector<int> ans;
+        for (auto i : a)
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            auto where = lower_bound(all(b), i);
+            ans.push_back(where - b.begin());
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
+        return ans;
     };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    auto z = zaz(a);
+    auto b = a;
+    sort(all(b));
+    // debug(a);
+    b.erase(unique(all(b)),b.end());
+    // debug(b);
+    // debug(z);
+    segtree<int, op, e> seg(n);
+    rep(i, n)
+    {
+        // debug(a[i]);
+        // debug(z[i]);
+        int left_idx = lower_bound(all(b), a[i] - d) - b.begin();
+        int right_idx = upper_bound(all(b), a[i] + d) - b.begin();
+        // debug(vector<int>({left_idx, right_idx}));
+        // debug(b[left_idx]);
+        // debug(b[right_idx-1]);
+        int peak = seg.prod(left_idx, right_idx);
+        // debug(peak);
+        seg.set(z[i], peak + 1);
+        // rep(i, n)
+        // {
+        //     cout << seg.get(i) << " ";
+        // }
+        // cout << endl;
+    }
+
+    cout << seg.all_prod() << endl;
 }

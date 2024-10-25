@@ -183,67 +183,68 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
+#include<atcoder/segtree>
 using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
+const ll mod9 = 998244353;
+const ll mod1 = 1000000007;
+ll op(ll a, ll b){
+    return (a+b)%mod9;
 }
 
-ll e()
-{
+ll e(){
     return 0;
 }
+#include <random>
 
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
-            }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+int main(){
+    int n,q;
+    cin >> n >> q;
+    vector<int> a(n);
+    cin >> a;
+    vector<int> b(n);
+    cin >> b;
+    // debug(a);
+    // debug(b);
+    map<ll,ll> hash_idx;
+    rep(i,n){
+        if(hash_idx.count(a[i])){
+            continue;
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        hash_idx[a[i]] = ll(rand())*ll(rand());
+    }
+    rep(i,n){
+        if(hash_idx.count(b[i])){
+            continue;
+        }
+        hash_idx[a[i]] = ll(rand())*ll(rand());
+    }
+    // debug(hash_idx);
+    vector<ll> za(n),zb(n);
+    rep(i,n){
+        za[i] = hash_idx[a[i]];
+        zb[i] = hash_idx[b[i]];
+    }
+    // debug(za);
+    // debug(zb);
+    segtree<ll,op,e> seg_a(za);
+    segtree<ll,op,e> seg_b(zb);
+    while(q--){
+        ll L,R,LL,RR;
+        cin >> L >> R >> LL >> RR;
+        if(R-L != RR-LL){
+            cout << "No" << endl;
+            continue;
+        }
+        L--;
+        LL--;
+        ll hash_a = seg_a.prod(L,R);
+        ll hash_b = seg_b.prod(LL,RR);
+        // debug(hash_a);
+        // debug(hash_b);
+        if(hash_a == hash_b){
+            cout << "Yes" << endl;
+        }else{
+            cout << "No" << endl;
+        }
+    }
 }

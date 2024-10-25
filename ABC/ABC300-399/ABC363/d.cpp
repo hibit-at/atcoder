@@ -183,67 +183,64 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+ll digit_max(ll n){
+    if(n == 1){
+        return 10;
+    }else{
+        ll m = (n+1)/2;
+        ll ans = 1;
+        rep(i,m){
+            if(i == 0){
+                ans *= 9;
+            }else{
+                ans *= 10;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+        return ans;
+    }
+}
+
+ll get_sz(ll n){
+    ll ans = 0;
+    while(n){
+        ans++;
+        n/=10;
+    }
+    return ans;
+}
+
+int main(){
+    ll n;
+    cin >> n;
+    if(n <= 10){
+        cout << n-1 << endl;
+        return 0;
+    }
+    ll target_sz = 0;
+    for(ll i=1;i<=100;i++){
+        // debug(i);
+        ll dig = digit_max(i);
+        // debug(dig);
+        if(dig >= n){
+            target_sz = i;
+            break;
+        }
+        n -= dig;
+        // debug(n);
+    }
+    // debug((target_sz+1)/2-1);
+    n--;
+    // debug(n);
+    ll factor = 1;
+    rep(_,(target_sz+1)/2-1){
+        factor *= 10;
+    }
+    n += factor;
+    string s = to_string(n);
+    cout << s;
+    if(target_sz%2){
+        s.pop_back();
+    }
+    reverse(all(s));
+    cout << s << endl;
 }

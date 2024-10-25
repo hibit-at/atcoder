@@ -183,67 +183,42 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+int main(){
+    int n,k;
+    cin >> n >> k;
+    vector<int> state;
+    vector<int> r(n);
+    cin >> r;
+    vector<vector<int>> cand;
+    int sum = 0;
+    auto dfs = [&](auto dfs)->void{
+        if(state.size() == n){
+            // debug(state);
+            if(sum%k == 0){
+                // cout << state << endl;
+                cand.push_back(state);
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            return;
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
+        int idx = state.size();
+        for(int next=1;next<=r[idx];next++){
+            state.push_back(next);
+            sum += next;
+            dfs(dfs);
+            sum -= next;
+            state.pop_back();
+        }
         return;
     };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    for(int i=1;i<=r[0];i++){
+        state.push_back(i);
+        sum += i;
+        dfs(dfs);
+        sum -= i;
+        state.pop_back();
+    }
+    sort(all(cand));
+    for(auto v : cand){
+        cout << v << endl;
+    }
 }

@@ -183,67 +183,129 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
+#include <cassert>
 
-ll op(ll a, ll b)
+ll validate(ll n, ll L, ll d)
 {
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
+    ll ng = 0;
+    ll ok = 1e9;
+    while (abs(ng - ok) > 1)
+    {
+        ll mid = ng + ok;
+        mid /= 2;
+        if (L + d * mid >= n)
+        {
+            ok = mid;
+        }
+        else
+        {
+            ng = mid;
+        }
+    }
+    return L + d * ok;
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    ll n, m;
+    cin >> n >> m;
+    vector<ll> L(m), d(m), k(m), c(m), a(m), b(m);
+    rep(i, m)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
+        cin >> L[i] >> d[i] >> k[i] >> c[i] >> a[i] >> b[i];
+        a[i]--;
+        b[i]--;
     }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
+    // debug(L);
+    // debug(d);
+    // debug(k);
+    // debug(c);
+    // debug(a);
+    // debug(b);
+    rep(i, m);
+    vector<vector<pair<ll, ll>>> to(n, vector<pair<ll, ll>>());
+    rep(i, m)
     {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        ll u = a[i];
+        ll v = b[i];
+        to[v].push_back({u, i}); // i ... edge_idx
+    }
+    // cout << to << endl;
+    priority_queue<pair<ll, ll>> q;
+    q.push({ll(2e18), n - 1});
+    vector<ll> dp(n, -1);
+    while (q.size())
+    {
+        auto [now_cost, now_pos] = q.top();
+        // debug(q.top());
+        q.pop();
+        if (now_cost <= dp[now_pos])
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            continue;
+        }
+        dp[now_pos] = now_cost;
+        for (auto [next_pos, edge_idx] : to[now_pos])
+        {
+            // debug(next_pos);
+            // debug(edge_idx);
+            ll start = L[edge_idx];
+            ll duration = d[edge_idx];
+            ll trains = k[edge_idx];
+            ll need_time = c[edge_idx];
+            assert(a[edge_idx] == next_pos);
+            assert(b[edge_idx] == now_pos);
+            ll max_time = start + (trains - 1) * duration;
+            // debug(max_time);
+            ll ok = -1;
+            ll ng = 2e18;
+            while (abs(ng - ok) > 1)
+            {
+                ll mid = ng + ok;
+                mid /= 2;
+                // debug(mid);
+                if (mid > max_time)
+                {
+                    ng = mid;
+                    continue;
+                }
+                ll valid_start;
+                if (mid < start)
+                {
+                    valid_start = start;
+                }
+                else
+                {
+                    valid_start = validate(mid, start, duration);
+                }
+                // debug(valid_start);
+                if (valid_start + need_time <= dp[now_pos])
+                {
+                    ok = mid;
+                }
+                else
+                {
+                    ng = mid;
+                }
+            }
+            // debug(ok);
+            if (ok <= dp[next_pos])
             {
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            q.push({ok, next_pos});
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    // cout << dp << endl;
+    rep(i, n - 1)
+    {
+        ll ans = dp[i];
+        if (ans == -1)
+        {
+            cout << "Unreachable" << endl;
+        }
+        else
+        {
+            cout << ans << endl;
+        }
+    }
 }

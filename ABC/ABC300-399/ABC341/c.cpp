@@ -183,67 +183,127 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
+vector<vector<char>> trim(vector<vector<char>> walk)
 {
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
+    int min_x = 1e9;
+    int max_x = -1e9;
+    int min_y = 1e9;
+    int max_y = -1e9;
+    int h = walk.size();
+    int w = walk[0].size();
+    rep(i, h)
+    {
+        rep(j, w)
+        {
+            auto chmin = [](auto &a, auto b)
+            { a = min(a, b); };
+            auto chmax = [](auto &a, auto b)
+            { a = max(a, b); };
+            if (walk[i][j] == '.')
+            {
+                chmin(min_x, i);
+                chmin(min_y, j);
+                chmax(max_x, i);
+                chmax(max_y, j);
+            }
+        }
+    }
+    vector<vector<char>> ans;
+    for (int i = min_x; i <= max_x; i++)
+    {
+        vector<char> tmp;
+        for (int j = min_y; j <= max_y; j++)
+        {
+            tmp.push_back(walk[i][j]);
+        }
+        ans.push_back(tmp);
+    }
+    return ans;
 }
 
 int main()
 {
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
+    int h, w, n;
+    cin >> h >> w >> n;
+    int lim = 1001;
+    vector<vector<char>> walk(lim, vector<char>(lim, '?'));
+    int cx = lim / 2;
+    int cy = lim / 2;
+    walk[cx][cy] = '.';
+    rep(i, n)
     {
-        int u, v;
-        cin >> u >> v;
-        u--;
-        v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
-    }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
+        char c;
+        cin >> c;
+        if (c == 'D')
         {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
+            cx++;
+        }
+        if (c == 'U')
+        {
+            cx--;
+        }
+        if (c == 'R')
+        {
+            cy++;
+        }
+        if (c == 'L')
+        {
+            cy--;
+        }
+        walk[cx][cy] = '.';
+    }
+    // cout << walk << endl;
+    vector<vector<char>> valid = trim(walk);
+    // cout << valid << endl;
+    int p = valid.size();
+    int q = valid[0].size();
+    vector<vector<char>> maze(h, vector<char>(w));
+    cin >> maze;
+    // debug(vector<int>({p, q}));
+    // cout << maze << endl;
+    int ans = 0;
+    rep(i, h)
+    {
+        if (i == 0)
+        {
+            continue;
+        }
+        if (i + p >= h)
+        {
+            continue;
+        }
+        rep(j, w)
+        {
+            if (j == 0)
             {
                 continue;
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
+            if (j + q >= w)
+            {
+                continue;
+            }
+            // debug(vector<int>({i, j}));
+            bool okay = true;
+            rep(dp, p)
+            {
+                rep(dq, q)
+                {
+                    if (valid[dp][dq] == '?')
+                    {
+                        continue;
+                    }
+                    else if (maze[i + dp][j + dq] == '#')
+                    {
+                        okay = false;
+                        break;
+                    }
+                }
+                if(!okay){
+                    break;
+                }
+            }
+            ans += okay;
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    cout << ans << endl;
 }

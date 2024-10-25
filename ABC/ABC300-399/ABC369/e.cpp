@@ -183,67 +183,76 @@ ostream &operator<<(ostream &os, priority_queue<T, vector<T>, greater<T>> mpq)
     return os;
 }
 
-#include <atcoder/segtree>
-using namespace atcoder;
-
-ll op(ll a, ll b)
-{
-    return a + b;
-}
-
-ll e()
-{
-    return 0;
-}
-
-int main()
-{
-    int n;
-    cin >> n;
-    using S = pair<pair<int, int>, ll>; // pos,edge,weight
-    vector<vector<S>> to(n);
-    rep(i, n - 1)
-    {
-        int u, v;
-        cin >> u >> v;
+int main(){
+    #define int ll
+    int n,m;
+    cin >> n >> m;
+    vector<vector<ll>> dp(n,vector<ll>(n,1e12));
+    vector<pair<pair<ll,ll>,ll>> edge(2*m);
+    rep(i,n){
+        dp[i][i] = 0;
+    }
+    rep(i,m){
+        ll u,v,t;
+        cin >> u >> v >> t;
         u--;
         v--;
-        ll w;
-        cin >> w;
-        to[u].push_back({{v, i}, w});
-        to[v].push_back({{u, i}, w});
+        edge[i] = {{u,v},t};
+        edge[i+m] = {{v,u},t};
+        auto chmin = [](auto &a, auto b)
+        { a = min(a, b); };
+        chmin(dp[u][v],t);
+        chmin(dp[v][u],t);
     }
-    vector<vector<int>> node_IO(2, vector<int>(n));
-    vector<vector<int>> edge_IO(2, vector<int>(n - 1));
-    vector<vector<int>> euler(3, vector<int>(2 * n)); // pos, depth, weight
-    int step = 0;
-    auto dfs = [&](auto dfs, int now_pos, int from_pos, int now_edge, int depth, int weight) -> void
-    {
-        node_IO[0][now_pos] = step;
-        edge_IO[0][now_edge] = step;
-        euler[0][step] = now_pos;
-        euler[1][step] = depth;
-        euler[2][step] = weight;
-        step++;
-        for (auto [PE, weight] : to[now_pos])
-        {
-            auto [next_pos, next_edge] = PE;
-            if (next_pos == from_pos)
-            {
-                continue;
+    rep(k,n){
+        rep(i,n){
+            rep(j,n){
+                auto chmin = [](auto &a, auto b)
+                { a = min(a, b); };
+                chmin(dp[i][j],dp[i][k]+dp[k][j]);
             }
-            dfs(dfs, next_pos, now_pos, next_edge, depth + 1, weight);
         }
-        node_IO[1][now_pos] = step;
-        edge_IO[1][now_edge] = step;
-        euler[0][step] = from_pos;
-        euler[1][step] = depth - 1;
-        euler[2][step] = -weight;
-        step++;
-        return;
-    };
-    dfs(dfs, 0, -1, 0, 0, 0);
-    cout << node_IO << endl;
-    cout << edge_IO << endl;
-    cout << euler << endl;
+    }
+    // cout << dp << endl;
+    int q;
+    cin >> q;
+    while(q--){
+        int k;
+        cin >> k;
+        vector<int> b(k);
+        cin >> b;
+        sort(all(b));
+        rep(i,k){
+            b[i]--;
+        }
+        ll ans = LLONG_MAX;
+        do{
+            rep(state,1<<k){
+                vector<int> c(k);
+                rep(i,k){
+                    if(state>>i&1){
+                        c[i] = b[i]+m;
+                    }else{
+                        c[i] = b[i];
+                    }
+                }
+                int now = 0;
+                ll tmp = 0;
+                rep(i,k){
+                    auto [to,cost] = edge[c[i]];
+                    auto [from,next] = to;
+                    ll cost_from = dp[now][from];
+                    ll cost_next = dp[from][next];
+                    tmp += cost_from;
+                    tmp += cost;
+                    now = next;
+                }
+                tmp += dp[now][n-1];
+                auto chmin = [](auto &a, auto b)
+                { a = min(a, b); };
+                chmin(ans,tmp);
+            }
+        }while(next_permutation(all(b)));
+        cout << ans << endl;
+    }
 }
